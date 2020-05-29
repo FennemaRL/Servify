@@ -1,13 +1,66 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, } from 'react';
 import './App.css';
-import { Avatar } from 'antd'
-import { UserOutlined } from '@ant-design/icons';
+import { Layout, Avatar, Form, Input, Button,  } from 'antd'
 import axios from 'axios';
+
+
 function Devs({devs}) {
-  return <div> {devs.map((d, idx)=><Avatar size={340} key={idx} shape="square"  icon={<UserOutlined />}/>)}</div>
+return <div  style={{marginBottom :'10vh'}}>
+  {devs.map((d,indx) => 
+  <Avatar key={indx} size={80} style={{ color: '#282c34', backgroundColor: '#fde3cf' , margin:'1vw'}} alt={d.name}>
+    {d.name}
+    </Avatar>)
+  }</div>
+}
+function AddDev(){
+  const onFinish = values => {
+    axios({
+      url: `http://localhost:8080/api/v1/character`,
+      data: {name:values.username, haircolor:'grey'},
+      method: "post"
+    })
+    .then(res=>alert('Se agrego correctamente'))
+    .catch(err=>console.error(err))
+  };
+
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };const layout = {
+    labelCol: { span: 4 },
+    wrapperCol: { span: 16 },
+  };
+  const tailLayout = {
+    wrapperCol: { offset: 4, span: 16 },
+  };
+
+  return (
+    <div style={{width:'60vw', backgroundColor:'#DFE0DC', paddingTop:'1vh' }}>
+      <h3 style={{textAlign:'center'}}>Agregate</h3>
+    <Form 
+      {...layout}
+      name="basic"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[{ required: true, message: 'Please input your username!' }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">Submit</Button>
+      </Form.Item>
+    </Form>
+    </div>
+
+  )
+      
 }
 function App() {
-  const [devs, setDevs] = useState([{}]);
+  const [devs, setDevs] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:8080/api/v1/characters')
@@ -15,16 +68,15 @@ function App() {
       .catch(err=>console.error(err))
   },[]);
   return (
-    <div className="App">
-      <div className="container">
-      <header >
-        <p>
-          Selecciona Dev
-        </p>
-      </header>
-        <Devs devs={devs}/>   
-    </div>
-    </div>
+    <Layout style={{height:'100vh'}}>
+      <Layout.Content >
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:'30vh'}}>
+        <h1>Somos:</h1>
+        <Devs devs={devs}/>
+        <AddDev/>
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 }
 
