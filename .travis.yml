@@ -1,4 +1,4 @@
 language: java
 
 before_script:
-  -cd Api
+  - cd Api
