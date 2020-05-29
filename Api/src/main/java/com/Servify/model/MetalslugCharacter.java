@@ -1,4 +1,4 @@
-package com.Cervify.Apicervify.model;
+package com.Servify.model;
 
 import lombok.Data;
 

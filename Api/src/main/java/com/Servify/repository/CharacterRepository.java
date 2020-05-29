@@ -1,6 +1,6 @@
-package com.Cervify.Apicervify.repository;
+package com.Servify.repository;
 
-import com.Cervify.Apicervify.model.MetalslugCharacter;
+import com.Servify.model.MetalslugCharacter;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

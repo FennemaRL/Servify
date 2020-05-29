@@ -1,7 +1,7 @@
-package com.Cervify.Apicervify.controller;
+package com.Servify.controller;
 
-import com.Cervify.Apicervify.model.MetalslugCharacter;
-import com.Cervify.Apicervify.repository.CharacterRepository;
+import com.Servify.model.MetalslugCharacter;
+import com.Servify.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
