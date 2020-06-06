@@ -1,6 +1,7 @@
 import React,{useState, useEffect, } from 'react';
 import axios from 'axios';
 import { Typography, Card, Col, Row } from 'antd';
+import { NavLink } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 const {Meta} = Card;
@@ -19,9 +20,11 @@ function Servicios() {
             <Row gutter={[40, 16]} justify="center">
             {categories.map((cat,indx)=>(
                 <Col xs={10} md={4} key={indx}>
-                    <Card hoverable onClick={console.log('hacer click a llamado a la api')} style={{ width: 150, }} cover={<img alt={cat.name} style={{ height: 130}} src={cat.url} />}>
+                    <NavLink to={`/search/${cat.name}`} >
+                    <Card hoverable  style={{ width: 150 }} cover={<img alt={cat.name} style={{ height: 130}} src={cat.url} />}>
                         <Meta title={cat.name}/>
                     </Card>
+                    </NavLink>
                 </Col>
                 ))
             }

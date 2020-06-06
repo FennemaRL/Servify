@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
-import {  BrowserRouter as Router,  Switch  } from "react-router-dom";
+import {  BrowserRouter as Router,  Switch, Route, NavLink} from "react-router-dom";
 import { Layout,Menu} from 'antd';
 import Home from  "./home";
+import Search from "./search";
 
 const { Content, Footer } = Layout;
 
@@ -11,7 +12,7 @@ const handleClick = e => {
 };
 function Nav() {
   return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
-        <Menu.Item><h3>Servify</h3></Menu.Item>
+        <Menu.Item> <NavLink to="/" >Servify</NavLink></Menu.Item>
       </Menu>
 }
 
@@ -19,11 +20,14 @@ function App() {
 
   return (
     <Layout style={{minHeight:'100vh'}}>
-      <Nav/>
       <Router>
+        <Nav/>
         <Layout style={{marginTop:'2vh',minHeight:'70vh'}}>
           <Content >
-            <Switch path="/"><Home /></Switch>
+            <Switch >
+              <Route exact path="/search/:Category" child={<Search/>}/> 
+              <Route exact path="/"><Home /></Route>
+            </Switch>
           </Content>
         </Layout>
       </Router>
