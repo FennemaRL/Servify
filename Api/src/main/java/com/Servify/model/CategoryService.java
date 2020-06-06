@@ -4,15 +4,11 @@ import lombok.Data;
 
 @Data
 public class CategoryService {
-    private String name ;
-    private String url ;
-    public CategoryService(String type) {
-        name = type;
-    }
-    public CategoryService() {
-    }
-    public CategoryService(String type, String url) {
-        this.url= url;
-        name = type;
+    private final String category;
+    private final String imageURL;
+
+    public CategoryService(String category, String imageURL) {
+        this.category = category;
+        this.imageURL = imageURL;
     }
 }
