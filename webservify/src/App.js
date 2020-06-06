@@ -1,82 +1,34 @@
-import React, {useState, useEffect, } from 'react';
+import React from 'react';
 import './App.css';
-import { Layout, Avatar, Form, Input, Button,  } from 'antd'
-import axios from 'axios';
+import {  BrowserRouter as Router,  Switch  } from "react-router-dom";
+import { Layout,Menu} from 'antd';
+import Home from  "./home";
 
+const { Content, Footer } = Layout;
 
-function Devs({devs}) {
-return <div  style={{marginBottom :'10vh'}}>
-  {devs.map((d,indx) => 
-  <Avatar key={indx} size={80} style={{ color: '#282c34', backgroundColor: '#fde3cf' , margin:'1vw'}} alt={d.name}>
-    {d.name}
-    </Avatar>)
-  }</div>
+const handleClick = e => {
+  console.log('click ', e);
+};
+function Nav() {
+  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
+        <Menu.Item><h3>Servify</h3></Menu.Item>
+      </Menu>
 }
-function AddDev(){
-  const onFinish = values => {
-    axios({
-      url: `http://localhost:8080/api/v1/character`,
-      data: {name:values.username, haircolor:'grey'},
-      method: "post"
-    })
-    .then(res=>alert('Se agrego correctamente'))
-    .catch(err=>console.error(err))
-  };
 
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  };const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 16 },
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 4, span: 16 },
-  };
-
-  return (
-    <div style={{width:'60vw', backgroundColor:'#DFE0DC', paddingTop:'1vh' }}>
-      <h3 style={{textAlign:'center'}}>Agregate</h3>
-    <Form 
-      {...layout}
-      name="basic"
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">Submit</Button>
-      </Form.Item>
-    </Form>
-    </div>
-
-  )
-      
-}
 function App() {
-  const [devs, setDevs] = useState([]);
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/api/v1/characters')
-      .then(res=>setDevs(res.data))
-      .catch(err=>console.error(err))
-  },[]);
   return (
-    <Layout style={{height:'100vh'}}>
-      <Layout.Content >
-        <div style={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:'30vh'}}>
-        <h1>Somos:</h1>
-        <Devs devs={devs}/>
-        <AddDev/>
-        </div>
-      </Layout.Content>
-    </Layout>
+    <Layout style={{minHeight:'100vh'}}>
+      <Nav/>
+      <Router>
+        <Layout style={{marginTop:'2vh',minHeight:'70vh'}}>
+          <Content >
+            <Switch path="/"><Home /></Switch>
+          </Content>
+        </Layout>
+      </Router>
+      <Footer style={{backgroundColor:'#1f1f1f', color:'#e6fffb', textAlign:'center',height:'10vh'}}><p style={{ color:'#e6fffb'}}>© Copyright 2020 </p></Footer>
+    </Layout>  
   );
 }
 
