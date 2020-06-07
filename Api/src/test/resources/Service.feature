@@ -1,4 +1,4 @@
-Feature:  Servicios ofrecidos
+Feature:  Services offer
 
   Scenario: List the categories
     Given A consumer

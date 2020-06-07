@@ -13,4 +13,4 @@ Feature:  Busqueda Basica por Categoria
   Scenario: Error is throwed as churrero is not a valid service category
     Given A consumer
     When  Searchs using category basic search for churrero service
-    Then  An Error is throwed
+    Then  An Error is thrown

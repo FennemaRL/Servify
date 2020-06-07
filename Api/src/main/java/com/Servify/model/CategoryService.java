@@ -37,4 +37,12 @@ public class CategoryService {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    public CategoryService(String type) {
+        category = type;
+    }
+
+    public String getCategoryName() {
+        return category;
+    }
 }
