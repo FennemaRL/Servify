@@ -12,7 +12,7 @@ public class ServifyController {
     @CrossOrigin
     @GetMapping("/categories")
     public ResponseEntity getAllCategories(){
-        return ResponseEntity.ok().body(CategoryManager.listOfCategories());
+        return ResponseEntity.ok().body(CategoryManager.categories());
     }
 
 

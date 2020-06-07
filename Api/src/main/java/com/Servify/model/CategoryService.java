@@ -1,24 +1,23 @@
 package com.Servify.model;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class CategoryService {
 
 
-    private String name ;
-    private String url ;
+    private String category;
+    private String imageURL;
     public CategoryService(String type) {
-        name = type;
+        category = type;
     }
     public CategoryService() {
     }
-    public CategoryService(String type, String url) {
-        this.url= url;
-        name = type;
+    public CategoryService(String category, String imageURL) {
+        this.category = category;
+        this.imageURL = imageURL;
     }
-    public String getName() {
-        return name;
+    public String getCategoryName() {
+        return category;
     }
 }

@@ -14,15 +14,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ServiceStepdef {
-    private Object result ;
+    private List<CategoryService> result;
     @Given("A consumer")
     public void a_consumer() {
     }
     @When("Ask for the list of categories")
     public void ask_for_the_list_of_categories() {
-        result = CategoryManager.listOfCategories();
+        result = CategoryManager.categories();
     }
     @Then("Get the list of categories")
     public void get_the_list_of_categories() {
-        assertTrue(result.getClass() == new ArrayList<CategoryService>().getClass()&&  0 < ((List) result).size() );    }
+        assertTrue( result.isEmpty());    }
 }
