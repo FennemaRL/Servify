@@ -15,6 +15,10 @@ public class ServiceServify {
     public ServiceServify() {
     }
 
+    public ServiceServify(CategoryService category) {
+        this.category = category;
+    }
+
     public Long getId() {
         return id;
     }
@@ -33,5 +37,13 @@ public class ServiceServify {
 
     public void setCategory(CategoryService category) {
         this.category = category;
+    }
+
+    public boolean sameCategory(ServiceServify serv) {
+        return serv.sameCategory(this.category);
+    }
+
+    public boolean sameCategory(CategoryService categoryService) {
+        return this.category.equals(categoryService);
     }
 }
