@@ -24,5 +24,6 @@ public class ServiceStepdef {
     }
     @Then("Get the list of categories")
     public void get_the_list_of_categories() {
-        assertTrue( result.isEmpty());    }
+        assertTrue(!result.isEmpty());
+    }
 }
