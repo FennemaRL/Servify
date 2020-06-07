@@ -1,7 +1,7 @@
 package integration.cucumber;
 
-import com.Servify.model.CategoryService;
-import com.sun.source.tree.AssertTree;
+import com.Servify.model.InvalidCategoryError;
+import com.Servify.model.ServiceProviderServify;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
@@ -10,12 +10,12 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 public class SearchStepDef {
-    private List<CategoryService> searchResult;
+    private List<ServiceProviderServify> searchResult;
     private Boolean errorWasThrown;
 
     @When("Searchs using category basic search for plomeria service")
     public void searchs_using_category_basic_search_for_plomeria_service() {
-        searchResult = ;//el que se encarga de realizar las busquedas, no tengo claro quien sería
+        searchResult =;
     }
 
     @Then("Get the list of people who offer that service")
