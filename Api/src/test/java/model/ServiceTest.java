@@ -1,5 +1,6 @@
 package model;
 
+import com.Servify.model.CategoryManager;
 import com.Servify.model.CategoryService;
 import com.Servify.model.ServiceL;
 import org.junit.Assert;
@@ -12,10 +13,9 @@ public class ServiceTest {
 
     @Test
     public void Test2ServicesHasTheSameCategory(){
-        CategoryService mcat = mock(CategoryService.class);
+        CategoryService mcat = CategoryManager.getCategory("Plomeria");
         ServiceL serv = new ServiceL(mcat);
-        serv.sameCategory(serv);
 
-        verify(mcat,atLeastOnce()).equals(mcat);
+        Assert.assertTrue(serv.sameCategory(serv));
     }
 }

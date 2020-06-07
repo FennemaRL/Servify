@@ -23,4 +23,8 @@ public class CategoryManager {
        }
        throw new NoExistentCategorieError();
     }
+
+    public static CategoryService getCategory(String cat) {
+        return listOfCategories().stream().filter(categoryService -> categoryService.getName().equals(cat)).collect(Collectors.toList()).get(0);
+    }
 }

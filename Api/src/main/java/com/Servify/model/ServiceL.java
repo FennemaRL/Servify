@@ -11,7 +11,7 @@ public class ServiceL {
         return serv.sameCategory(this.cat);
     }
 
-    private boolean sameCategory(CategoryService cate) {
+    public boolean sameCategory(CategoryService cate) {
         return this.cat.equals(cate);
     }
 
