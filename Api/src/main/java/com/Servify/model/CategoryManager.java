@@ -21,15 +21,25 @@ public class CategoryManager {
         return CATEGORY_SERVICES;
     }
 
-    public static ServiceL createService(String cat) throws NoExistentCategorieError {
-       List<CategoryService> matchCategories =  categories().stream().filter(categoryService -> {return categoryService.getCategoryName().equals(cat);}).collect(Collectors.toList());
-       if (matchCategories.size() != 0){
-           return new ServiceL(matchCategories.get(0));
-       }
-       throw new NoExistentCategorieError();
+    public static ServiceServify createService(String cat) throws NoExistentCategorieError {
+        List<CategoryService> matchCategories = categories().stream().filter(categoryService -> {
+            return categoryService.getCategoryName().equals(cat);
+        }).collect(Collectors.toList());
+        if (matchCategories.size() != 0) {
+            return new ServiceServify(matchCategories.get(0));
+        }
+        throw new NoExistentCategorieError();
     }
 
-    public static CategoryService getCategory(String cat) {
-        return categories().stream().filter(categoryService -> categoryService.getCategoryName().equals(cat)).collect(Collectors.toList()).get(0);
+    public static CategoryService getCategory(String cat) throws InvalidCategoryError {
+        List<CategoryService> categoryServices = categories().stream().filter(categoryService -> categoryService.getCategoryName().equals(cat)).collect(Collectors.toList());
+        assertNotEmpty(categoryServices);
+        return categoryServices.get(0);
+    }
+
+    private static void assertNotEmpty(List<CategoryService> categoryServices) {
+        if (categoryServices.isEmpty()) {
+            throw new InvalidCategoryError();
+        }
     }
 }

@@ -2,13 +2,13 @@ package model;
 
 import com.Servify.model.CategoryManager;
 import com.Servify.model.NoExistentCategorieError;
-import com.Servify.model.ServiceL;
+import com.Servify.model.ServiceServify;
 import org.junit.Test;
 
 public class TestCategoryManager {
     @Test
-    public void testcreateServiceOfAnExistentCategorie(){
-        ServiceL serv = null;
+    public void testcreateServiceOfAnExistentCategorie() {
+        ServiceServify serv = null;
         try {
             serv = CategoryManager.createService("Plomeria");
         } catch (NoExistentCategorieError catError) {
@@ -16,8 +16,9 @@ public class TestCategoryManager {
             assert serv != null;
         }
     }
+
     @Test(expected = NoExistentCategorieError.class)
     public void testcreateServiceOfAnNoExistentCategorie() throws NoExistentCategorieError {
-        ServiceL serv = CategoryManager.createService("Mineria");
+        ServiceServify serv = CategoryManager.createService("Mineria");
     }
 }

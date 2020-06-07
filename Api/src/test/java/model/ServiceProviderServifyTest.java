@@ -1,9 +1,9 @@
 package model;
 
 import com.Servify.model.CategoryService;
-import com.Servify.model.ServiceL;
 import com.Servify.model.ServiceProvideError;
 import com.Servify.model.ServiceProviderServify;
+import com.Servify.model.ServiceServify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class ServiceProviderServifyTest {
 
     @Test(expected = ServiceProvideError.class)
     public void addAServiceRepeated() throws ServiceProvideError {
-        ServiceL mservice = mock(ServiceL.class);
+        ServiceServify mservice = mock(ServiceServify.class);
         when(mservice.sameCategory(mservice)).thenReturn(true);
         ServiceProviderServify sp = new ServiceProviderServify("");
 
@@ -23,9 +23,10 @@ public class ServiceProviderServifyTest {
         sp.addService(mservice);
 
     }
+
     @Test
     public void removeAService() throws ServiceProvideError {
-        ServiceL mservice = mock(ServiceL.class);
+        ServiceServify mservice = mock(ServiceServify.class);
         CategoryService mcs = mock(CategoryService.class);
         when(mservice.sameCategory(mcs)).thenReturn(true);
         when(mservice.sameCategory(mservice)).thenReturn(true);
@@ -35,8 +36,9 @@ public class ServiceProviderServifyTest {
 
         Assert.assertFalse(sp.providesService(mservice));
     }
+
     @Test
-    public void removeANonExistentService(){
+    public void removeANonExistentService() {
         CategoryService mcs = mock(CategoryService.class);
         ServiceProviderServify sp = new ServiceProviderServify("");
 
