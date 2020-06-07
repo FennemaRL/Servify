@@ -1,6 +1,7 @@
 package com.Servify;
-
+/*
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -13,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 public class ServifyControllerIntegrationTest {
 
-    private MockMvc mockMvc;
+*//*    private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext wac;
 
@@ -21,5 +22,5 @@ public class ServifyControllerIntegrationTest {
     public void setup() throws Exception {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
-
-}
+    *//*
+}*/
