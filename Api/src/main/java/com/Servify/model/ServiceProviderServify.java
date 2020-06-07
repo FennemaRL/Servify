@@ -50,8 +50,8 @@ public class ServiceProviderServify {
 
     public void addService(ServiceServify ser) throws ServiceProvideError {
         List<ServiceServify> sameServices = offerServices.stream().filter(serv -> serv.sameCategory(ser)).collect(Collectors.toList());
-        if (!sameServices.isEmpty()) {
-            throw new ServiceProvideError("Servicio con categoria" + ser.getCategory().getCategoryName() + "ya proveeido");
+        if (0 < sameServices.size()) {
+            throw new ServiceProvideError("ya provees ese servicio");
         }
         offerServices.add(ser);
     }
