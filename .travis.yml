@@ -12,8 +12,6 @@ matrix:
           branch: master
 
     - languaje: node_js
-        node_js:
-          - "node"
       branches:
         only:
         - master
