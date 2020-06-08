@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const HorizontalLoginForm = () => {
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const [, forceUpdate] = useState(); // To disable submit button at the beginning.
 
   useEffect(() => {
@@ -12,24 +13,23 @@ const HorizontalLoginForm = () => {
   }, []);
 
   const onFinish = values => {
-    axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`,{data:{values}})
-      .then(res=> alert("se agrego con exito"))
+    axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`,{data:{values:{ username:"Test",...values}}})
+      .then(res=> {alert("se agrego con exito")
+                   console.log(res.data)})
+      .catch(err=>alert(err.response.data))
+  };
+  const onFinishDelete = values => {
+    console.log(values)
+    axios.delete(`${process.env.REACT_APP_API_URL}/api/provider/serviced`,{data:{values:{ username:"Test",...values}}})
+      .then(res=> {alert("se borro con exito")
+                   console.log(res.data)})
       .catch(err=>alert(err.response.data))
   };
 
   return (
+    <div>
+      <h2>Agregar Categoria</h2>
     <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
-      <Form.Item
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
-      >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-      </Form.Item>
       <Form.Item
         name="category"
         rules={[
@@ -56,6 +56,36 @@ const HorizontalLoginForm = () => {
         )}
       </Form.Item>
     </Form>
+    <h2>Eliminar Categoria</h2>
+    <Form form={form1} name="horizontal_login" layout="inline" onFinish={onFinishDelete}>
+      <Form.Item
+        name="category"
+        rules={[
+          {
+            required: true,
+            message: 'Please input category',
+          },
+        ]}
+      >
+        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="category" />
+      </Form.Item>
+      <Form.Item shouldUpdate>
+        {() => (
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={
+              !form1.isFieldsTouched(true) ||
+              form1.getFieldsError().filter(({ errors }) => errors.length).length
+            }
+          >
+            Delete Category
+          </Button>
+        )}
+      </Form.Item>
+    </Form>
+    
+    </div>
   );
 };
 export default HorizontalLoginForm;

@@ -20,9 +20,9 @@ function Servicios() {
             <Row gutter={[40, 16]} justify="center">
             {categories.map((cat,indx)=>(
                 <Col xs={10} md={4} key={indx}>
-                    <NavLink to={`/search/${cat.categoryName}`} >
+                    <NavLink to={`/Servify/search/${cat.categoryName}`} >
                     <Card hoverable  style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130}} src={cat.imageURL} />}>
-                        <Meta title={cat.name}/>
+                        <Meta title={cat.categoryName}/>
                     </Card>
                     </NavLink>
                 </Col>
