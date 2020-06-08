@@ -11,9 +11,7 @@ matrix:
         on:
           branch: master
 
-      - languaje: node_js
-        node_js:
-          - "node"
+    - languaje: node_js
       branches:
         only:
         - master
