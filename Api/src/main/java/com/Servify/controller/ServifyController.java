@@ -3,7 +3,6 @@ package com.Servify.controller;
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +24,18 @@ public class ServifyController {
     public ResponseEntity<List<CategoryService>> getAllCategories() {
         return ResponseEntity.ok().body(CategoryManager.categories());
     }
-
+    @CrossOrigin
     @GetMapping("/services/{category}")
     public ResponseEntity<List<ServiceProviderServify>> category(@PathVariable String category) {
         return ResponseEntity.ok().body(dbServiceProvider.findByCategory(category));
     }
+    @CrossOrigin
     @GetMapping("/provider/{name}")
     public ResponseEntity getUser(@PathVariable String name){
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         return ResponseEntity.ok().body(user);
     }
-
+    @CrossOrigin
     @PostMapping("/provider")
     public ResponseEntity addProvider(@RequestBody String provider){
         try {
@@ -48,6 +48,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+    @CrossOrigin
     @PostMapping("/provider/service")
     public ResponseEntity addService(@RequestBody String provider){
         try {
@@ -63,6 +64,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+    @CrossOrigin
     @DeleteMapping("/provider/serviced")
     public ResponseEntity deleteService(@RequestBody String provider){
         System.out.print(provider);
