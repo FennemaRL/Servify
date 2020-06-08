@@ -28,7 +28,7 @@ public class CategoryManager {
         if (matchCategories.size() != 0) {
             return new ServiceServify(matchCategories.get(0));
         }
-        throw new NoExistentCategorieError();
+        throw new NoExistentCategorieError("No existe esa categoria en el sistema");
     }
 
     public static CategoryService getCategory(String cat) throws InvalidCategoryError {
