@@ -14,7 +14,6 @@ matrix:
     - languaje: node_js
       before_install:
         - cd webservify
-        - npm update
       install:
         - npm install        
       branches:
