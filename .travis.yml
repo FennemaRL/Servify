@@ -12,12 +12,13 @@ matrix:
           branch: master
 
     - languaje: node_js
+      before_script:
+        - cd ..
+        - cd webservify
       branches:
         only:
         - master
       after_success:
-        - cd ..
-        - cd webservify
         - git config --global user.name "FennemaRL"
         - git config --global user.mail "ld.fennema@gmail.com"
         - git remote rm origin 
