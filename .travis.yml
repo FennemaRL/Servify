@@ -13,11 +13,10 @@ matrix:
 
     - languaje: node_js
       before_install:
+        - cd webservify
         - npm update
       install:
-        - npm install
-      before_script:
-        - cd webservify
+        - npm install        
       branches:
         only:
         - master
