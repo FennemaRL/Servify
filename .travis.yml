@@ -13,7 +13,6 @@ matrix:
 
     - languaje: node_js
       before_script:
-        - cd ..
         - cd webservify
       branches:
         only:
