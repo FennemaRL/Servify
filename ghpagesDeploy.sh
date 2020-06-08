@@ -1,6 +1,5 @@
 #!/bin/bash
 
- cd ..
  cd webservify
  apt install npm
  git config --global user.name "FennemaRL"
