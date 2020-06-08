@@ -15,7 +15,7 @@ matrix:
       before_install:
         - cd webservify
       install:
-        - npm install        
+        - npm ci        
       branches:
         only:
         - master
