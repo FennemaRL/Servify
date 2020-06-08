@@ -8,7 +8,7 @@ public class ServiceServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     private CategoryService category;
 
     public ServiceServify() {

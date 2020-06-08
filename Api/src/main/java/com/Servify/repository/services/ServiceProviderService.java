@@ -1,8 +1,9 @@
-package com.Servify.services;
+package com.Servify.repository.services;
 
 import com.Servify.model.ServiceProviderServify;
 import com.Servify.repository.ServiceProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public class ServiceProviderService {
                 .collect(Collectors.toList());
     }
 
+    public ServiceProviderServify save(ServiceProviderServify user) {
+        return serviceProviderRepository.save(user);
+    }
+
+    public ServiceProviderServify findOne(String name) {
+        return serviceProviderRepository.findByName(name);
+    }
 }

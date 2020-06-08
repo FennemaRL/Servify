@@ -9,7 +9,7 @@ function Servicios() {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-    axios.get('http://localhost:8080/api/categories')
+    axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
       .then(res=>setCategories(res.data))
       .catch(err=>console.error(err))
   },[]);
@@ -20,8 +20,8 @@ function Servicios() {
             <Row gutter={[40, 16]} justify="center">
             {categories.map((cat,indx)=>(
                 <Col xs={10} md={4} key={indx}>
-                    <NavLink to={`/search/${cat.name}`} >
-                    <Card hoverable  style={{ width: 150 }} cover={<img alt={cat.name} style={{ height: 130}} src={cat.url} />}>
+                    <NavLink to={`/search/${cat.categoryName}`} >
+                    <Card hoverable  style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130}} src={cat.imageURL} />}>
                         <Meta title={cat.name}/>
                     </Card>
                     </NavLink>

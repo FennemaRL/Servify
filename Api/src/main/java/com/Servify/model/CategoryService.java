@@ -10,7 +10,6 @@ public class CategoryService {
     @Column
     private String imageURL;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private String category;
 

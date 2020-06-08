@@ -1,5 +1,7 @@
 package com.Servify.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,37 +9,21 @@ import java.util.stream.Collectors;
 
 
 @Entity
+@Data
 public class ServiceProviderServify {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @OneToMany
-    private List<ServiceServify> services;
 
     private String name;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     private List<ServiceServify> offerServices;
 
     protected ServiceProviderServify() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Long setId() {
-        return id;
-    }
-
-    public List<ServiceServify> getServices() {
-        return services;
-    }
-
-    public void setServices(List<ServiceServify> services) {
-        this.services = services;
-    }
 
     public ServiceProviderServify(String name) {
         this.name = name;
@@ -45,7 +31,7 @@ public class ServiceProviderServify {
     }
 
     public Boolean hasServicesWithCategory(String category) {
-        return this.services.stream().anyMatch(s -> s.hasCategory(category));
+        return this.offerServices.stream().anyMatch(s -> s.hasCategory(category));
     }
 
     public void addService(ServiceServify ser) throws ServiceProvideError {
