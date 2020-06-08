@@ -8,7 +8,6 @@ public class ServiceServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @Column
     @OneToOne
     private CategoryService category;
 

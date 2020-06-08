@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan("com.Servify")
-public class ApicervifyApplication {
+public class ApiServifyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ApicervifyApplication.class, args);
+		SpringApplication.run(ApiServifyApplication.class, args);
 	}
 
 }
