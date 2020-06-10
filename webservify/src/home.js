@@ -19,25 +19,29 @@ function Servicios() {
         <Title  level={3} style={{textAlign:'center'}}>Servicios</Title>
             <Row gutter={[40, 16]} justify="center">
             {categories.map((cat,indx)=>(
-                <Col xs={10} md={4} key={indx}>
-                    <NavLink to={`/Servify/search/${cat.categoryName}`} >
-                    <Card hoverable  style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130}} src={cat.imageURL} />}>
-                        <Meta title={cat.categoryName}/>
-                    </Card>
-                    </NavLink>
-                </Col>
+                serviceCategory(indx, cat)
                 ))
             }
             </Row>
     </div>
     )
+
+    function serviceCategory(indx, cat) {
+        return <Col xs={10} md={4} key={indx}>
+            <NavLink to={`/Servify/search/${cat.categoryName}`}>
+                <Card hoverable style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130 }} src={cat.imageURL} />}>
+                    <Meta title={cat.categoryName} />
+                </Card>
+            </NavLink>
+        </Col>;
+    }
 }
 
 function Home () {
     return (  
         <div style={{display:'flex',flexDirection:'column',minHeight:'60vh',alignItems:'center', }}>
             <Title  level={2}>Sobre Nosotros</Title>
-            <Paragraph ellipsis>Somos un sitio que nacio por la necesitad de conectar personas que buscan algun tipo de 
+            <Paragraph ellipsis>Somos un sitio que nació por la necesitad de conectar personas que buscan algun tipo de 
                                 servicio con aquellas que lo brindan.
             </Paragraph>
             <Servicios/>
