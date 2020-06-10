@@ -1,6 +1,7 @@
 package integration.cucumber;
 
 import com.Servify.model.*;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -48,5 +49,24 @@ public class ServiceProviderStepdef {
     public void iDeleteTheService(String cat) {
         CategoryService sc = CategoryManager.getCategory(cat);
         sp.remove(sc);
+    }
+
+    @And("I add a description {string} to the service {string}")
+    public void iAddADescriptionToTheService(String description, String c) {
+        sp.setServiceWithDescription(CategoryManager.getCategory(c), description);
+    }
+
+    @Then("That description {string} is in the service {string}")
+    public void thatDescriptionIsInTheService(String description, String c) {
+        Assert.assertEquals(sp.getServiceDescription(CategoryManager.getCategory(c)), description);
+    }
+
+    @Then("I add a description {string} to the service {string} and throw {string}")
+    public void iAddADescriptionToTheServiceAndThrow(String description, String category, String errorMsg) {
+        try {
+            sp.setServiceWithDescription(CategoryManager.getCategory(category), description);
+        } catch (EmptyDescriptionError error) {
+            Assert.assertEquals(errorMsg, error.getMessage());
+        }
     }
 }

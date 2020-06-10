@@ -8,8 +8,10 @@ public class ServiceServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private CategoryService category;
+    @Column
+    private String description;
 
     public ServiceServify() {
     }
@@ -44,5 +46,13 @@ public class ServiceServify {
 
     public boolean sameCategory(CategoryService categoryService) {
         return this.category.equals(categoryService);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

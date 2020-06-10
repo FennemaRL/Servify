@@ -54,6 +54,21 @@ public class ServiceProviderServify {
     }
 
     public Boolean providesService(CategoryService cs) {
-        return offerServices.stream().filter(serv -> serv.sameCategory(cs)).count() == 1;
+        return filterByCategory(cs).size() == 1;
+    }
+
+    public void setServiceWithDescription(CategoryService c, String description) {
+        List<ServiceServify> services = filterByCategory(c);
+        if (services.isEmpty()) throw new EmptyDescriptionError();
+        services.get(0).setDescription(description);
+    }
+
+    private List<ServiceServify> filterByCategory(CategoryService c) {
+        return offerServices.stream().filter(s -> s.sameCategory(c))
+                .collect(Collectors.toList());
+    }
+
+    public String getServiceDescription(CategoryService c) {
+        return filterByCategory(c).get(0).getDescription();
     }
 }
