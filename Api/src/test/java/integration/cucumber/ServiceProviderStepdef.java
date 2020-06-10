@@ -19,10 +19,8 @@ public class ServiceProviderStepdef {
         try {
             ServiceServify ser = CategoryManager.createService(cat);
             sp.addService(ser);
-        } catch (ServiceProvideError serviceProvideError) {
+        } catch (ServiceProvideError | NoExistentCategoryError serviceProvideError) {
             serviceProvideError.printStackTrace();
-        } catch (NoExistentCategorieError noExistentCategorieError) {
-            noExistentCategorieError.printStackTrace();
         }
     }
 
@@ -36,11 +34,11 @@ public class ServiceProviderStepdef {
 
     @Then("I add the service {string} and throw {string}")
     public void iAddTheServiceAndThrow(String cat, String errorMesage) {
-        ServiceServify serv3 = null;
+        ServiceServify serv3;
         try {
             serv3 = CategoryManager.createService(cat);
             sp.addService(serv3);
-        } catch (NoExistentCategorieError error) {
+        } catch (NoExistentCategoryError ignored) {
         } catch (ServiceProvideError serviceProvideError) {
             Assert.assertEquals(errorMesage, serviceProvideError.getMessage());
         }

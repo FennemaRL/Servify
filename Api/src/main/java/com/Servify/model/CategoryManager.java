@@ -21,14 +21,18 @@ public class CategoryManager {
         return CATEGORY_SERVICES;
     }
 
-    public static ServiceServify createService(String cat) throws NoExistentCategorieError {
-        List<CategoryService> matchCategories = categories().stream().filter(categoryService -> {
-            return categoryService.getCategoryName().equals(cat);
-        }).collect(Collectors.toList());
-        if (matchCategories.size() != 0) {
-            return new ServiceServify(matchCategories.get(0));
+    public static ServiceServify createService(String cat) throws NoExistentCategoryError {
+        List<CategoryService> matchCategories = categories().stream()
+                .filter(categoryService -> categoryService.getCategoryName().equals(cat))
+                .collect(Collectors.toList());
+        assertExistsCategory(matchCategories);
+        return new ServiceServify(matchCategories.get(0));
+    }
+
+    private static void assertExistsCategory(List<CategoryService> matchCategories) throws NoExistentCategoryError {
+        if (matchCategories.isEmpty()) {
+            throw new NoExistentCategoryError();
         }
-        throw new NoExistentCategorieError("No existe esa categoria en el sistema");
     }
 
     public static CategoryService getCategory(String cat) throws InvalidCategoryError {

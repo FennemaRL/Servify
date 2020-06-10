@@ -53,14 +53,13 @@ public class ServifyController {
     public ResponseEntity addService(@RequestBody String provider){
         try {
             System.out.print(provider);
-            HashMap<String,Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-            String username = (String) ((HashMap<String,Object>) ( (HashMap<String,Object>) result.get("data")).get("values")).get("username");
-            String category = (String) ((HashMap<String,Object>) ( (HashMap<String,Object>) result.get("data")).get("values")).get("category");
-            System.out.print(username + " totatada "+category);
+            HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
+            String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
+            String category = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("category");
             ServiceProviderServify user = dbServiceProvider.findOne(username);
             user.addService(CategoryManager.createService(category));
-            return ResponseEntity.status(201).body( dbServiceProvider.save(user));
-        } catch (JsonProcessingException | ServiceProvideError | NoExistentCategorieError e) {
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+        } catch (JsonProcessingException | ServiceProvideError | NoExistentCategoryError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -72,7 +71,6 @@ public class ServifyController {
             HashMap<String,Object> result = new ObjectMapper().readValue(provider, HashMap.class);
             String username = (String) ( (HashMap<String,Object>) result.get("values")).get("username");
             String category = (String)  ( (HashMap<String,Object>) result.get("values")).get("category");
-            System.out.print(username + " totatada "+category);
             ServiceProviderServify user = dbServiceProvider.findOne(username);
             user.remove(CategoryManager.getCategory(category));
             return ResponseEntity.status(201).body( dbServiceProvider.save(user));
