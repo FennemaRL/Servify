@@ -7,23 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Entity
 @Data
 public class ServiceProviderServify {
 
+    public static final String SERVICIO_YA_PROVISTO = "Error: Servicio ya provisto";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
 
     private String name;
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceServify> offerServices;
 
     protected ServiceProviderServify() {
     }
-
 
     public ServiceProviderServify(String name) {
         this.name = name;
@@ -36,24 +35,25 @@ public class ServiceProviderServify {
 
     public void addService(ServiceServify ser) throws ServiceProvideError {
         List<ServiceServify> sameServices = offerServices.stream().filter(serv -> serv.sameCategory(ser)).collect(Collectors.toList());
-        if (0 < sameServices.size()) {
-            throw new ServiceProvideError("ya provees ese servicio");
-        }
+        assertServiceNotProvided(sameServices);
         offerServices.add(ser);
     }
 
+    private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProvideError {
+        if (!sameServices.isEmpty()) {
+            throw new ServiceProvideError(SERVICIO_YA_PROVISTO);
+        }
+    }
 
-    public boolean providesService(ServiceServify ser) {
-        return offerServices.stream().filter(serv -> serv.sameCategory(ser)).collect(Collectors.toList()).size() == 1;
+    public Boolean providesService(ServiceServify ser) {
+        return offerServices.stream().filter(serv -> serv.sameCategory(ser)).count() == 1;
     }
 
     public void remove(CategoryService sc) {
-
         offerServices = offerServices.stream().filter(serv -> !serv.sameCategory(sc)).collect(Collectors.toList());
-
     }
 
-    public boolean providesService(CategoryService cs) {
-        return offerServices.stream().filter(serv -> serv.sameCategory(cs)).collect(Collectors.toList()).size() == 1;
+    public Boolean providesService(CategoryService cs) {
+        return offerServices.stream().filter(serv -> serv.sameCategory(cs)).count() == 1;
     }
 }

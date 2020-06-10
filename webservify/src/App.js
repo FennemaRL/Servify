@@ -14,7 +14,7 @@ const handleClick = e => {
 function Nav() {
   return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
         <Menu.Item> <NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
-        <Menu.Item> <NavLink to="/Servify/profile/Test" >ingresa</NavLink></Menu.Item>
+        <Menu.Item> <NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
       </Menu>
 }
 
@@ -31,7 +31,7 @@ function App() {
               <Route exact path="/Servify/testadd"><TestAdd /></Route>
               <Route exact path="/Servify/profile/:username" component={ProfileEditable}></Route>
               <Route path="/Servify/"><Home /></Route>
-              <Redirect to={{  pathname: "/Servify/" }}/>
+              <Redirect to={{ pathname: "/Servify/" }}/>
             </Switch>
           </Content>
         </Layout>

@@ -13,21 +13,21 @@ const HorizontalLoginForm = () => {
 
   const onFinish = values => {
     axios.post(`${process.env.REACT_APP_API_URL}/api/provider`,{data:{values:{ username:values.username}}})
-      .then(res=> {alert("se agrego con exito")
+      .then(res=> {alert("Se agregó con éxito")
                    console.log(res.data)})
       .catch(err=>alert(err.response.data))
   };
 
   return (
     <div>
-      <h2>Agregar Categoria</h2>
+      <h2>Agregar Prestador</h2>
     <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
       <Form.Item
         name="username"
         rules={[
           {
             required: true,
-            message: 'Please input category',
+            message: 'Por favor ingrese una categoria',
           },
         ]}
       >

@@ -15,7 +15,7 @@ function Search(){
     
 return (
     <div style={{display:'flex',flexDirection:'column', justifyContent:'center',alignItems:'center'}}>
-        <Title  style={{textAlign:'center'}} level={2}>Busqueda {category}</Title>
+        <Title  style={{textAlign:'center'}} level={2}>Búsqueda {category}</Title>
         <List itemLayout="horizontal" dataSource={providers} size='large' renderItem={item => (
             <List.Item style={{backgroundColor:'#d9d9d9', borderRadius:5}}>
             <List.Item.Meta
