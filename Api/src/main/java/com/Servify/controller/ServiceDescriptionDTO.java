@@ -29,4 +29,10 @@ public class ServiceDescriptionDTO {
     public String getDescription() {
         return description;
     }
+
+    public void assertEmpty() throws EmptyDTOError {
+        if (description.equals("") || username.equals("") || category.equals("")) {
+            throw new EmptyDTOError();
+        }
+    }
 }

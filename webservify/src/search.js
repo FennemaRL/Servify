@@ -20,8 +20,8 @@ return (
             <List.Item style={{backgroundColor:'#d9d9d9', borderRadius:5}}>
             <List.Item.Meta
                 avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={<p>{item.name}</p>}
-                description={item.description? item.description:"no contiene descripcion"}
+                title={<p>{item.username}</p>}
+                description={item.description? item.description:"No contiene descripcion"}
             />
       </List.Item>
     )}

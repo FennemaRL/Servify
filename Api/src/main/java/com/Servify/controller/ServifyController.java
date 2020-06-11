@@ -75,14 +75,14 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider/service/description")
     public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription) {
-        System.out.println(serviceDescription.toString());
         try {
+            serviceDescription.assertEmpty();
             ServiceProviderServify provider = dbServiceProvider.findOne(serviceDescription.getUsername());
             CategoryService category = CategoryManager.getCategory(serviceDescription.getCategory());
             provider.setServiceWithDescription(category, serviceDescription.getDescription());
             ServiceProviderServify save = dbServiceProvider.save(provider);
             return ResponseEntity.status(201).body(save);
-        } catch (Exception e) {
+        } catch (Exception | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -90,7 +90,6 @@ public class ServifyController {
     @CrossOrigin
     @DeleteMapping("/provider/serviced")
     public ResponseEntity deleteService(@RequestBody String provider) {
-        System.out.print(provider);
         try {
             HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
             String username = (String) ((HashMap<String, Object>) result.get("values")).get("username");
