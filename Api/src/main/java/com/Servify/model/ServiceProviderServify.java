@@ -16,7 +16,7 @@ public class ServiceProviderServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-
+    @Column
     private String name;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceServify> offerServices;
@@ -70,5 +70,9 @@ public class ServiceProviderServify {
 
     public String getServiceDescription(CategoryService c) {
         return filterByCategory(c).get(0).getDescription();
+    }
+
+    public String getName() {
+        return name;
     }
 }

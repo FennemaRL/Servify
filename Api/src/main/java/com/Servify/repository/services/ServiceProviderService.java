@@ -3,7 +3,6 @@ package com.Servify.repository.services;
 import com.Servify.model.ServiceProviderServify;
 import com.Servify.repository.ServiceProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class ServiceProviderService {
     private ServiceProviderRepository serviceProviderRepository;
 
     public List<ServiceProviderServify> findByCategory(String category) {
-        List<ServiceProviderServify> all = (List<ServiceProviderServify>) serviceProviderRepository.findAll();
+        List<ServiceProviderServify> all = serviceProviderRepository.findAll();
         return all.stream()
                 .filter(p -> p.hasServicesWithCategory(category))
                 .collect(Collectors.toList());
