@@ -12,7 +12,6 @@ public class CategoryService {
     @Id
     @Column
     private String category;
-
     public CategoryService() {
     }
 

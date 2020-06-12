@@ -18,3 +18,14 @@ Feature: Service Provider
   Scenario: Delete a service repeated
     Given A serviceProvider "Lucas"
     Then  I delete the service "Plomeria"
+
+  Scenario: Add a description to a service
+    Given A serviceProvider "Lucas"
+    When I add the service "Plomeria"
+    And I add a description "Cash Only" to the service "Plomeria"
+    Then That description "Cash Only" is in the service "Plomeria"
+
+  Scenario: Add a description to a service
+    Given A serviceProvider "Lucas"
+    When I add the service "Plomeria"
+    Then I add a description "" to the service "Plomeria" and throw "Error: Descripción vacía"

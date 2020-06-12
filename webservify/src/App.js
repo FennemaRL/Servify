@@ -5,7 +5,7 @@ import { Layout,Menu} from 'antd';
 import Home from  "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
-import ProfileEditable from "./profileEditable";
+import ProfileEditable from "./profile/profileEditable";
 
 const { Content, Footer } = Layout;
 
@@ -29,7 +29,7 @@ function App() {
             <Switch >
               <Route exact path="/Servify/search/:category" component={Search}/> 
               <Route exact path="/Servify/testadd"><TestAdd /></Route>
-              <Route exact path="/Servify/profile/:username" component={ProfileEditable}></Route>
+              <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
               <Route path="/Servify/"><Home /></Route>
               <Redirect to={{ pathname: "/Servify/" }}/>
             </Switch>
