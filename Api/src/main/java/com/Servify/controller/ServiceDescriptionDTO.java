@@ -3,7 +3,7 @@ package com.Servify.controller;
 import lombok.Data;
 
 @Data
-public class ServiceDescriptionDTO {
+public class ServiceDescriptionDTO implements DTOServify{
 
     private String username;
     private String category;

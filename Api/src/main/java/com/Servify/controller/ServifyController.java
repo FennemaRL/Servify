@@ -4,6 +4,7 @@ import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,15 +60,14 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping("/provider/service")
-    public ResponseEntity addService(@RequestBody String provider) {
+    public ResponseEntity addService(@RequestBody ProviderDTO provider) {
         try {
-            HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-            String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
-            String category = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("category");
-            ServiceProviderServify user = dbServiceProvider.findOne(username);
-            user.addService(CategoryManager.createService(category));
+            System.out.print(provider);
+            provider.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
+            user.addService(CategoryManager.createService(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (JsonProcessingException | ServiceProvideError | NoExistentCategoryError e) {
+        } catch (ServiceProvideError | NoExistentCategoryError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -81,24 +81,24 @@ public class ServifyController {
             CategoryService category = CategoryManager.getCategory(serviceDescription.getCategory());
             provider.setServiceWithDescription(category, serviceDescription.getDescription());
             ServiceProviderServify save = dbServiceProvider.save(provider);
+
             return ResponseEntity.status(201).body(save);
         } catch (Exception | EmptyDTOError e) {
+            System.out.print(e.getClass());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @CrossOrigin
-    @DeleteMapping("/provider/serviced")
-    public ResponseEntity deleteService(@RequestBody String provider) {
+    @DeleteMapping("/provider/service")
+    public ResponseEntity deleteService(@RequestBody ProviderDTO provider) {
         try {
-            HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-            String username = (String) ((HashMap<String, Object>) result.get("values")).get("username");
-            String category = (String) ((HashMap<String, Object>) result.get("values")).get("category");
-            ServiceProviderServify user = dbServiceProvider.findOne(username);
-            user.remove(CategoryManager.getCategory(category));
+            provider.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
+            user.remove(CategoryManager.getCategory(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (EmptyDTOError e) {
+            return ResponseEntity.status(201).body(e.getMessage());
         }
     }
 

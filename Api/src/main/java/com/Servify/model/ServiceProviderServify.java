@@ -59,8 +59,8 @@ public class ServiceProviderServify {
 
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
-        if (services.isEmpty()) throw new EmptyDescriptionError();
-        services.get(0).setDescription(description);
+        if (description.isEmpty()) throw new EmptyDescriptionError();
+        services.forEach(serv ->serv.setDescription(description) );
     }
 
     private List<ServiceServify> filterByCategory(CategoryService c) {
