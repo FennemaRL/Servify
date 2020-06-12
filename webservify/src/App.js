@@ -5,7 +5,7 @@ import { Layout,Menu} from 'antd';
 import Home from  "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
-import ProfileEditable from "./profileEditable";
+import ProfileEditable from "./profile/profileEditable";
 
 const { Content, Footer } = Layout;
 
