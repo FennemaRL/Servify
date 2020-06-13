@@ -77,6 +77,7 @@ public class ServifyController {
     public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription) {
         try {
             serviceDescription.assertEmpty();
+
             ServiceProviderServify provider = dbServiceProvider.findOne(serviceDescription.getUsername());
             CategoryService category = CategoryManager.getCategory(serviceDescription.getCategory());
             provider.setServiceWithDescription(category, serviceDescription.getDescription());
