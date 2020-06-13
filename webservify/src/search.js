@@ -15,17 +15,19 @@ function Search(){
     
 return (
     <div style={{display:'flex',flexDirection:'column', justifyContent:'center',alignItems:'center'}}>
-        <Title  style={{textAlign:'center'}} level={2}>Búsqueda {category}</Title>
-        <List itemLayout="horizontal" dataSource={providers} size='large' renderItem={item => (
-            <List.Item style={{backgroundColor:'#d9d9d9', borderRadius:5}}>
+        <Title  style={{textAlign:'center',}} level={2}>Búsqueda {category}</Title>
+        <div style={{backgroundColor:'#d9d9d9', width:'45vw'}}>
+        <List itemLayout="horizontal" dataSource={providers}  size='large' renderItem={item => (
+            <List.Item >
             <List.Item.Meta
-                avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                avatar={<Avatar src={item.urlImage?item.urlImage:"https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"} />}
                 title={<p>{item.username}</p>}
                 description={item.description? item.description:"No contiene descripcion"}
             />
       </List.Item>
     )}
   />
+  </div>
 </div>)
 }
 export default Search
