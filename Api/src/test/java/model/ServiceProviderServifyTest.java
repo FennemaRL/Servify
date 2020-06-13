@@ -1,23 +1,28 @@
 package model;
 
-import com.Servify.model.CategoryService;
-import com.Servify.model.ServiceProvideError;
-import com.Servify.model.ServiceProviderServify;
-import com.Servify.model.ServiceServify;
+import com.Servify.model.*;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ServiceProviderServifyTest {
     private ServiceProviderServify sp;
+    private ServiceServify mservice;
+    private CategoryService mcs;
+    @Before
+    public void setUp(){
+        mservice = mock(ServiceServify.class);
+        sp = new ServiceProviderServify("");
+        mcs = mock(CategoryService.class);
+    }
 
     @Test(expected = ServiceProvideError.class)
     public void addAServiceRepeated() throws ServiceProvideError {
-        ServiceServify mservice = mock(ServiceServify.class);
+
         when(mservice.sameCategory(mservice)).thenReturn(true);
-        ServiceProviderServify sp = new ServiceProviderServify("");
+
 
         sp.addService(mservice);
         sp.addService(mservice);
@@ -26,8 +31,6 @@ public class ServiceProviderServifyTest {
 
     @Test
     public void removeAService() throws ServiceProvideError {
-        ServiceServify mservice = mock(ServiceServify.class);
-        CategoryService mcs = mock(CategoryService.class);
         when(mservice.sameCategory(mcs)).thenReturn(true);
         when(mservice.sameCategory(mservice)).thenReturn(true);
         ServiceProviderServify sp = new ServiceProviderServify("");
@@ -39,10 +42,39 @@ public class ServiceProviderServifyTest {
 
     @Test
     public void removeANonExistentService() {
-        CategoryService mcs = mock(CategoryService.class);
-        ServiceProviderServify sp = new ServiceProviderServify("");
-
         sp.remove(mcs);
+    }
+    @Test
+    public void addADescriptionToAnExistentService()  {
+        when(mservice.sameCategory(mcs)).thenReturn(true);
+        try {
+            sp.addService(mservice);
+        } finally {
+            sp.setServiceWithDescription(mcs,"tetera");
+        }
+        verify(mservice,atLeastOnce()).setDescription("tetera");
+    }
 
+    @Test(expected = EmptyDescriptionError.class)
+    public void addAEmptyDescriptionToAnExistentService() {
+        when(mservice.sameCategory(mcs)).thenReturn(true);
+        ServiceProviderServify sp = new ServiceProviderServify("");
+        try {
+            sp.addService(mservice);
+        } finally {
+            sp.setServiceWithDescription(mcs,"");
+        }
+        verify(mservice,atLeast(0)).setDescription("");
+    }
+    @Test(expected = ServiceProvideError.class)
+    public void addADescriptionToAnonExistentService() {
+        when(mservice.sameCategory(mcs)).thenReturn(false);
+        ServiceProviderServify sp = new ServiceProviderServify("");
+        try {
+            sp.addService(mservice);
+        } finally {
+            sp.setServiceWithDescription(mcs,"te");
+        }
+        verify(mservice,atLeast(0)).setDescription("te");
     }
 }
