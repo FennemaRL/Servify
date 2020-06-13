@@ -1,16 +1,18 @@
 import React from 'react';
 import './App.css';
-import {  BrowserRouter as Router,  Switch, Route, NavLink, Redirect} from "react-router-dom";
-import { Layout,Menu} from 'antd';
-import Home from  "./home";
+import {BrowserRouter as Router, NavLink, Redirect, Route, Switch} from "react-router-dom";
+import {Layout, Menu} from 'antd';
+import Home from "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
 import ProfileEditable from "./profile/profileEditable";
+import ConsumerView from "./profile/ConsumerView";
 
-const { Content, Footer } = Layout;
+const {Content, Footer} = Layout;
 
-const handleClick = e => {
+const handleClick = () => {
 };
+
 function Nav() {
   return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
         <Menu.Item> <NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
@@ -26,13 +28,14 @@ function App() {
         <Nav/>
         <Layout style={{marginTop:'2vh',minHeight:'70vh'}}>
           <Content >
-            <Switch >
-              <Route exact path="/Servify/search/:category" component={Search}/> 
-              <Route exact path="/Servify/testadd"><TestAdd /></Route>
-              <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
-              <Route path="/Servify/"><Home /></Route>
-              <Redirect to={{ pathname: "/Servify/" }}/>
-            </Switch>
+              <Switch>
+                  <Route exact path="/Servify/search/:category" component={Search}/>
+                  <Route exact path="/Servify/testadd"><TestAdd/></Route>
+                  <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
+                  <Route exact path="/Servify/view/:username" component={ConsumerView}/>
+                  <Route path="/Servify/"><Home/></Route>
+                  <Redirect to={{pathname: "/Servify/"}}/>
+              </Switch>
           </Content>
         </Layout>
       </Router>

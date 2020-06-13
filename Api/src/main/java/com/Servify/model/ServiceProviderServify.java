@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Data
 public class ServiceProviderServify {
 
-    public static final String SERVICIO_YA_PROVISTO = "Error: Servicio ya provisto";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
@@ -41,7 +40,7 @@ public class ServiceProviderServify {
 
     private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProvideError {
         if (!sameServices.isEmpty()) {
-            throw new ServiceProvideError(SERVICIO_YA_PROVISTO);
+            throw new ServiceProvideError();
         }
     }
 
