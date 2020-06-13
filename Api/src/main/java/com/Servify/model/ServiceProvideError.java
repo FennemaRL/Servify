@@ -6,4 +6,8 @@ public class ServiceProvideError extends RuntimeException {
     public ServiceProvideError() {
         super(SERVICIO_YA_PROVISTO);
     }
+
+    public ServiceProvideError(String msg) {
+        super(msg);
+    }
 }

@@ -59,7 +59,7 @@ public class ServiceProviderServify {
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
         if (description.isEmpty()) throw new EmptyDescriptionError();
-        if (services.isEmpty()) throw new ServiceProvideError();
+        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
         services.get(0).setDescription(description);
     }
 
