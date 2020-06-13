@@ -9,6 +9,7 @@ import org.junit.Assert;
 
 public class ServiceProviderStepdef {
     private ServiceProviderServify sp;
+    private Boolean errorWasThrown;
 
     @Given("A serviceProvider {string}")
     public void a_serviceProvider(String name) {
@@ -68,5 +69,36 @@ public class ServiceProviderStepdef {
         } catch (EmptyDescriptionError error) {
             Assert.assertEquals(errorMsg, error.getMessage());
         }
+    }
+
+    @When("I modify personal information")
+    public void i_modify_personal_information() throws EmptyFieldReceivedError {
+
+        sp.setPersonalInformation("Pepe2", "1234567890", "0987654321", "www.pepeCarpinteria.com",
+                "pepelandia");
+    }
+
+    @Then("That information is in Pepe's profile")
+    public void that_information_is_in_Pepe_s_profile() {
+        Assert.assertEquals("Pepe2", sp.getName());
+        Assert.assertEquals("1234567890", sp.getPhoneNmbr());
+        Assert.assertEquals("0987654321", sp.getCelNmbr());
+        Assert.assertEquals("www.pepeCarpinteria.com", sp.getWebPage());
+        Assert.assertEquals("pepelandia", sp.getResidence());
+    }
+
+    @When("I modify personal information leaving one empty field")
+    public void i_modify_personal_information_leaving_one_empty_field() {
+        try{
+            sp.setPersonalInformation("Pepe2", "", "0987654321", "www.pepeCarpinteria.com",
+                    "");
+        }catch(EmptyFieldReceivedError error){
+            errorWasThrown = true;
+        }
+    }
+
+    @Then("I don't add any information and i throw {string}")
+    public void i_don_t_add_any_information_and_i_throw(String string) {
+        Assert.assertTrue(errorWasThrown);
     }
 }

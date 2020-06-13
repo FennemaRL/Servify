@@ -18,15 +18,31 @@ public class ServiceProviderServify {
     private Long id;
     @Column
     private String name;
+    @Column
+    private String phoneNmbr;
+    @Column
+    private String celNmbr;
+    @Column
+    private String webPage;
+    @Column
+    private String residence;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceServify> offerServices;
 
     protected ServiceProviderServify() {
     }
 
-    public ServiceProviderServify(String name) {
+    public ServiceProviderServify(String name){
         this.name = name;
-        offerServices = new ArrayList<>();
+        this.offerServices = new ArrayList<ServiceServify>();
+    }
+    public ServiceProviderServify(String name,String phoneNmbr, String celNmbr, String webPage, String residence) {
+        this.name = name;
+        this.phoneNmbr = phoneNmbr;
+        this.celNmbr = celNmbr;
+        this. webPage = webPage;
+        this.residence = residence;
+        offerServices = new ArrayList<ServiceServify>();
     }
 
     public Boolean hasServicesWithCategory(String category) {
@@ -72,7 +88,24 @@ public class ServiceProviderServify {
         return filterByCategory(c).get(0).getDescription();
     }
 
-    public String getName() {
-        return name;
+
+    public String getName() { return name; }
+    public String getPhoneNmbr() { return phoneNmbr; }
+    public String getCelNmbr() { return celNmbr; }
+    public String getWebPage() { return webPage;}
+    public String getResidence() { return residence; }
+
+    public void setPersonalInformation(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
+
+        if(name.equals("")||phoneNmbr.equals("")||cellNmbr.equals("")||webpage.equals("")|| residence.equals("")){
+
+            throw new EmptyFieldReceivedError("There is an empty missing field");
+        }else{
+            this.name = name;
+            this.phoneNmbr = phoneNmbr;
+            this.celNmbr = cellNmbr;
+            this.webPage = webpage;
+            this.residence = residence;
+        }
     }
 }

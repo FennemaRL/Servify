@@ -46,17 +46,32 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping("/provider")
-    public ResponseEntity addProvider(@RequestBody String provider) {
-        try {
-            HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-            String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
-            ServiceProviderServify user = new ServiceProviderServify(username);
-            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(400).body(e.getMessage());
-        }
+        public ResponseEntity addProvider(@RequestBody String provider) {
+            try {
+                HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
+                String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
+                String phoneNmbr = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("phoneNmbr");
+                String celNmbr = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("celNmbr");
+                String webPage = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("webPage");
+                String residence = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("residence");
+
+                ServiceProviderServify user = new ServiceProviderServify(username, phoneNmbr, celNmbr, webPage, residence);
+                return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(400).body(e.getMessage());
+            }
     }
+
+    /*@CrossOrigin
+    @PutMapping("/provider/{name}")
+    public ResponseEntity editProvider(@RequestBody String provider){
+        try {
+            ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
+        }catch(){
+
+        }
+    }*/
 
     @CrossOrigin
     @PostMapping("/provider/service")

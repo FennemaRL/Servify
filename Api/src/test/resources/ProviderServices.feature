@@ -29,3 +29,13 @@ Feature: Service Provider
     Given A serviceProvider "Lucas"
     When I add the service "Plomeria"
     Then I add a description "" to the service "Plomeria" and throw "Error: Descripción vacía"
+  
+  Scenario: Add personal information to provider
+    Given A serviceProvider "Pepe"
+    When I modify personal information
+    Then That information is in Pepe's profile
+  
+  Scenario: Add personal incompleted information to provider
+    Given A serviceProvider "Pepe"
+    When I modify personal information leaving one empty field
+    Then I don't add any information and i throw "Error: No puede dejar campos vacios"
