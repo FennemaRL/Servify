@@ -63,15 +63,20 @@ public class ServifyController {
             }
     }
 
-    /*@CrossOrigin
-    @PutMapping("/provider/{name}")
-    public ResponseEntity editProvider(@RequestBody String provider){
+    @CrossOrigin
+    @PostMapping("/provider/edit/{name}")
+    public ResponseEntity editPersonalInfo(@RequestBody String providerName, String name,
+                                           String phoneNmbr, String cellNmbr, String webpage, String residence) {
         try {
-            ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
-        }catch(){
+            ServiceProviderServify provider = dbServiceProvider.findOne(providerName);
+            provider.setPersonalInformation(name, phoneNmbr, cellNmbr, webpage, residence);
+            ServiceProviderServify save = dbServiceProvider.save(provider);
+            return ResponseEntity.status(201).body(save);
 
+        } catch (Exception | EmptyFieldReceivedError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
-    }*/
+    }
 
     @CrossOrigin
     @PostMapping("/provider/service")
@@ -117,5 +122,6 @@ public class ServifyController {
             return ResponseEntity.status(201).body(e.getMessage());
         }
     }
+
 
 }
