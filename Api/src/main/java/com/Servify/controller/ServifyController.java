@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.cbor.Jackson2CborDecoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,18 +30,24 @@ public class ServifyController {
 
     @CrossOrigin
     @GetMapping("/services/{category}")
-    public ResponseEntity<List<ServiceDescriptionDTO>> category(@PathVariable String category) {
-        List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
-                .stream().map(sp -> new ServiceDescriptionDTO(sp.getName(),
-                        sp.getServiceDescription(CategoryManager.getCategory(category)), category))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok().body(byCategory);
+    public ResponseEntity category(@PathVariable String category) {
+        try{
+            CategoryService categoryObj = CategoryManager.getCategory(category);
+            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
+                .stream().map(sp ->
+                            new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj), category)
+                ).collect(Collectors.toList());
+        return ResponseEntity.ok().body(byCategory);}
+        catch (InvalidCategoryError e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @CrossOrigin
     @GetMapping("/provider/{name}")
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
+        if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
         return ResponseEntity.ok().body(user);
     }
 
@@ -64,7 +71,7 @@ public class ServifyController {
     }
 
     @CrossOrigin
-    @PostMapping("/provider/edit/{name}")
+    @PutMapping("/provider/edit/{name}")
     public ResponseEntity editPersonalInfo(@RequestBody String providerName, String name,
                                            String phoneNmbr, String cellNmbr, String webpage, String residence) {
         try {

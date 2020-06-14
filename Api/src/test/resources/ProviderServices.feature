@@ -29,7 +29,7 @@ Feature: Service Provider
     Given A serviceProvider "Lucas"
     When I add the service "Plomeria"
     Then I add a description "" to the service "Plomeria" and throw "Error: Descripción vacía"
-  
+
   Scenario: Add personal information to provider
     Given A serviceProvider "Pepe"
     When I modify personal information
@@ -39,3 +39,8 @@ Feature: Service Provider
     Given A serviceProvider "Pepe"
     When I modify personal information leaving one empty field
     Then I don't add any information and i throw "Error: No puede dejar campos vacios"
+
+  Scenario: Add a description to a non existent service
+    Given A serviceProvider "Lucas"
+    When I add the service "Plomeria"
+    Then I add a description "Cash Only" to the service "Electricidad" and throw "Error: Servicio no provisto"
