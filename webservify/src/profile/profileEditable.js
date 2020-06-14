@@ -5,7 +5,7 @@ import ViewEditableService from "./servicesProfile";
 
 
 export function useProviderServices() {
-    let {username} = useParams();
+    let {username, category} = useParams();
     const [providerSevices, setproviderSevices] = useState([])
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/provider/${username}`)
@@ -15,7 +15,7 @@ export function useProviderServices() {
             })
             .catch(err => alert(err.response.data))
     }, [username])
-    return {username, providerSevices, setproviderSevices};
+    return {username, providerSevices, setproviderSevices, category};
 }
 
 function ProfileEditable() {

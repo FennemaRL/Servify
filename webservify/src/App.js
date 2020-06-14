@@ -7,6 +7,7 @@ import Search from "./search";
 import TestAdd from "./testadd";
 import ProfileEditable from "./profile/profileEditable";
 import ConsumerView from "./profile/ConsumerView";
+import {ProfileEditable2, ConsumerView2} from "./profile/profile";
 
 const {Content, Footer} = Layout;
 
@@ -31,8 +32,8 @@ function App() {
               <Switch>
                   <Route exact path="/Servify/search/:category" component={Search}/>
                   <Route exact path="/Servify/testadd"><TestAdd/></Route>
-                  <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
-                  <Route exact path="/Servify/view/:username" component={ConsumerView}/>
+                  <Route exact path="/Servify/profile/:username" component={ProfileEditable2}/>
+                  <Route path="/Servify/view/:username/:category?" component={ConsumerView2}/>
                   <Route path="/Servify/"><Home/></Route>
                   <Redirect to={{pathname: "/Servify/"}}/>
               </Switch>

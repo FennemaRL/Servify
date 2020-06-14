@@ -90,14 +90,13 @@ function ViewEditableService({username, services, setServices}) {
 }
 
 ///Non editable
-export function ViewService({username, services, setServices}) {
+export function ViewService({username, services, category}) {
 
-    const [selectCategory, setselectCategory] = useState();
     const [activeCategory, setActiveCategorie] = useState();
 
     useEffect(() => {
-        setActiveCategorie(services[0] ? services[0].categoryName : null)
-    }, [services])
+        setActiveCategorie(category? category: services[0] ? services[0].categoryName : null)
+    }, [services,category])
 
     return (
         <div style={{width: '70vw'}}>
