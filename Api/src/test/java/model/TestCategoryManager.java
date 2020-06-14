@@ -1,8 +1,6 @@
 package model;
 
-import com.Servify.model.CategoryManager;
-import com.Servify.model.NoExistentCategoryError;
-import com.Servify.model.ServiceServify;
+import com.Servify.model.*;
 import org.junit.Test;
 
 public class TestCategoryManager {
@@ -20,5 +18,9 @@ public class TestCategoryManager {
     @Test(expected = NoExistentCategoryError.class)
     public void testCreateServiceOfAnNoExistentCategory() throws NoExistentCategoryError {
         ServiceServify serv = CategoryManager.createService("Mineria");
+    }
+    @Test(expected = InvalidCategoryError.class)
+    public void testSearchForANoNExistentCategory() throws NoExistentCategoryError {
+        CategoryService Cat = CategoryManager.getCategory("Mineria");
     }
 }

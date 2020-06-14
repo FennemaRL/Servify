@@ -65,7 +65,7 @@ public class ServiceProviderStepdef {
     public void iAddADescriptionToTheServiceAndThrow(String description, String category, String errorMsg) {
         try {
             sp.setServiceWithDescription(CategoryManager.getCategory(category), description);
-        } catch (EmptyDescriptionError error) {
+        } catch (EmptyDescriptionError | ServiceProvideError error) {
             Assert.assertEquals(errorMsg, error.getMessage());
         }
     }
