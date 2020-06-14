@@ -7,16 +7,17 @@ import Search from "./search";
 import TestAdd from "./testadd";
 import {ProfileEditable, ConsumerView} from "./profile/profile";
 import Error from "./error";
-const {Content, Footer} = Layout;
+const {Content, Footer,} = Layout;
 
 const handleClick = () => {
 };
 
 function Nav() {
-  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
-        <Menu.Item> <NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
-        <Menu.Item> <NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
-      </Menu>
+  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw', width:'96vw', display:'flex'}}>
+          <Menu.Item ><NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
+          <div style={{flex:1}}></div>
+          <Menu.Item ><NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
+        </Menu>
 }
 
 function App() {

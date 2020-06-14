@@ -96,15 +96,18 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
 }
 
 ///Non editable
-export function ViewService({username, services, category}) {
+export function ViewService({username, providerSevices, category, err}) {
 
     const [activeCategory, setActiveCategorie] = useState();
     const onChangeTab = key => setActiveCategorie(key);
     useEffect(() => {
-        setActiveCategorie(category? category: services[0] ? services[0].categoryName : null)
-    }, [services,category])
+        setActiveCategorie(category? category: providerSevices[0] ? providerSevices[0].categoryName : null)
+    }, [providerSevices,category])
 
-    return (
+    return  (<>{ (err && <Redirect to={{
+        pathname: '/Servify/Error',
+        state: { message: err }
+    }} /> ) ||
         <div style={{width: '70vw'}}>
             <h1>Categorias ofrecidas</h1>
             <div className="card-container">
@@ -112,12 +115,14 @@ export function ViewService({username, services, category}) {
                       activeKey={activeCategory}
                       onChange={onChangeTab}
                       hideAdd>
-                    {services.map(ser => (
+                    {providerSevices.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
                             <Service username={username} service={ser}/>
                         </TabPane>))}
                 </Tabs>
             </div>
         </div>
+        }
+    </>
     )
 }

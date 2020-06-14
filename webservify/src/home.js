@@ -41,7 +41,7 @@ function Home () {
     return (  
         <div style={{display:'flex',flexDirection:'column',minHeight:'60vh',alignItems:'center', }}>
             <Title  level={2}>Sobre Nosotros</Title>
-            <Paragraph ellipsis>Somos un sitio que nació por la necesitad de conectar personas que buscan algun tipo de 
+            <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>Somos un sitio que nació por la necesitad de conectar personas que buscan algun tipo de 
                                 servicio con aquellas que lo brindan.
             </Paragraph>
             <Servicios/>
