@@ -1,21 +1,23 @@
 import React from 'react';
 import './App.css';
-import {  BrowserRouter as Router,  Switch, Route, NavLink, Redirect} from "react-router-dom";
-import { Layout,Menu} from 'antd';
-import Home from  "./home";
+import {BrowserRouter as Router, NavLink, Redirect, Route, Switch} from "react-router-dom";
+import {Layout, Menu} from 'antd';
+import Home from "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
-import ProfileEditable from "./profile/profileEditable";
+import {ProfileEditable, ConsumerView} from "./profile/profile";
+import Error from "./error";
+const {Content, Footer,} = Layout;
 
-const { Content, Footer } = Layout;
-
-const handleClick = e => {
+const handleClick = () => {
 };
+
 function Nav() {
-  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw'}}>
-        <Menu.Item> <NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
-        <Menu.Item> <NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
-      </Menu>
+  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw', width:'96vw', display:'flex'}}>
+          <Menu.Item ><NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
+          <div style={{flex:1}}></div>
+          <Menu.Item ><NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
+        </Menu>
 }
 
 function App() {
@@ -26,13 +28,15 @@ function App() {
         <Nav/>
         <Layout style={{marginTop:'2vh',minHeight:'70vh'}}>
           <Content >
-            <Switch >
-              <Route exact path="/Servify/search/:category" component={Search}/> 
-              <Route exact path="/Servify/testadd"><TestAdd /></Route>
-              <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
-              <Route path="/Servify/"><Home /></Route>
-              <Redirect to={{ pathname: "/Servify/" }}/>
-            </Switch>
+              <Switch>
+                  <Route exact path="/Servify/search/:category" component={Search}/>
+                  <Route exact path="/Servify/testadd"><TestAdd/></Route>
+                  <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
+                  <Route path="/Servify/view/:username/:category?" component={ConsumerView}/>
+                  <Route path="/Servify/error" component={Error}/>
+                  <Route exact path="/Servify/"><Home/></Route>
+                  <Redirect to={{pathname: "/Servify/"}}/>
+              </Switch>
           </Content>
         </Layout>
       </Router>

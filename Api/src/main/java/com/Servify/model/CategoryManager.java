@@ -37,13 +37,13 @@ public class CategoryManager {
 
     public static CategoryService getCategory(String cat) throws InvalidCategoryError {
         List<CategoryService> categoryServices = categories().stream().filter(categoryService -> categoryService.getCategoryName().equals(cat)).collect(Collectors.toList());
-        assertNotEmpty(categoryServices);
+        assertNotEmpty(categoryServices,cat);
         return categoryServices.get(0);
     }
 
-    private static void assertNotEmpty(List<CategoryService> categoryServices) {
+    private static void assertNotEmpty(List<CategoryService> categoryServices, String category) throws InvalidCategoryError{
         if (categoryServices.isEmpty()) {
-            throw new InvalidCategoryError();
+            throw new InvalidCategoryError(category);
         }
     }
 }

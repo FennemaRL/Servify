@@ -29,6 +29,11 @@ Feature: Service Provider
     Given A serviceProvider "Lucas"
     When I add the service "Plomeria"
     Then I add a description "" to the service "Plomeria" and throw "Error: Descripción vacía"
+
+  Scenario: Add a description to a non existent service
+    Given A serviceProvider "Lucas"
+    When I add the service "Plomeria"
+    Then I add a description "Cash Only" to the service "Electricidad" and throw "Error: Servicio no provisto"
   
   Scenario: Add personal information to provider
     Given A serviceProvider "Pepe"
