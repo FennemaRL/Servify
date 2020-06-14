@@ -1,5 +1,5 @@
 import React from 'react';
-import { ViewEditableService, ViewService} from "./servicesProfile";
+import { ViewEditableService, ViewService, } from "./servicesProfile";
 import { useProviderServices } from "./useProviderServices";
 
 export function ProfileEditable(){
