@@ -19,17 +19,17 @@ function Servicios() {
         <Title  level={3} style={{textAlign:'center'}}>Servicios</Title>
             <Row gutter={[40, 16]} justify="center">
             {categories.map((cat,indx)=>(
-                serviceCategory(indx, cat, categories)
+                serviceCategory(indx, cat)
                 ))
             }
             </Row>
     </div>
     )
 
-    function serviceCategory(indx, cat, categories) {
+    function serviceCategory(indx, cat) {
         return <Col xs={10} md={4} key={indx}>
             <NavLink to={`/Servify/search/${cat.categoryName}`}>
-                <Card hoverable style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130 }} src={cat.imageURL} loading={categories.length > 0}/>}>
+                <Card hoverable style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130 }} src={cat.imageURL} />}>
                     <Meta title={cat.categoryName} />
                 </Card>
             </NavLink>

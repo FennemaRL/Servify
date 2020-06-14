@@ -5,10 +5,8 @@ import {Layout, Menu} from 'antd';
 import Home from "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
-import ProfileEditable from "./profile/profileEditable";
-import ConsumerView from "./profile/ConsumerView";
-import {ProfileEditable2, ConsumerView2} from "./profile/profile";
-
+import {ProfileEditable, ConsumerView} from "./profile/profile";
+import Error from "./error";
 const {Content, Footer} = Layout;
 
 const handleClick = () => {
@@ -32,9 +30,10 @@ function App() {
               <Switch>
                   <Route exact path="/Servify/search/:category" component={Search}/>
                   <Route exact path="/Servify/testadd"><TestAdd/></Route>
-                  <Route exact path="/Servify/profile/:username" component={ProfileEditable2}/>
-                  <Route path="/Servify/view/:username/:category?" component={ConsumerView2}/>
-                  <Route path="/Servify/"><Home/></Route>
+                  <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
+                  <Route path="/Servify/view/:username/:category?" component={ConsumerView}/>
+                  <Route path="/Servify/error" component={Error}/>
+                  <Route exact path="/Servify/"><Home/></Route>
                   <Redirect to={{pathname: "/Servify/"}}/>
               </Switch>
           </Content>

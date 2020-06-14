@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const {TextArea} = Input;
 
-function FormEditService({username, service}) {
+export function FormEditService({username, service}) {
     const [form] = Form.useForm()
     const onFinish = (values) => {
         axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/description`, {
@@ -58,5 +58,3 @@ export function Service({service}) {
         </div>
     )
 }
-
-export default FormEditService

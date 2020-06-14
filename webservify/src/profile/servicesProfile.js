@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Cascader, Tabs} from 'antd';
 import axios from "axios";
-import FormEditService, {Service} from "./formService";
+import { FormEditService, Service } from "./contentServiceProfile";
+import { Redirect } from 'react-router-dom';
 
 const {TabPane} = Tabs;
 const categories = [
@@ -13,23 +14,23 @@ const categories = [
 ];
 
 
-function ViewEditableService({username, services, setServices}) {
+export function ViewEditableService({username, providerSevices, setproviderSevices, err}) {
 
     const [selectCategory, setselectCategory] = useState();
     const [activeCategory, setActiveCategorie] = useState();
 
     useEffect(() => {
-        setActiveCategorie(services[0] ? services[0].categoryName : null)
-    }, [services])
+        setActiveCategorie(providerSevices[0] ? providerSevices[0].categoryName : null)
+    }, [providerSevices])
 
     const onChange = categorie => setselectCategory(categorie);
 
     const add = () => {
-        if (selectCategory[0] && services.filter(ser => ser.category.categoryName === selectCategory[0]).length) {
+        if (selectCategory[0] && providerSevices.filter(ser => ser.category.categoryName === selectCategory[0]).length) {
             return alert("ya brindas ese servicio")
         }
         if (selectCategory[0]) {
-            setServices(prevCate => [...prevCate, {category: {categoryName: selectCategory[0]}}])
+            setproviderSevices(prevCate => [...prevCate, {category: {categoryName: selectCategory[0]}}])
             setActiveCategorie(selectCategory)
             axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`, {
                 username: username,
@@ -45,9 +46,9 @@ function ViewEditableService({username, services, setServices}) {
         }
     }
     const remove = targetKey => {
-        setServices(prevSer =>
+        setproviderSevices(prevSer =>
             [...prevSer].filter(ser => ser.category.categoryName !== targetKey))
-        setActiveCategorie(services[0].category ? services[0].category.categoryName : null)
+        setActiveCategorie(providerSevices[0].category ? providerSevices[0].category.categoryName : null)
 
         axios.delete(`${process.env.REACT_APP_API_URL}/api/provider/service`, {
             data: {
@@ -69,9 +70,11 @@ function ViewEditableService({username, services, setServices}) {
                                                                                       onClick={add}>add</Button></div>
     const onChangeTab = key => setActiveCategorie(key);
 
-
-    return (
-        <div style={{width: '70vw'}}>
+    return (<>{ (err && <Redirect to={{
+        pathname: '/Servify/Error',
+        state: { message: err }
+    }} /> ) ||
+    <div style={{width: '70vw'}}>
             <h1>Categorias ofrecidas</h1>
             <div className="card-container">
                 <Tabs tabBarExtraContent={operations} type="editable-card"
@@ -79,21 +82,24 @@ function ViewEditableService({username, services, setServices}) {
                       activeKey={activeCategory}
                       onEdit={onEdit}
                       hideAdd>
-                    {services.map(ser => (
+                    {providerSevices.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={true}>
                             <FormEditService username={username} service={ser}/>
                         </TabPane>))}
                 </Tabs>
-            </div>
+            
         </div>
-    )
+    </div>
+    }
+    </>)
+   
 }
 
 ///Non editable
 export function ViewService({username, services, category}) {
 
     const [activeCategory, setActiveCategorie] = useState();
-
+    const onChangeTab = key => setActiveCategorie(key);
     useEffect(() => {
         setActiveCategorie(category? category: services[0] ? services[0].categoryName : null)
     }, [services,category])
@@ -104,6 +110,7 @@ export function ViewService({username, services, category}) {
             <div className="card-container">
                 <Tabs type="editable-card"
                       activeKey={activeCategory}
+                      onChange={onChangeTab}
                       hideAdd>
                     {services.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
@@ -114,5 +121,3 @@ export function ViewService({username, services, category}) {
         </div>
     )
 }
-
-export default ViewEditableService
