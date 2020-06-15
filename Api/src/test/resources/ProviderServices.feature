@@ -44,3 +44,4 @@ Feature: Service Provider
     Given A serviceProvider "Lucas"
     When I add the service "Plomeria"
     Then I add a description "Cash Only" to the service "Electricidad" and throw "Error: Servicio no provisto"
+
