@@ -53,32 +53,33 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping("/provider")
-        public ResponseEntity addProvider(@RequestBody String provider) {
+        public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
             try {
-                HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-                String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
-                String phoneNmbr = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("phoneNmbr");
-                String celNmbr = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("celNmbr");
-                String webPage = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("webPage");
-                String residence = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("residence");
-
-                ServiceProviderServify user = new ServiceProviderServify(username, phoneNmbr, celNmbr, webPage, residence);
+                providerLogUpDTO.assertEmpty();
+                ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
+                        providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
                 return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                return ResponseEntity.status(400).body(e.getMessage());
+            } catch (EmptyDTOError emptyDTOError) {
+                return ResponseEntity.status(400).body("Bad_Request");
             }
     }
 
-    /*@CrossOrigin
-    @PutMapping("/provider/{name}")
-    public ResponseEntity editProvider(@RequestBody String provider){
+    @CrossOrigin
+    @PutMapping("/provider/edit")
+    public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo) {
         try {
-            ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
-        }catch(){
+            providerPersonalInfo.assertEmpty();
+            ServiceProviderServify provider = dbServiceProvider.findOne(providerPersonalInfo.getProviderOriginalName());
+            provider.setPersonalInformation(providerPersonalInfo.getNewProviderName(), providerPersonalInfo.getNewPhoneNmbr(),
+                    providerPersonalInfo.getNewCellPhoneNmbr(), providerPersonalInfo.getNewWebPage(),
+                    providerPersonalInfo.getNewResidence());
+            ServiceProviderServify save = dbServiceProvider.save(provider);
+            return ResponseEntity.status(201).body(save);
 
+        } catch (Exception | EmptyFieldReceivedError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body("BAD REQUEST");
         }
-    }*/
+    }
 
     @CrossOrigin
     @PostMapping("/provider/service")
@@ -124,5 +125,6 @@ public class ServifyController {
             return ResponseEntity.status(201).body(e.getMessage());
         }
     }
+
 
 }
