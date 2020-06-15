@@ -1,76 +1,38 @@
 import React from 'react';
 import { ViewEditableService, ViewService, } from "./servicesProfile";
-import { useProviderServices } from "./useProviderServices";
-import { Form, Input, Button } from 'antd';
+import { useProvider } from "./useProviderServices";
+import { Descriptions } from 'antd';
 
 
 function ProfileInfoEditable(){
-    const layout = {labelCol: {span: 8,}, wrapperCol: {span: 16,},};
-    const validateMessages = {
-      required: "No puedes dejar este campo en blanco",
-      types: {number: "No es un número válido",}}
-    const onFinish = () => {}
+    
  
-    return (
-    <div style= {{width: "100vw", display: "flex", justifyContent: "left"}}>  
-    <Form style= {{width: "50vw"}}
-      {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-         <Form.Item
-    name={['user', 'name']}
-    label="Nombre"
-    rules={[{required: true,},]}>
-      <Input />
-    </Form.Item>
-   
-    <Form.Item
-    name={['user', 'phoneNmbr']}
-    label="Número de teléfono"
-    rules={[{required: true,},{type: "number", min: 8, max: 14}]}>
-      <Input />
-    </Form.Item>
-    
-    <Form.Item
-    name={['user', 'celNmbr']}
-    label="Número de celular"
-    rules={[{required: true,},{type: "number"}]}>
-      <Input />
-    </Form.Item>
-    
-    <Form.Item
-    name={['user', 'webPage']}
-    label="Página web"
-    rules={[{required: true,},]}>
-      <Input />
-    </Form.Item>
-    
-    <Form.Item
-    name={['user', 'residence']}
-    label="Residencia"
-    rules={[{required: true,},]}>
-      <Input />
-    </Form.Item>
+    return (<div> </div>)
+}
 
-  <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-    <Button type="primary" htmlType="submit">
-      Submit
-    </Button>
-  </Form.Item>
-</Form>
-</div>  )}
-
-function ProfileInfoView(){
-
+function ProfileInfoView({personalInfo}){
+    const layout = {labelCol: { span: 8 }, wrapperCol: { span: 8 },};
+    return(<div >
+        <Descriptions {...layout} title="User Info">
+            <Descriptions.Item label="Nombre"> {personalInfo.providerName} </Descriptions.Item>
+            <Descriptions.Item label="Número de celular"> {personalInfo.cellNumber ? personalInfo.cellNumber: "Este usuario no cuenta con número de celular"} </Descriptions.Item>
+            <Descriptions.Item label="Número de telefono"> {personalInfo.phoneNumber ? personalInfo.phoneNumber: "Este usuario no cuenta con número de teléfono"}</Descriptions.Item>
+             <Descriptions.Item label="Sitio Web"> {personalInfo.webPage ? personalInfo.webPage: "Este usuario no cuenta con sitio web"}</Descriptions.Item>
+             <Descriptions.Item label="Residencia"> {personalInfo.residence ? personalInfo.residence: "Este usuario no cuenta con una localidad"}</Descriptions.Item>
+        </Descriptions>
+    </div>)
+    
 }
 
 export function ProfileEditable(){
     return <Profile ComponentViewService={ViewEditableService} ComponentViewProfileInfo={ProfileInfoEditable}/>
 }
 export function ConsumerView(){
-    return <Profile ComponentViewService={ViewService}/>
+    return <Profile ComponentViewService={ViewService} ComponentViewProfileInfo={ProfileInfoView} />
 }
 
 const Profile = ({ComponentViewService, ComponentViewProfileInfo}) => {
-    let data = useProviderServices();
+    let data = useProvider();
     return (
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                 <ComponentViewProfileInfo {...data} />

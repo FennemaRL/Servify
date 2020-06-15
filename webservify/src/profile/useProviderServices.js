@@ -14,7 +14,7 @@ export function useProvider() {
         axios.get(`${process.env.REACT_APP_API_URL}/api/provider/${username}`)
             .then(res => { setproviderSevices(res.data.offerServices )
                             setPersonalInfo({providerName: res.data.name, phoneNumber: res.data.phoneNmbr, 
-                                cellNumber: res.data.cellNmbr, webPage: res.data.webPage, residence: res.data.residence})
+                                cellNumber: res.data.cellNmbr, webPage: res.data.webPage, residence: res.data.residence, test: 1})
                             })
             .catch(err =>{console.log(err.response.data)
                 setErr(err.response.data)})
