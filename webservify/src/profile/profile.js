@@ -1,14 +1,141 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ViewEditableService, ViewService, } from "./servicesProfile";
 import { useProvider } from "./useProviderServices";
 import { Descriptions } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
+import axios from 'axios';
+import { findAllInRenderedTree } from 'react-dom/test-utils';
 
 
-function ProfileInfoEditable(){
-    
- 
-    return (<div> </div>)
-}
+function ProfileInfoEditable({personalInfo}){
+
+    const formRef = React.createRef();
+
+    const layout = {
+        labelCol: {
+        span: 12,
+    },
+    wrapperCol: {
+        span: 16,
+    },
+    };
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
+  
+  const onFinish = values => {
+    axios.put(`${process.env.REACT_APP_API_URL}api/provider`, 
+    {
+        originalName : personalInfo.providerName,
+        newName : values.username,
+        newPhoneNmbr : values.phoneNmbr,
+        newCellPhoneNmbr : values.celPhoneNmbr,
+        newWebPage : values.webPage,
+        newResidence : values.residence   
+    }).then(res => {
+        alert("Se modifico con exito");
+    }).catch( err => {
+        console.log(err.response);
+    });
+  };
+
+  const onFinishFailed = errorInfo => {
+    console.log('Failed:', errorInfo);
+  };
+
+  useEffect( () => {
+     
+      formRef.current.setFieldsValue({username: personalInfo.providerName, phoneNmbr: personalInfo.phoneNumber,
+         celPhoneNmbr: personalInfo.cellNumber, webPage: personalInfo.webPage, residence: personalInfo.residence});
+  }, [formRef, personalInfo]);
+
+  return (
+    <Form
+        ref = {formRef}
+        {...layout}
+        name="basic"
+        initialValues={{
+            remember: true,
+        }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+    >
+      <Form.Item
+        label="Nombre"
+        name="username"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your username!',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Telefono"
+        name="phoneNmbr"
+        rules={[
+          {
+            required: true, 
+            message: 'Please input your phone number'
+          },
+        ]}
+      >
+        <Input type = "number"/>
+      </Form.Item>
+
+      <Form.Item
+        label="Celular"
+        name="celPhoneNmbr"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your celphone number',
+          },
+        ]}
+      >
+        <Input type = "number"/>
+      </Form.Item>
+
+      <Form.Item
+        label="Pagina Web"
+        name="webPage"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your phone web page!',
+          },
+        ]}
+      >
+        <Input/>
+      </Form.Item>
+
+      <Form.Item
+        label="Localidad"
+        name="residence"
+        rules={[
+          {
+            required: true,
+            message: 'Please input your phone residence!',
+          },
+        ]}
+      >
+        <Input/>
+      </Form.Item>
+
+      <Form.Item {...tailLayout}>
+        <Button type="primary" htmlType="submit">
+          Guardar Cambios
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
 
 function ProfileInfoView({personalInfo}){
     const layout = {labelCol: { span: 8 }, wrapperCol: { span: 8 },};

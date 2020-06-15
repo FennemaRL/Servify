@@ -9,16 +9,16 @@ export function useProvider() {
     const [err, setErr] = useState()
     const [personalInfo, setPersonalInfo] = useState({})
 
-
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/provider/${username}`)
-            .then(res => { setproviderSevices(res.data.offerServices )
-                            setPersonalInfo({providerName: res.data.name, phoneNumber: res.data.phoneNmbr, 
-                                cellNumber: res.data.cellNmbr, webPage: res.data.webPage, residence: res.data.residence, test: 1})
+            .then(res => { setproviderSevices(res.data.offerServices )            
+                
+                setPersonalInfo({providerName: res.data.name, phoneNumber: res.data.phoneNmbr, 
+                                cellNumber: res.data.celNmbr, webPage: res.data.webPage, residence: res.data.residence, test: 1})
                             })
             .catch(err =>{console.log(err.response.data)
                 setErr(err.response.data)})
     }, [username])
-    return {username, providerSevices, setproviderSevices, personalInfo, setPersonalInfo, category, err};
+    return {username, providerSevices, setproviderSevices, personalInfo, setPersonalInfo, category, err}
 }
 

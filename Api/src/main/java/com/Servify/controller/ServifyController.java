@@ -34,10 +34,10 @@ public class ServifyController {
         try{
             CategoryService categoryObj = CategoryManager.getCategory(category);
             List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
-                .stream().map(sp ->
+                    .stream().map(sp ->
                             new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj), category)
-                ).collect(Collectors.toList());
-        return ResponseEntity.ok().body(byCategory);}
+                    ).collect(Collectors.toList());
+            return ResponseEntity.ok().body(byCategory);}
         catch (InvalidCategoryError e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -49,6 +49,7 @@ public class ServifyController {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
         return ResponseEntity.ok().body(user);
+
     }
 
     @CrossOrigin
@@ -65,7 +66,7 @@ public class ServifyController {
     }
 
     @CrossOrigin
-    @PutMapping("/provider/edit")
+    @PutMapping("/provider")
     public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo) {
         try {
             providerPersonalInfo.assertEmpty();
@@ -74,6 +75,7 @@ public class ServifyController {
                     providerPersonalInfo.getNewCellPhoneNmbr(), providerPersonalInfo.getNewWebPage(),
                     providerPersonalInfo.getNewResidence());
             ServiceProviderServify save = dbServiceProvider.save(provider);
+            System.out.println(save);
             return ResponseEntity.status(201).body(save);
 
         } catch (Exception | EmptyFieldReceivedError | EmptyDTOError e) {
