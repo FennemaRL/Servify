@@ -34,10 +34,10 @@ public class ServifyController {
         try{
             CategoryService categoryObj = CategoryManager.getCategory(category);
             List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
-                .stream().map(sp ->
+                    .stream().map(sp ->
                             new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj), category)
-                ).collect(Collectors.toList());
-        return ResponseEntity.ok().body(byCategory);}
+                    ).collect(Collectors.toList());
+            return ResponseEntity.ok().body(byCategory);}
         catch (InvalidCategoryError e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -49,19 +49,37 @@ public class ServifyController {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
         return ResponseEntity.ok().body(user);
+
     }
 
     @CrossOrigin
     @PostMapping("/provider")
-    public ResponseEntity addProvider(@RequestBody String provider) {
+        public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
+            try {
+                providerLogUpDTO.assertEmpty();
+                ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
+                        providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
+                return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+            } catch (EmptyDTOError emptyDTOError) {
+                return ResponseEntity.status(400).body("Bad_Request");
+            }
+    }
+
+    @CrossOrigin
+    @PutMapping("/provider")
+    public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo) {
         try {
-            HashMap<String, Object> result = new ObjectMapper().readValue(provider, HashMap.class);
-            String username = (String) ((HashMap<String, Object>) ((HashMap<String, Object>) result.get("data")).get("values")).get("username");
-            ServiceProviderServify user = new ServiceProviderServify(username);
-            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(400).body(e.getMessage());
+            providerPersonalInfo.assertEmpty();
+            ServiceProviderServify provider = dbServiceProvider.findOne(providerPersonalInfo.getProviderOriginalName());
+            provider.setPersonalInformation(providerPersonalInfo.getNewProviderName(), providerPersonalInfo.getNewPhoneNmbr(),
+                    providerPersonalInfo.getNewCellPhoneNmbr(), providerPersonalInfo.getNewWebPage(),
+                    providerPersonalInfo.getNewResidence());
+            ServiceProviderServify save = dbServiceProvider.save(provider);
+            System.out.println(save);
+            return ResponseEntity.status(201).body(save);
+
+        } catch (Exception | EmptyFieldReceivedError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body("BAD REQUEST");
         }
     }
 
@@ -109,5 +127,6 @@ public class ServifyController {
             return ResponseEntity.status(201).body(e.getMessage());
         }
     }
+
 
 }

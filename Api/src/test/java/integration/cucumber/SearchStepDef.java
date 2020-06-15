@@ -3,6 +3,7 @@ package integration.cucumber;
 import com.Servify.model.*;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class SearchStepDef {
     }
 
     @Then("An Error is thrown")
-    public void an_Error_is_throwed() {
-        assertTrue(errorWasThrown);
+    public void an_Error_is_thrown() {
+        Assert.assertTrue(errorWasThrown);
     }
 }

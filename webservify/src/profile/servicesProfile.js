@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs} from 'antd';
+import {Button, Cascader, Tabs,Typography} from 'antd';
 import axios from "axios";
 import { FormEditService, Service } from "./contentServiceProfile";
 import { Redirect } from 'react-router-dom';
 
+const { Title, Paragraph } = Typography;
 const {TabPane} = Tabs;
 const categories = [
     {value: "Plomeria", label: " Plomeria"},
@@ -75,7 +76,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
         state: { message: err }
     }} /> ) ||
     <div style={{width: '70vw'}}>
-            <h1>Categorias ofrecidas</h1>
+            <Title style={{textAlign:'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container">
                 <Tabs tabBarExtraContent={operations} type="editable-card"
                       onChange={onChangeTab}
@@ -109,7 +110,7 @@ export function ViewService({username, providerSevices, category, err}) {
         state: { message: err }
     }} /> ) ||
         <div style={{width: '70vw'}}>
-            <h1>Categorias ofrecidas</h1>
+           <Title style={{textAlign:'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container">
                 <Tabs type="editable-card"
                       activeKey={activeCategory}

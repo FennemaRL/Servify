@@ -39,11 +39,12 @@ function Servicios() {
 
 function Home () {
     return (  
-        <div style={{display:'flex',flexDirection:'column',minHeight:'60vh',alignItems:'center', }}>
+        <div style={{display:'flex',flexDirection:'column',minHeight:'80vh',alignItems:'center', justifyContent:'center'}}>
             <Title  level={2}>Sobre Nosotros</Title>
             <Paragraph ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}>Somos un sitio que nació por la necesitad de conectar personas que buscan algun tipo de 
                                 servicio con aquellas que lo brindan.
             </Paragraph>
+            <div style={{marginTop:'10vh'}}/>
             <Servicios/>
         </div>) 
 }

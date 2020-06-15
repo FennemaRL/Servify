@@ -26,7 +26,7 @@ function App() {
     <Layout style={{minHeight:'100vh'}}>
       <Router>
         <Nav/>
-        <Layout style={{marginTop:'2vh',minHeight:'70vh'}}>
+        <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Content >
               <Switch>
                   <Route exact path="/Servify/search/:category" component={Search}/>
