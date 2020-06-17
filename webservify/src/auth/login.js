@@ -76,7 +76,7 @@ const FormPop =({setIslog})=>{
 const LoginForm=({setIslog})=>{
     return (
         <Popover placement="topLeft" content={<FormPop setIslog={setIslog} />} trigger="hover">
-        <h4 style={{marginRight:'1vw',marginLeft:'1vw', cursor:'pointer',marginTop:'5px'}}> Ingresá</h4>
+          <p style={{marginRight:'1vw',marginLeft:'1vw', cursor:'pointer',marginTop:'5px'}}> Ingresá</p>
         </Popover>
     )
 }
