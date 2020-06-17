@@ -2,15 +2,10 @@ package com.Servify.controller;
 
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.cbor.Jackson2CborDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -125,6 +120,21 @@ public class ServifyController {
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
             return ResponseEntity.status(201).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/login")
+    public ResponseEntity loginWith(@RequestBody LoginDTO loginDTO) {
+
+        try {
+            ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
+            if (sp.canLoginWith(loginDTO.getUsername(), loginDTO.getPassword())) {
+                throw new ServiceProvideError("Usuario o contraseña incorrectos");
+            }
+            return ResponseEntity.status(200).body("{login succesful}");
+        } catch (ServiceProvideError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
