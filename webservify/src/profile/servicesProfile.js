@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormEditService, Service } from "./contentServiceProfile";
 import { Redirect } from 'react-router-dom';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const {TabPane} = Tabs;
 const categories = [
     {value: "Plomeria", label: " Plomeria"},
