@@ -124,9 +124,22 @@ public class ServifyController {
             user.remove(CategoryManager.getCategory(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
-            return ResponseEntity.status(201).body(e.getMessage());
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
+    @CrossOrigin
+    @PostMapping("/provider/service/calification")
+    public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
+        try {
+            newCalificationDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
+            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue());
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
 
+        } catch (EmptyDTOError | WrongValueError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 }

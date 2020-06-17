@@ -1,6 +1,8 @@
 package com.Servify.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class ServiceServify {
@@ -10,6 +12,8 @@ public class ServiceServify {
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     private CategoryService category;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Calification> califications;
     @Column
     private String description;
 
@@ -17,7 +21,9 @@ public class ServiceServify {
     }
 
     public ServiceServify(CategoryService category) {
+
         this.category = category;
+        this.califications = new ArrayList<Calification>();
     }
 
     public Long getId() {
@@ -54,5 +60,13 @@ public class ServiceServify {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void addCalification(Calification calificacion) {
+        this.califications.add(calificacion);
+    }
+
+    public List<Calification> getCalifications(){
+        return this.califications;
     }
 }
