@@ -55,8 +55,7 @@ const tailLayout = {
   return (
     <div>
     <Title style={{textAlign:'center'}} level={4}>Informacion Personal</Title>
-    <Form
-         style={{ width:'40vw'}}
+    <Form className='formEditableInfo'
         ref = {formRef}
         {...layout}
         name="basic"

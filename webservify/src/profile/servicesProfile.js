@@ -4,7 +4,7 @@ import axios from "axios";
 import { FormEditService, Service } from "./contentServiceProfile";
 import { Redirect } from 'react-router-dom';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 const {TabPane} = Tabs;
 const categories = [
     {value: "Plomeria", label: " Plomeria"},
@@ -66,7 +66,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
             })
     }
     const onEdit = (targetKey, action) => action === 'add' ? add(targetKey) : remove(targetKey);
-    const operations = <div><Cascader options={categories} onChange={onChange}
+    const operations = <div style={{display:'flex'}}><Cascader options={categories} onChange={onChange} style={{width:140}}
                                       placeholder="Seleccione Una categoria"/><Button type="primary"
                                                                                       onClick={add}>add</Button></div>
     const onChangeTab = key => setActiveCategorie(key);
@@ -75,7 +75,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
         pathname: '/Servify/Error',
         state: { message: err }
     }} /> ) ||
-    <div style={{width: '70vw'}}>
+    <div className='catOfferSize' >
             <Title style={{textAlign:'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container">
                 <Tabs tabBarExtraContent={operations} type="editable-card"
