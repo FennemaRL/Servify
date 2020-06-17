@@ -10,6 +10,7 @@ import org.junit.Assert;
 public class ServiceProviderStepdef {
     private ServiceProviderServify sp;
     private Boolean errorWasThrown;
+    private Boolean canLoginWith;
 
     @Given("A serviceProvider {string}")
     public void a_serviceProvider(String name) {
@@ -92,7 +93,7 @@ public class ServiceProviderStepdef {
         try{
             sp.setPersonalInformation("Pepe2", "", "0987654321", "www.pepeCarpinteria.com",
                     "");
-        }catch(EmptyFieldReceivedError error){
+        } catch (EmptyFieldReceivedError error) {
             errorWasThrown = true;
         }
     }
@@ -100,5 +101,26 @@ public class ServiceProviderStepdef {
     @Then("I don't add any information and i throw {string}")
     public void i_don_t_add_any_information_and_i_throw(String string) {
         Assert.assertTrue(errorWasThrown);
+    }
+
+
+    @Given("A serviceProvider with user {string} and password {string}")
+    public void aServiceProviderWithUserAndPassword(String user, String password) {
+        sp = new ServiceProviderServify(user, password);
+    }
+
+    @When("I login with user {string} and password {string}")
+    public void iLoginWithUserAndPassword(String user, String password) {
+        canLoginWith = sp.canLoginWith(user, password);
+    }
+
+    @Then("I login")
+    public void iLogin() {
+        Assert.assertTrue(canLoginWith);
+    }
+
+    @Then("I do not log in")
+    public void iDoNotLoggedIn() {
+        Assert.assertFalse(canLoginWith);
     }
 }

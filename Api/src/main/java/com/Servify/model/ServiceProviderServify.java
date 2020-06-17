@@ -27,19 +27,28 @@ public class ServiceProviderServify {
     private String residence;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceServify> offerServices;
+    @Column
+    private String password;
 
     protected ServiceProviderServify() {
     }
 
-    public ServiceProviderServify(String name){
+    public ServiceProviderServify(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.offerServices = new ArrayList<ServiceServify>();
+    }
+
+    public ServiceProviderServify(String name) {
         this.name = name;
         this.offerServices = new ArrayList<ServiceServify>();
     }
-    public ServiceProviderServify(String name,String phoneNmbr, String celNmbr, String webPage, String residence) {
+
+    public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
         this.name = name;
         this.phoneNmbr = phoneNmbr;
         this.celNmbr = celNmbr;
-        this. webPage = webPage;
+        this.webPage = webPage;
         this.residence = residence;
         offerServices = new ArrayList<ServiceServify>();
     }
@@ -100,7 +109,7 @@ public class ServiceProviderServify {
         if(name.equals("")||phoneNmbr.equals("")||cellNmbr.equals("")||webpage.equals("")|| residence.equals("")){
 
             throw new EmptyFieldReceivedError("There is an empty missing field");
-        }else{
+        } else {
             this.name = name;
             this.phoneNmbr = phoneNmbr;
             this.celNmbr = cellNmbr;
@@ -108,4 +117,9 @@ public class ServiceProviderServify {
             this.residence = residence;
         }
     }
+
+    public Boolean canLoginWith(String username, String password) {
+        return name.equals(username) && this.password.equals(password);
+    }
+
 }
