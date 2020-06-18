@@ -98,23 +98,38 @@ public class ServiceProviderServify {
     }
 
 
-    public String getName() { return name; }
-    public String getPhoneNmbr() { return phoneNmbr; }
-    public String getCelNmbr() { return celNmbr; }
-    public String getWebPage() { return webPage;}
-    public String getResidence() { return residence; }
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNmbr() {
+        return phoneNmbr;
+    }
+
+    public String getCelNmbr() {
+        return celNmbr;
+    }
+
+    public String getWebPage() {
+        return webPage;
+    }
+
+    public String getResidence() {
+        return residence;
+    }
 
     public void setPersonalInformation(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
+        assertAnyFieldsAreEmpty(name, phoneNmbr, cellNmbr, webpage, residence);
+        this.name = name;
+        this.phoneNmbr = phoneNmbr;
+        this.celNmbr = cellNmbr;
+        this.webPage = webpage;
+        this.residence = residence;
+    }
 
-        if(name.equals("")||phoneNmbr.equals("")||cellNmbr.equals("")||webpage.equals("")|| residence.equals("")){
-
+    private void assertAnyFieldsAreEmpty(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
+        if (name.equals("") || phoneNmbr.equals("") || cellNmbr.equals("") || webpage.equals("") || residence.equals("")) {
             throw new EmptyFieldReceivedError("There is an empty missing field");
-        } else {
-            this.name = name;
-            this.phoneNmbr = phoneNmbr;
-            this.celNmbr = cellNmbr;
-            this.webPage = webpage;
-            this.residence = residence;
         }
     }
 
