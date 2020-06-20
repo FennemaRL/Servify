@@ -169,7 +169,11 @@ public class ServifyController {
 
     private void checkToken(TokenResponse token, String name){
         Jtoken.isValidToken(token.getToken().split(" ")[1],name);
+<<<<<<< HEAD
     }
+=======
+
+>>>>>>> e3386f8f84f7fca9b5d90acf6c9a1eff9dd780c5
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
