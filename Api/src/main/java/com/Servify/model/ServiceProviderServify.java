@@ -88,6 +88,13 @@ public class ServiceProviderServify {
         services.get(0).setDescription(description);
     }
 
+    public void addNewCalificationToService(CategoryService c, Integer calificationValue) throws WrongValueError {
+        List<ServiceServify> services = filterByCategory(c);
+        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        Calification newCalification = new Calification(calificationValue);
+        services.get(0).addCalification(newCalification);
+    }
+
     private List<ServiceServify> filterByCategory(CategoryService c) {
         return offerServices.stream().filter(s -> s.sameCategory(c))
                 .collect(Collectors.toList());
