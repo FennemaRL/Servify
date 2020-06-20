@@ -1,5 +1,5 @@
 import React, {useEffect,useState} from 'react';
-import { Popover, Button, Form, Input} from 'antd'; 
+import { Popover, Button, Form, Input, message} from 'antd'; 
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
@@ -8,8 +8,8 @@ const ViewProfileAndCloseSession=({setIslog})=>{
     let history = useHistory();
     return(
         < div style={{display:'flex'}}>
-           <NavLink to="/Servify/Profile/Test" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}} ><h4>Ver Perfil</h4></NavLink>
-           <Button onClick={()=>{setIslog(false); history.push('/Servify/')}} danger type="text" style={{marginTop:'7px',marginLeft:'1vw', }} >Cerrar Session</Button>
+           <NavLink to={`/Servify/Profile/${localStorage.removeItem("UserName")}`} exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}} ><h4>Ver Perfil</h4></NavLink>
+           <Button onClick={()=>{setIslog(false); localStorage.removeItem("tokenUser");localStorage.removeItem("UserName"); history.push('/Servify/')}} danger type="text" style={{marginTop:'7px',marginLeft:'1vw', }} >Cerrar Session</Button>
         </div>
     )
 }
@@ -28,10 +28,11 @@ const FormPop =({setIslog})=>{
     })
       .then(res => {
           localStorage.setItem("tokenUser",res.data.token)
+          localStorage.setItem("userName",values.username)
           setIslog(true)
           history.push(`/Servify/Profile/${values.username}`)
       })
-      .catch(err => alert(err.response.data))
+      .catch(err => message.error(err.response.data))
 }
 
   return (

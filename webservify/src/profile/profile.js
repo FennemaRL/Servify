@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ViewEditableService, ViewService, } from "./servicesProfile";
 import { useProvider } from "./useProviderServices";
 import { Descriptions, Typography} from 'antd';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,message } from 'antd';
 import axios from 'axios';
 
 const { Title, } = Typography;
@@ -38,9 +38,9 @@ const tailLayout = {
   headers:{
       'token': 'Bearer ' + localStorage.getItem("tokenUser")
   } }).then(res => {
-        alert("Se modifico con exito");
+    message.success("Se modifico al informacion personal con exito");
     }).catch( err => {
-        console.log(err);
+      message.error(err);
     });
   };
 

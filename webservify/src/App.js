@@ -41,7 +41,7 @@ function PrivateRoute({ children,islog, ...rest }) {
 }
 function App() {
 
-  let {islog, setIslog} = IsAuth('user');
+  let {islog, setIslog} = IsAuth(localStorage.getItem("userName"));
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>

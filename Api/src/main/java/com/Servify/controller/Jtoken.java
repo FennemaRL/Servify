@@ -22,9 +22,14 @@ public class Jtoken {
     static public void isValidToken(String token, String tokenOwner){
         try {
             String jotName = getTokenName(token);
-            if (!jotName.equals(tokenOwner)) throw new ServiceProvideError("No tiene permiso o session caducada");
+            if (!jotName.equals(tokenOwner)) {
+                throw new ServiceProvideError("No tiene permiso o session caducada");
+
+            }
+            return ;
         }
         catch ( ExpiredJwtException| UnsupportedJwtException| MalformedJwtException| SignatureException | IllegalArgumentException e){
+
             throw new ServiceProvideError("No tiene permiso o session caducada");
         }
         }

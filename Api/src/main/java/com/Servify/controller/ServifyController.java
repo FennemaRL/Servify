@@ -156,6 +156,18 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+    @CrossOrigin
+    @PostMapping("/tokenVerify")
+    public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
+        try{
+            checkToken(token, user.getUsername());
+            return  ResponseEntity.status(200).body("estas Logueado");
+        }
+        catch (ServiceProvideError e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
     private void checkToken(TokenResponse token, String name){
         Jtoken.isValidToken(token.getToken().split(" ")[1],name);
     }

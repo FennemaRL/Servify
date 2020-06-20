@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Input,} from 'antd';
+import {Button, Form, Input, message} from 'antd';
 import axios from 'axios';
 
 const {TextArea} = Input;
@@ -16,10 +16,10 @@ export function FormEditService({username, service}) {
             'token': 'Bearer ' + localStorage.getItem("tokenUser")
         }})
             .then(res => {
-                alert("se agrego con exito")
+                message.success("se modifico la descripcion del servicio "+service.category.categoryName+" con exito")
             })
             .catch(err => {
-                alert(err.response.data)})
+                message.error(err.response.data)})
     };
 
     return (

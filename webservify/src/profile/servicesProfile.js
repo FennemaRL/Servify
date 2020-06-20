@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs,Typography} from 'antd';
+import {Button, Cascader, Tabs,Typography,message} from 'antd';
 import axios from "axios";
 import { FormEditService, Service } from "./contentServiceProfile";
 import { Redirect } from 'react-router-dom';
@@ -42,11 +42,10 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                 'token': 'Bearer ' + localStorage.getItem("tokenUser")
             }})
                 .then(() => {
-                    alert("se agrego con exito")
+                    message.success("se agrego el servicio "+selectCategory[0]+" con exito")
                 })
                 .catch(err => {
-                    alert(err.response.data)
-                    window.location.reload();
+                    message.error(err.response.data +" se recargara la pagina")
                 })
         }
     }
@@ -65,12 +64,10 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
             }
         })
             .then(() => {
-                alert("se borro con exito")
+                message.success("se borro el servicio " +targetKey+" con exito")
             })
             .catch(err => {
-                console.log(err.response)
-                alert(err.response.data)
-                window.location.reload();
+                message.error(err.response.data +" se recargara la pagina")
             })
     }
     const onEdit = (targetKey, action) => action === 'add' ? add(targetKey) : remove(targetKey);
@@ -80,7 +77,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
     const onChangeTab = key => setActiveCategorie(key);
 
     return (<>{ (err && <Redirect to={{
-        pathname: '/Servify/Error',
+        pathname: "/Servify/error",
         state: { message: err }
     }} /> ) ||
     <div className='catOfferSize' >
