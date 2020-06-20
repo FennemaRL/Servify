@@ -95,6 +95,10 @@ public class ServiceProviderServify {
         return filterByCategory(c).get(0).getDescription();
     }
 
+    public Double getServiceAverage(CategoryService c){
+        return filterByCategory(c).get(0).getCalificationAverage();
+    }
+
 
     public String getName() { return name; }
     public String getPhoneNmbr() { return phoneNmbr; }

@@ -8,14 +8,16 @@ public class ServiceDescriptionDTO implements DTOServify{
     private String username;
     private String category;
     private String description;
+    private Double average;
 
     ServiceDescriptionDTO() {
     }
 
-    public ServiceDescriptionDTO(String name, String description, String category) {
+    public ServiceDescriptionDTO(String name, String description, Double average, String category) {
         this.username = name;
         this.description = description;
         this.category = category;
+        this.average = average;
     }
 
     public String getUsername() {

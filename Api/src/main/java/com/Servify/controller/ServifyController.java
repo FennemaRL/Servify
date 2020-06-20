@@ -35,7 +35,8 @@ public class ServifyController {
             CategoryService categoryObj = CategoryManager.getCategory(category);
             List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
                     .stream().map(sp ->
-                            new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj), category)
+                            new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj),
+                                    sp.getServiceAverage(categoryObj), category)
                     ).collect(Collectors.toList());
             return ResponseEntity.ok().body(byCategory);}
         catch (InvalidCategoryError e){
@@ -132,11 +133,13 @@ public class ServifyController {
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
+
             newCalificationDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
             user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue());
-            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("Calificacion agregada con exito");
 
         } catch (EmptyDTOError | WrongValueError e) {
             return ResponseEntity.status(400).body(e.getMessage());

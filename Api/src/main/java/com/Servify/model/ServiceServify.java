@@ -69,4 +69,9 @@ public class ServiceServify {
     public List<Calification> getCalifications(){
         return this.califications;
     }
+
+    public Double getCalificationAverage() {
+        return califications.stream().mapToInt(Calification::getCalificationValue).average()
+                .orElse(0d);
+    }
 }

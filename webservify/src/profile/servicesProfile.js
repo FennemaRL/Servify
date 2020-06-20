@@ -3,6 +3,8 @@ import {Button, Cascader, Tabs,Typography} from 'antd';
 import axios from "axios";
 import { FormEditService, Service } from "./contentServiceProfile";
 import { Redirect } from 'react-router-dom';
+import { Rate } from 'antd';
+import { Modal} from 'antd';
 
 const { Title, Paragraph } = Typography;
 const {TabPane} = Tabs;
@@ -98,7 +100,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
 
 ///Non editable
 export function ViewService({username, providerSevices, category, err}) {
-
+    
     const [activeCategory, setActiveCategorie] = useState();
     const onChangeTab = key => setActiveCategorie(key);
     useEffect(() => {
@@ -118,6 +120,7 @@ export function ViewService({username, providerSevices, category, err}) {
                       hideAdd>
                     {providerSevices.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
+                            <Rating serviceName={ser.category.categoryName} username={username}/>
                             <Service username={username} service={ser}/>
                         </TabPane>))}
                 </Tabs>
@@ -126,4 +129,53 @@ export function ViewService({username, providerSevices, category, err}) {
         }
     </>
     )
+}
+
+function Rating({serviceName, username}){
+
+    const [visible, setVisible] = useState(false);
+
+    const calificate = (value) => 
+    {
+        setVisible(false)    
+        axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`, 
+    {
+    "providerName": username,
+    "serviceCategory": serviceName,
+    "calificationValue": value
+    }).then( res => {
+        alert(res.data);
+    }
+    ).catch(err => console.log(err.response.data))}
+
+        const showModal = () => {
+          setVisible(true);
+        };
+      
+        const handleOk = e => {
+          console.log(e);
+          setVisible(false);
+        };
+      
+        const handleCancel = e => {
+          console.log(e);
+          setVisible(false);
+        };
+      
+        return (
+            <div>
+              <Button type="primary" onClick={showModal}>
+                Calificá
+              </Button>
+              <Modal
+                title="Basic Modal"
+                visible={visible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+              >
+                <Rate onChange = {calificate} />
+              </Modal>
+            </div>
+          );
+        
 }
