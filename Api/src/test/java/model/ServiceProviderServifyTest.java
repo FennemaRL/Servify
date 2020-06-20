@@ -86,7 +86,7 @@ public class ServiceProviderServifyTest {
         String name = "Lucas";
         String password = "123456";
         ServiceProviderServify sp = new ServiceProviderServify(name, password);
-        Boolean login = sp.canLoginWith(name, password);
+        Boolean login = sp.canLoginWith( password);
 
         Assert.assertTrue(login);
     }
@@ -96,7 +96,7 @@ public class ServiceProviderServifyTest {
         String name = "Lucas";
         String password = "000000";
         ServiceProviderServify sp = new ServiceProviderServify(name, password);
-        Boolean login = sp.canLoginWith(name, password + 1);
+        Boolean login = sp.canLoginWith( password + 1);
 
         Assert.assertFalse(login);
     }

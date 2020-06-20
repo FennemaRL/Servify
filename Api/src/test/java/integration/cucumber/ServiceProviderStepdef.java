@@ -111,7 +111,7 @@ public class ServiceProviderStepdef {
 
     @When("I login with user {string} and password {string}")
     public void iLoginWithUserAndPassword(String user, String password) {
-        canLoginWith = sp.canLoginWith(user, password);
+        canLoginWith = sp.canLoginWith(password);
     }
 
     @Then("I login")

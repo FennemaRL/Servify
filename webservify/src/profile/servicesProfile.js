@@ -33,10 +33,14 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
         if (selectCategory[0]) {
             setproviderSevices(prevCate => [...prevCate, {category: {categoryName: selectCategory[0]}}])
             setActiveCategorie(selectCategory)
-            axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`, {
-                username: username,
-                category: selectCategory[0]
-            })
+            axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`, 
+            {
+                    username: username,
+                    category: selectCategory[0]
+            }, 
+            {headers:{
+                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+            }})
                 .then(() => {
                     alert("se agrego con exito")
                 })
@@ -55,13 +59,17 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
             data: {
                 username: username,
                 category: targetKey
+            },
+            headers:{
+                'token': 'Bearer ' + localStorage.getItem("tokenUser")
             }
         })
             .then(() => {
                 alert("se borro con exito")
             })
             .catch(err => {
-                alert(err.response.data.message)
+                console.log(err.response)
+                alert(err.response.data)
                 window.location.reload();
             })
     }

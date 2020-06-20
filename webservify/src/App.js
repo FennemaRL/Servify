@@ -7,15 +7,15 @@ import Search from "./search";
 import TestAdd from "./testadd";
 import {ProfileEditable, ConsumerView} from "./profile/profile";
 import Error from "./error";
-import ButtonLogin from './auth/login'
-import {IsAuth} from './auth/auth';
+import ButtonLogin from './login/login'
+import {IsAuth} from './login/auth';
 const {Content, Footer,} = Layout;
 
 
 
 function Nav({islog, setIslog}) {
   return <Menu mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw',paddingLeft:'1vw', paddingRight:'1vw', width:'96vw', display:'flex'}}>
-         <NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}}><h3> Servify </h3></NavLink>
+          <Menu.Item><NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}}><h3> Servify </h3></NavLink></Menu.Item>
           <div style={{flex:1}}></div>
           <ButtonLogin setIslog={setIslog} islog={islog}/>
         </Menu>

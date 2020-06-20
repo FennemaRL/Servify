@@ -11,12 +11,15 @@ export function FormEditService({username, service}) {
             username: username,
             description: values.description,
             category: service.category.categoryName
-        })
+        }
+        , {headers:{
+            'token': 'Bearer ' + localStorage.getItem("tokenUser")
+        }})
             .then(res => {
                 alert("se agrego con exito")
-                console.log(res.data)
             })
-            .catch(err => alert(err.response.data))
+            .catch(err => {
+                alert(err.response.data)})
     };
 
     return (
@@ -54,7 +57,7 @@ export function FormEditService({username, service}) {
 export function Service({service}) {
     return (
         <div name="description">
-            {service.description ? service.description : 'este proveedor por el momento no posee descripscion del servicio'}
+            {service.description ? service.description : 'este proveedor por el momento no posee descripción del servicio'}
         </div>
     )
 }

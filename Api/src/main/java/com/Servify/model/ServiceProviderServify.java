@@ -15,7 +15,7 @@ public class ServiceProviderServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @Column
+    @Column(unique = true)
     private String name;
     @Column
     private String phoneNmbr;
@@ -133,8 +133,15 @@ public class ServiceProviderServify {
         }
     }
 
-    public Boolean canLoginWith(String username, String password) {
-        return name.equals(username) && this.password.equals(password);
+    public Boolean canLoginWith( String password) {
+        return this.password.equals(password);
     }
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public List<ServiceServify> getServices() {
+        return offerServices;
+    }
 }

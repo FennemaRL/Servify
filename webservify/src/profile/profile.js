@@ -26,16 +26,18 @@ const tailLayout = {
   },
 };
   
-  const onFinish = values => {
-    axios.put(`${process.env.REACT_APP_API_URL}/api/provider`, 
-    {
+  const onFinish = values => {/* modificar */
+    axios.put(`${process.env.REACT_APP_API_URL}/api/provider`, {
         originalName : personalInfo.providerName,
         newName : values.username,
         newPhoneNmbr : values.phoneNmbr,
         newCellPhoneNmbr : values.celPhoneNmbr,
         newWebPage : values.webPage,
         newResidence : values.residence   
-    }).then(res => {
+  },{
+  headers:{
+      'token': 'Bearer ' + localStorage.getItem("tokenUser")
+  } }).then(res => {
         alert("Se modifico con exito");
     }).catch( err => {
         console.log(err);
