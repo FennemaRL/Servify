@@ -120,6 +120,7 @@ public class ServifyController {
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
             user.remove(CategoryManager.getCategory(provider.getCategory()));
+
             return ResponseEntity.status(200).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError | ServiceProvideError e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -170,5 +171,18 @@ public class ServifyController {
 
     private void checkToken(TokenResponse token, String name){
         Jtoken.isValidToken(token.getToken().split(" ")[1],name);
+
+    @PostMapping("/provider/service/calification")
+    public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
+        try {
+            newCalificationDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
+            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue());
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+
+        } catch (EmptyDTOError | WrongValueError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }
