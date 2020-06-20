@@ -1,6 +1,8 @@
 package model;
 
 import com.Servify.model.*;
+import com.Servify.model.InvalidCategoryError;
+import com.Servify.model.NoExistentCategoryError;
 import org.junit.Test;
 
 public class TestCategoryManager {

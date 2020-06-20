@@ -48,15 +48,15 @@ public class ServiceProviderServify {
         return this.offerServices.stream().anyMatch(s -> s.hasCategory(category));
     }
 
-    public void addService(ServiceServify ser) throws ServiceProvideError {
+    public void addService(ServiceServify ser) throws ServiceProviderError {
         List<ServiceServify> sameServices = offerServices.stream().filter(serv -> serv.sameCategory(ser)).collect(Collectors.toList());
         assertServiceNotProvided(sameServices);
         offerServices.add(ser);
     }
 
-    private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProvideError {
+    private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProviderError {
         if (!sameServices.isEmpty()) {
-            throw new ServiceProvideError();
+            throw new ServiceProviderError();
         }
     }
 
@@ -75,13 +75,13 @@ public class ServiceProviderServify {
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
         if (description.isEmpty()) throw new EmptyDescriptionError();
-        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
         services.get(0).setDescription(description);
     }
 
     public void addNewCalificationToService(CategoryService c, Integer calificationValue) throws WrongValueError {
         List<ServiceServify> services = filterByCategory(c);
-        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
         Calification newCalification = new Calification(calificationValue);
         services.get(0).addCalification(newCalification);
     }
@@ -114,5 +114,15 @@ public class ServiceProviderServify {
             this.webPage = webpage;
             this.residence = residence;
         }
+    }
+
+    public void setServiceWithScope(CategoryService category, ScopeService scope) {
+        List<ServiceServify> services = filterByCategory(category);
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        services.get(0).setScope(scope);
+    }
+
+    public List<ScopeService> getServiceScope(CategoryService category) {
+        return filterByCategory(category).get(0).getScope();
     }
 }

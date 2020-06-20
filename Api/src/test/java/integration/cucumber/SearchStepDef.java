@@ -1,6 +1,7 @@
 package integration.cucumber;
 
 import com.Servify.model.*;
+import com.Servify.model.InvalidCategoryError;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
@@ -16,7 +17,7 @@ public class SearchStepDef {
     private Boolean errorWasThrown;
 
     @When("Searchs using category basic search for plomeria service")
-    public void searchs_using_category_basic_search_for_plomeria_service() throws ServiceProvideError {
+    public void searchs_using_category_basic_search_for_plomeria_service() throws ServiceProviderError {
         ArrayList<ServiceProviderServify> providers = new ArrayList<>();
         ServiceProviderServify provider = new ServiceProviderServify("MyProvider");
         provider.addService(new ServiceServify(CategoryManager.getCategory("Plomeria")));
@@ -52,7 +53,7 @@ public class SearchStepDef {
             providers.add(provider);
             searchResult = providers.stream().filter(p -> p.providesService(CategoryManager.getCategory("Churrero")))
                     .collect(Collectors.toList());
-        } catch (InvalidCategoryError | ServiceProvideError e) {
+        } catch (InvalidCategoryError | ServiceProviderError e) {
             errorWasThrown = true;
         }
     }

@@ -1,16 +1,14 @@
 package com.Servify.controller;
 
 import com.Servify.model.*;
+import com.Servify.model.EmptyFieldReceivedError;
+import com.Servify.model.InvalidCategoryError;
+import com.Servify.model.NoExistentCategoryError;
 import com.Servify.repository.services.ServiceProviderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.cbor.Jackson2CborDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,7 +90,7 @@ public class ServifyController {
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
             user.addService(CategoryManager.createService(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (ServiceProvideError | NoExistentCategoryError | EmptyDTOError e) {
+        } catch (ServiceProviderError | NoExistentCategoryError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
