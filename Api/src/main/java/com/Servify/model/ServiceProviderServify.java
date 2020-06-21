@@ -50,7 +50,7 @@ public class ServiceProviderServify {
         this.celNmbr = celNmbr;
         this.webPage = webPage;
         this.residence = residence;
-        offerServices = new ArrayList<ServiceServify>();
+        offerServices = new ArrayList<>();
     }
 
     public Boolean hasServicesWithCategory(String category) {
@@ -84,15 +84,19 @@ public class ServiceProviderServify {
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
         if (description.isEmpty()) throw new EmptyDescriptionError();
-        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         services.get(0).setDescription(description);
     }
 
     public void addNewCalificationToService(CategoryService c, Integer calificationValue) throws WrongValueError {
         List<ServiceServify> services = filterByCategory(c);
-        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue);
         services.get(0).addCalification(newCalification);
+    }
+
+    private void assertServiceIsProvided(List<ServiceServify> services) {
+        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
     }
 
     private List<ServiceServify> filterByCategory(CategoryService c) {
@@ -102,6 +106,10 @@ public class ServiceProviderServify {
 
     public String getServiceDescription(CategoryService c) {
         return filterByCategory(c).get(0).getDescription();
+    }
+
+    public Double getServiceAverage(CategoryService c){
+        return filterByCategory(c).get(0).getCalificationAverage();
     }
 
 
