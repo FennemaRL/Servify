@@ -53,7 +53,7 @@ export function FormEditService({username, service}) {
 
 export function Service({service}) {
     return (
-        <div name="description">
+        <div name="description" style={{width: "80%"}}>
             {service.description ? service.description : 'este proveedor por el momento no posee descripscion del servicio'}
         </div>
     )
