@@ -15,21 +15,21 @@ function Servicios() {
   },[]);
 
     return (
-    <div>
+    <div style={{width:'90vw'}}>
         <Title  level={3} style={{textAlign:'center'}}>Servicios</Title>
-            <Row gutter={[40, 16]} justify="center">
+        <Row gutter={[24, 16]} justify="space-around">
             {categories.map((cat,indx)=>(
                 serviceCategory(indx, cat)
                 ))
             }
-            </Row>
+        </Row>
     </div>
     )
 
     function serviceCategory(indx, cat) {
-        return <Col xs={10} md={4} key={indx}>
+        return <Col ms={12} lg={8} xl={4} key={indx}>
             <NavLink to={`/Servify/search/${cat.categoryName}`}>
-                <Card hoverable style={{ width: 150 }} cover={<img alt={cat.categoryName} style={{ height: 130 }} src={cat.imageURL} />}>
+                <Card hoverable className='cardResize' cover={<img alt={cat.categoryName}  src={cat.imageURL} />}>
                     <Meta title={cat.categoryName} />
                 </Card>
             </NavLink>

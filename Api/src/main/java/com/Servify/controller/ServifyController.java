@@ -2,15 +2,10 @@ package com.Servify.controller;
 
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.cbor.Jackson2CborDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +43,7 @@ public class ServifyController {
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
-        return ResponseEntity.ok().body(user);
+        return ResponseEntity.ok().body(new providerEditDTO(user.getName(), user.getCelNmbr(), user.getPhoneNmbr(),user.getResidence(),user.getWebPage(),user.getServices()));
 
     }
 
@@ -67,68 +62,116 @@ public class ServifyController {
 
     @CrossOrigin
     @PutMapping("/provider")
-    public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo) {
+    public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo,@RequestHeader TokenResponse token) {
         try {
+            this.checkToken(token, providerPersonalInfo.getProviderOriginalName());
             providerPersonalInfo.assertEmpty();
             ServiceProviderServify provider = dbServiceProvider.findOne(providerPersonalInfo.getProviderOriginalName());
             provider.setPersonalInformation(providerPersonalInfo.getNewProviderName(), providerPersonalInfo.getNewPhoneNmbr(),
                     providerPersonalInfo.getNewCellPhoneNmbr(), providerPersonalInfo.getNewWebPage(),
                     providerPersonalInfo.getNewResidence());
             ServiceProviderServify save = dbServiceProvider.save(provider);
-            System.out.println(save);
-            return ResponseEntity.status(201).body(save);
+            return ResponseEntity.status(200).body(save);
 
-        } catch (Exception | EmptyFieldReceivedError | EmptyDTOError e) {
-            return ResponseEntity.status(400).body("BAD REQUEST");
+        } catch (ServiceProvideError | EmptyFieldReceivedError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @CrossOrigin
     @PostMapping("/provider/service")
-    public ResponseEntity addService(@RequestBody ProviderDTO provider) {
+    public ResponseEntity addService(@RequestBody ProviderDTO provider, @RequestHeader TokenResponse token) {
         try {
-            System.out.print(provider);
+            this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
             user.addService(CategoryManager.createService(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (ServiceProvideError | NoExistentCategoryError | EmptyDTOError e) {
+        } catch (ServiceProvideError | NoExistentCategoryError | EmptyDTOError  e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @CrossOrigin
     @PostMapping("/provider/service/description")
-    public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription) {
+    public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription,@RequestHeader  TokenResponse token) {
         try {
-            serviceDescription.assertEmpty();
 
+            this.checkToken(token, serviceDescription.getUsername());
+            serviceDescription.assertEmpty();
             ServiceProviderServify provider = dbServiceProvider.findOne(serviceDescription.getUsername());
             CategoryService category = CategoryManager.getCategory(serviceDescription.getCategory());
             provider.setServiceWithDescription(category, serviceDescription.getDescription());
             ServiceProviderServify save = dbServiceProvider.save(provider);
 
             return ResponseEntity.status(201).body(save);
-        } catch (Exception | EmptyDTOError e) {
-            System.out.print(e.getClass());
+        } catch (  EmptyDTOError | ServiceProvideError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @CrossOrigin
     @DeleteMapping("/provider/service")
-    public ResponseEntity deleteService(@RequestBody ProviderDTO provider) {
+    public ResponseEntity deleteService(@RequestBody ProviderDTO provider,@RequestHeader TokenResponse token) {
         try {
+            this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
             user.remove(CategoryManager.getCategory(provider.getCategory()));
-            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (EmptyDTOError e) {
+
+            return ResponseEntity.status(200).body(dbServiceProvider.save(user));
+        } catch (EmptyDTOError | ServiceProvideError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
     @CrossOrigin
+    @PostMapping("/provider/login")
+    public ResponseEntity loginWith(@RequestBody LoginDTO loginDTO) {
+
+        try {
+            ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
+            if(sp != null){
+                sp.changePassword(sp.getName());
+                dbServiceProvider.save(sp);
+            }
+            if (sp == null || ! sp.canLoginWith(loginDTO.getPassword())) {
+                throw new ServiceProvideError("Usuario o contraseña incorrectos");
+            }
+            String token = Jtoken.getTokenFor(sp.getName());
+            return ResponseEntity.status(200).body(new TokenResponse(token));
+        } catch (ServiceProvideError  e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+    @CrossOrigin
+    @PutMapping("/provider/password")
+    public ResponseEntity changePassword(@RequestBody LoginDTO loginDTO){
+        try {
+            ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
+            sp.changePassword(loginDTO.getPassword());
+            return ResponseEntity.status(200).body("se cambio correctamente");
+        } catch (ServiceProvideError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+    @CrossOrigin
+    @PostMapping("/tokenVerify")
+    public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
+        try{
+            checkToken(token, user.getUsername());
+            return  ResponseEntity.status(200).body("estas Logueado");
+        }
+        catch (ServiceProvideError e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    private void checkToken(TokenResponse token, String name){
+        Jtoken.isValidToken(token.getToken().split(" ")[1],name);
+
+
+    }
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
