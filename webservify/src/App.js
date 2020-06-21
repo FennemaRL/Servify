@@ -7,31 +7,52 @@ import Search from "./search";
 import TestAdd from "./testadd";
 import {ProfileEditable, ConsumerView} from "./profile/profile";
 import Error from "./error";
+import ButtonLogin from './login/login'
+import {IsAuth} from './login/auth';
 const {Content, Footer,} = Layout;
 
-const handleClick = () => {
-};
 
-function Nav() {
-  return <Menu onClick={handleClick} mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw', width:'96vw', display:'flex'}}>
-          <Menu.Item ><NavLink to="/Servify/" >Servify</NavLink></Menu.Item>
+
+function Nav({islog, setIslog}) {
+  return <Menu mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw',paddingLeft:'1vw', paddingRight:'1vw', width:'96vw', display:'flex'}}>
+          <Menu.Item><NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}}><h3> Servify </h3></NavLink></Menu.Item>
           <div style={{flex:1}}></div>
-          <Menu.Item ><NavLink to="/Servify/profile/Test" >Ingresa</NavLink></Menu.Item>
+          <ButtonLogin setIslog={setIslog} islog={islog}/>
         </Menu>
 }
-
+function PrivateRoute({ children,islog, ...rest }) {
+  return(
+    <Route
+      {...rest}
+      render={({ location }) =>
+       islog ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/Servify/",
+              state: { from: location }
+            }}
+          />
+          )
+      }/>
+      )
+        
+}
 function App() {
 
+  let {islog, setIslog} = IsAuth(localStorage.getItem("userName"));
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>
-        <Nav/>
+        <Nav setIslog={setIslog} islog={islog}/>
         <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Content >
               <Switch>
                   <Route exact path="/Servify/search/:category" component={Search}/>
                   <Route exact path="/Servify/testadd"><TestAdd/></Route>
-                  <Route exact path="/Servify/profile/:username" component={ProfileEditable}/>
+                  <PrivateRoute exact path="/Servify/profile/:username" children={<ProfileEditable/>} islog={islog}>
+                  </PrivateRoute>
                   <Route path="/Servify/view/:username/:category?" component={ConsumerView}/>
                   <Route path="/Servify/error" component={Error}/>
                   <Route exact path="/Servify/"><Home/></Route>

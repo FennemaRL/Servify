@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Form, Input,} from 'antd';
+import {Button, Form, Input, message} from 'antd';
 import axios from 'axios';
 
 const {TextArea} = Input;
@@ -11,12 +11,15 @@ export function FormEditService({username, service}) {
             username: username,
             description: values.description,
             category: service.category.categoryName
-        })
+        }
+        , {headers:{
+            'token': 'Bearer ' + localStorage.getItem("tokenUser")
+        }})
             .then(res => {
-                alert("se agrego con exito")
-                console.log(res.data)
+                message.success("se modifico la descripcion del servicio "+service.category.categoryName+" con exito")
             })
-            .catch(err => alert(err.response.data))
+            .catch(err => {
+                message.error(err.response.data)})
     };
 
     return (
@@ -53,8 +56,8 @@ export function FormEditService({username, service}) {
 
 export function Service({service}) {
     return (
-        <div name="description" style={{width: "80%"}}>
-            {service.description ? service.description : 'este proveedor por el momento no posee descripscion del servicio'}
+        <div name="description">
+            {service.description ? service.description : 'este proveedor por el momento no posee descripción del servicio'}
         </div>
     )
 }

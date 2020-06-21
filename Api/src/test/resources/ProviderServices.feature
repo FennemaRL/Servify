@@ -34,7 +34,7 @@ Feature: Service Provider
     Given A serviceProvider "Pepe"
     When I modify personal information
     Then That information is in Pepe's profile
-  
+
   Scenario: Add personal incompleted information to provider
     Given A serviceProvider "Pepe"
     When I modify personal information leaving one empty field
@@ -44,3 +44,14 @@ Feature: Service Provider
     Given A serviceProvider "Lucas"
     When I add the service "Plomeria"
     Then I add a description "Cash Only" to the service "Electricidad" and throw "Error: Servicio no provisto"
+
+  Scenario: Login with username and password
+    Given A serviceProvider with user "Lucas" and password "123456"
+    When I login with user "Lucas" and password "123456"
+    Then I login
+
+  Scenario: Login with username or password are incorrect
+    Given A serviceProvider with user "Lucas" and password "123456"
+    When I login with user "Lucas" and password "010101"
+    Then I do not log in
+
