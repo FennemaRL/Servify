@@ -2,15 +2,10 @@ package com.Servify.controller;
 
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.cbor.Jackson2CborDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +45,6 @@ public class ServifyController {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
         return ResponseEntity.ok().body(user);
-
     }
 
     @CrossOrigin
@@ -76,9 +70,7 @@ public class ServifyController {
                     providerPersonalInfo.getNewCellPhoneNmbr(), providerPersonalInfo.getNewWebPage(),
                     providerPersonalInfo.getNewResidence());
             ServiceProviderServify save = dbServiceProvider.save(provider);
-            System.out.println(save);
             return ResponseEntity.status(201).body(save);
-
         } catch (Exception | EmptyFieldReceivedError | EmptyDTOError e) {
             return ResponseEntity.status(400).body("BAD REQUEST");
         }
@@ -111,7 +103,6 @@ public class ServifyController {
 
             return ResponseEntity.status(201).body(save);
         } catch (Exception | EmptyDTOError e) {
-            System.out.print(e.getClass());
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

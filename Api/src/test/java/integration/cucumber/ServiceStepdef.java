@@ -44,8 +44,8 @@ public class ServiceStepdef {
 
     @Then("a calification is added to that service califications")
     public void a_calification_is_added_to_that_service_califications() {
-        assertFalse(service.getCalifications().isEmpty());
-        assertEquals(service.getCalifications().get(0).getCalificationValue(), 5,0);
+        assertTrue(service.hasCalifications());
+        assertEquals(service.getCalifications().get(0).getCalificationValue(), 5, 0);
     }
 
     @Given("a service {string} of {string} serviceProvider")
@@ -63,8 +63,8 @@ public class ServiceStepdef {
 
     @Then("cero is returned")
     public void cero_is_returned() {
-        assertTrue(service.getCalifications().isEmpty());
-        assertEquals(average, 0,0);
+        assertFalse(service.hasCalifications());
+        assertEquals(average, 0, 0);
     }
 
     @When("i ask the average calification of a service with some calification")
@@ -82,7 +82,7 @@ public class ServiceStepdef {
 
     @Then("the average is returned")
     public void the_average_is_returned() {
-        assertFalse(service.getCalifications().isEmpty());
-        assertEquals(average, 5,0);
+        assertTrue(service.hasCalifications());
+        assertEquals(average, 5, 0);
     }
 }
