@@ -53,7 +53,7 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider")
         public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-        System.out.print(providerLogUpDTO);
+
         try {
                 providerLogUpDTO.assertEmpty();
                 ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
@@ -163,7 +163,6 @@ public class ServifyController {
     @PostMapping("/tokenVerify")
     public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
         try{
-            System.out.print(token);
             checkToken(token, user.getUsername());
             return  ResponseEntity.status(200).body("estas Logueado");
         }
@@ -177,6 +176,7 @@ public class ServifyController {
 
 
     }
+    @CrossOrigin
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
@@ -196,8 +196,7 @@ public class ServifyController {
     @CrossOrigin
     @PutMapping("/provider/service/scope")
     public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
-        System.out.print(scopeDTO.getScope() + "\n");
-        System.out.print("\nap");
+
 
         try {
             scopeDTO.assertEmpty();
