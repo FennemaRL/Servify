@@ -13,11 +13,11 @@ const {Content, Footer,} = Layout;
 
 
 
-function Nav({islog, setIslog}) {
+function Nav({islog, closeSession, openSession}) {
   return <Menu mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw',paddingLeft:'1vw', paddingRight:'1vw', width:'96vw', display:'flex'}}>
           <Menu.Item><NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}}><h3> Servify </h3></NavLink></Menu.Item>
           <div style={{flex:1}}></div>
-          <ButtonLogin setIslog={setIslog} islog={islog}/>
+          <ButtonLogin closeSession={closeSession} openSession ={openSession} islog={islog}/>
         </Menu>
 }
 function PrivateRoute({ children,islog, ...rest }) {
@@ -41,11 +41,11 @@ function PrivateRoute({ children,islog, ...rest }) {
 }
 function App() {
 
-  let {islog, setIslog} = IsAuth(localStorage.getItem("userName"));
+  let {islog, closeSession, openSession} = IsAuth();
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>
-        <Nav setIslog={setIslog} islog={islog}/>
+        <Nav closeSession={closeSession} openSession={openSession} islog={islog}/>
         <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Content >
               <Switch>

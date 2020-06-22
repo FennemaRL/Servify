@@ -30,7 +30,7 @@ public class Jtoken {
         }
         catch ( ExpiredJwtException| UnsupportedJwtException| MalformedJwtException| SignatureException | IllegalArgumentException e){
 
-            throw new ServiceProviderError("No tiene permiso o session caducada");
+            throw new ServiceProviderError("No tiene permiso o session caducada"+ e.getMessage());
         }
         }
     static private String getTokenName(String token){
