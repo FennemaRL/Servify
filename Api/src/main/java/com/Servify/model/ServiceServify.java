@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class ServiceServify {
@@ -17,7 +18,7 @@ public class ServiceServify {
     private List<Calification> califications;
     @Column
     private String description;
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany (cascade = CascadeType.ALL)
     private List<ScopeService> scopeAreas;
 
     public ServiceServify() {
@@ -74,7 +75,8 @@ public class ServiceServify {
         return this.califications;
     }
 
-    public List<ScopeService> getScope() { return this.scopeAreas;}
+    public List<ScopeService> getScopes() { return this.scopeAreas;}
 
-    public void setScope(ScopeService area) { this.scopeAreas.add(area);}
+    public void setScope(List scope) { this.scopeAreas = scope;}
+
 }

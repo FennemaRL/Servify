@@ -53,7 +53,8 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider")
         public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-            try {
+        System.out.print(providerLogUpDTO);
+        try {
                 providerLogUpDTO.assertEmpty();
                 ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
                         providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
@@ -137,6 +138,23 @@ public class ServifyController {
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
 
         } catch (EmptyDTOError | WrongValueError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping("/provider/service/scope")
+    public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
+        System.out.print(scopeDTO.getScope() + "\n");
+        System.out.print("\nap");
+
+        try {
+            scopeDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(scopeDTO.getServiceCategory());
+            user.modifyServiceWithScope(category, scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList()));
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+        } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

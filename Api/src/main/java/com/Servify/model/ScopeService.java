@@ -23,7 +23,4 @@ public class ScopeService {
         this.scope = scope;
     }
 
-    public String getScopeName() {
-        return scope;
-    }
 }

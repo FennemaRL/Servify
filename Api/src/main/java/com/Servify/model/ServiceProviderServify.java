@@ -95,7 +95,6 @@ public class ServiceProviderServify {
         return filterByCategory(c).get(0).getDescription();
     }
 
-
     public String getName() { return name; }
     public String getPhoneNmbr() { return phoneNmbr; }
     public String getCelNmbr() { return celNmbr; }
@@ -116,13 +115,13 @@ public class ServiceProviderServify {
         }
     }
 
-    public void setServiceWithScope(CategoryService category, ScopeService scope) {
+    public List<ScopeService> getServiceScope(CategoryService category) {
+        return filterByCategory(category).get(0).getScopes();
+    }
+
+    public void modifyServiceWithScope(CategoryService category, List<ScopeService> scope) {
         List<ServiceServify> services = filterByCategory(category);
         if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
         services.get(0).setScope(scope);
-    }
-
-    public List<ScopeService> getServiceScope(CategoryService category) {
-        return filterByCategory(category).get(0).getScope();
     }
 }

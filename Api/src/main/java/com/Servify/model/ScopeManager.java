@@ -10,10 +10,10 @@ public class ScopeManager {
 
     static {
         SCOPE_SERVICES.add(new ScopeService("CABA"));
-        SCOPE_SERVICES.add(new ScopeService("GBASUR"));
-        SCOPE_SERVICES.add(new ScopeService("GBANORTE"));
-        SCOPE_SERVICES.add(new ScopeService("GBAESTE"));
-        SCOPE_SERVICES.add(new ScopeService("GBAOESTE"));
+        SCOPE_SERVICES.add(new ScopeService("GBA SUR"));
+        SCOPE_SERVICES.add(new ScopeService("GBA NORTE"));
+        SCOPE_SERVICES.add(new ScopeService("GBA ESTE"));
+        SCOPE_SERVICES.add(new ScopeService("GBA OESTE"));
     }
 
     public static List<ScopeService> scopes() {
@@ -21,7 +21,7 @@ public class ScopeManager {
     }
 
     public static ScopeService getScope(String scope) throws InvalidScopeError {
-        List<ScopeService> scopeServices = scopes().stream().filter(scopeService -> scopeService.getScopeName().equals(scope)).collect(Collectors.toList());
+        List<ScopeService> scopeServices = scopes().stream().filter(scopeService -> scopeService.getScope().equals(scope)).collect(Collectors.toList());
         assertNotEmpty(scopeServices,scope);
         return scopeServices.get(0);
     }

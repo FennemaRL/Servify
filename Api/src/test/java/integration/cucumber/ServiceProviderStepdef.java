@@ -11,6 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,13 +112,15 @@ public class ServiceProviderStepdef {
 
     @When("I add the scope area {string} to the service {string}")
     public void i_add_the_scope_area_to_the_service(String scope, String category) {
+        List areas = new ArrayList();
         ScopeService area = ScopeManager.getScope(scope);
-        sp.setServiceWithScope(CategoryManager.getCategory(category), area);
+        areas.add(area);
+        sp.modifyServiceWithScope(CategoryManager.getCategory(category), areas);
     }
     @Then("The scope area {string} is in the service {string}")
     public void the_scope_area_is_in_the_service(String area, String category) {
         List<ScopeService> scopes = sp.getServiceScope(CategoryManager.getCategory(category));
-        Assert.assertEquals(scopes.stream().filter(scopeService -> scopeService.getScopeName().equals(area)).collect(Collectors.toList()).get(0).getScopeName(), area);
+        Assert.assertEquals(scopes.stream().filter(scopeService -> scopeService.getScope().equals(area)).collect(Collectors.toList()).get(0).getScope(), area);
     }
 
 }
