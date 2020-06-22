@@ -22,7 +22,7 @@ const HorizontalLoginForm = () => {
   };
 
   const onFinish = values => {
-    axios.post(`${process.env.REACT_APP_API_URL}/api/provider`,{data:{values:{ username:values.username}}})
+    axios.post(`${process.env.REACT_APP_API_URL}/api/provider`,{...values, phoneNmbr:"1234",  celPhoneNmbr:"12346",  webPage:"www.google.com",  residence:"Ezeiza"})
         .then(res=> {alert("Se agregó con éxito")
           console.log(res.data)})
         .catch(err=>alert(err.response.data))

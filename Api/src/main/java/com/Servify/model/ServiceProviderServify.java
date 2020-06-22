@@ -57,15 +57,15 @@ public class ServiceProviderServify {
         return this.offerServices.stream().anyMatch(s -> s.hasCategory(category));
     }
 
-    public void addService(ServiceServify ser) throws ServiceProvideError {
+    public void addService(ServiceServify ser) throws ServiceProviderError {
         List<ServiceServify> sameServices = offerServices.stream().filter(serv -> serv.sameCategory(ser)).collect(Collectors.toList());
         assertServiceNotProvided(sameServices);
         offerServices.add(ser);
     }
 
-    private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProvideError {
+    private void assertServiceNotProvided(List<ServiceServify> sameServices) throws ServiceProviderError {
         if (!sameServices.isEmpty()) {
-            throw new ServiceProvideError();
+            throw new ServiceProviderError();
         }
     }
 
@@ -96,7 +96,7 @@ public class ServiceProviderServify {
     }
 
     private void assertServiceIsProvided(List<ServiceServify> services) {
-        if (services.isEmpty()) throw new ServiceProvideError("Error: Servicio no provisto");
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
     }
 
     private List<ServiceServify> filterByCategory(CategoryService c) {
@@ -107,30 +107,15 @@ public class ServiceProviderServify {
     public String getServiceDescription(CategoryService c) {
         return filterByCategory(c).get(0).getDescription();
     }
-
+    public String getPhoneNmbr() { return phoneNmbr; }
+    public String getCelNmbr() { return celNmbr; }
+    public String getWebPage() { return webPage;}
+    public String getResidence() { return residence; }
     public Double getServiceAverage(CategoryService c){
         return filterByCategory(c).get(0).getCalificationAverage();
     }
-
-
     public String getName() {
         return name;
-    }
-
-    public String getPhoneNmbr() {
-        return phoneNmbr;
-    }
-
-    public String getCelNmbr() {
-        return celNmbr;
-    }
-
-    public String getWebPage() {
-        return webPage;
-    }
-
-    public String getResidence() {
-        return residence;
     }
 
     public void setPersonalInformation(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
@@ -146,6 +131,16 @@ public class ServiceProviderServify {
         if (name.equals("") || phoneNmbr.equals("") || cellNmbr.equals("") || webpage.equals("") || residence.equals("")) {
             throw new EmptyFieldReceivedError("There is an empty missing field");
         }
+    }
+
+    public List<ScopeService> getServiceScope(CategoryService category) {
+        return filterByCategory(category).get(0).getScopes();
+    }
+
+    public void modifyServiceWithScope(CategoryService category, List<ScopeService> scope) {
+        List<ServiceServify> services = filterByCategory(category);
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        services.get(0).setScope(scope);
     }
 
     public Boolean canLoginWith( String password) {

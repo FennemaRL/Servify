@@ -45,6 +45,12 @@ Feature: Service Provider
     When I add the service "Plomeria"
     Then I add a description "Cash Only" to the service "Electricidad" and throw "Error: Servicio no provisto"
 
+  Scenario: Add the scope area to a service
+    Given A serviceProvider "Pepa"
+    When I add the service "Plomeria"
+    And I add the scope area "CABA" to the service "Plomeria"
+    Then The scope area "CABA" is in the service "Plomeria"
+
   Scenario: Login with username and password
     Given A serviceProvider with user "Lucas" and password "123456"
     When I login with user "Lucas" and password "123456"

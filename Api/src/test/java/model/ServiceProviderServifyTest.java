@@ -1,6 +1,7 @@
 package model;
 
 import com.Servify.model.*;
+import com.Servify.model.EmptyDescriptionError;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +20,8 @@ public class ServiceProviderServifyTest {
         mcs = mock(CategoryService.class);
     }
 
-    @Test(expected = ServiceProvideError.class)
-    public void addAServiceRepeated() throws ServiceProvideError {
+    @Test(expected = ServiceProviderError.class)
+    public void addAServiceRepeated() throws ServiceProviderError {
 
         when(mservice.sameCategory(mservice)).thenReturn(true);
 
@@ -31,7 +32,7 @@ public class ServiceProviderServifyTest {
     }
 
     @Test
-    public void removeAService() throws ServiceProvideError {
+    public void removeAService() throws ServiceProviderError {
         when(mservice.sameCategory(mcs)).thenReturn(true);
         when(mservice.sameCategory(mservice)).thenReturn(true);
         ServiceProviderServify sp = new ServiceProviderServify("");
@@ -69,7 +70,7 @@ public class ServiceProviderServifyTest {
         verify(mservice, atLeast(0)).setDescription("");
     }
 
-    @Test(expected = ServiceProvideError.class)
+    @Test(expected = ServiceProviderError.class)
     public void addADescriptionToAnonExistentService() {
         when(mservice.sameCategory(mcs)).thenReturn(false);
         ServiceProviderServify sp = new ServiceProviderServify("");

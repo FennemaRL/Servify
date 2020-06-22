@@ -1,11 +1,19 @@
 package integration.cucumber;
 
 import com.Servify.model.*;
+import com.Servify.model.EmptyDescriptionError;
+import com.Servify.model.EmptyFieldReceivedError;
+import com.Servify.model.InvalidScopeError;
+import com.Servify.model.NoExistentCategoryError;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServiceProviderStepdef {
     private ServiceProviderServify sp;
@@ -22,8 +30,8 @@ public class ServiceProviderStepdef {
         try {
             ServiceServify ser = CategoryManager.createService(cat);
             sp.addService(ser);
-        } catch (ServiceProvideError | NoExistentCategoryError serviceProvideError) {
-            serviceProvideError.printStackTrace();
+        } catch (ServiceProviderError | NoExistentCategoryError serviceProviderError) {
+            serviceProviderError.printStackTrace();
         }
     }
 
@@ -42,8 +50,8 @@ public class ServiceProviderStepdef {
             serv3 = CategoryManager.createService(cat);
             sp.addService(serv3);
         } catch (NoExistentCategoryError ignored) {
-        } catch (ServiceProvideError serviceProvideError) {
-            Assert.assertEquals(errorMesage, serviceProvideError.getMessage());
+        } catch (ServiceProviderError serviceProviderError) {
+            Assert.assertEquals(errorMesage, serviceProviderError.getMessage());
         }
     }
 
@@ -67,7 +75,7 @@ public class ServiceProviderStepdef {
     public void iAddADescriptionToTheServiceAndThrow(String description, String category, String errorMsg) {
         try {
             sp.setServiceWithDescription(CategoryManager.getCategory(category), description);
-        } catch (EmptyDescriptionError | ServiceProvideError error) {
+        } catch (EmptyDescriptionError | ServiceProviderError error) {
             Assert.assertEquals(errorMsg, error.getMessage());
         }
     }
@@ -103,6 +111,18 @@ public class ServiceProviderStepdef {
         Assert.assertTrue(errorWasThrown);
     }
 
+    @When("I add the scope area {string} to the service {string}")
+    public void i_add_the_scope_area_to_the_service(String scope, String category) {
+        List areas = new ArrayList();
+        ScopeService area = ScopeManager.getScope(scope);
+        areas.add(area);
+        sp.modifyServiceWithScope(CategoryManager.getCategory(category), areas);
+    }
+    @Then("The scope area {string} is in the service {string}")
+    public void the_scope_area_is_in_the_service(String area, String category) {
+        List<ScopeService> scopes = sp.getServiceScope(CategoryManager.getCategory(category));
+        Assert.assertEquals(scopes.stream().filter(scopeService -> scopeService.getScope().equals(area)).collect(Collectors.toList()).get(0).getScope(), area);
+    }
 
     @Given("A serviceProvider with user {string} and password {string}")
     public void aServiceProviderWithUserAndPassword(String user, String password) {

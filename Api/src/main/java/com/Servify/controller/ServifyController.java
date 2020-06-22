@@ -1,6 +1,9 @@
 package com.Servify.controller;
 
 import com.Servify.model.*;
+import com.Servify.model.EmptyFieldReceivedError;
+import com.Servify.model.InvalidCategoryError;
+import com.Servify.model.NoExistentCategoryError;
 import com.Servify.repository.services.ServiceProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +53,8 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider")
         public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-            try {
+        System.out.print(providerLogUpDTO);
+        try {
                 providerLogUpDTO.assertEmpty();
                 ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
                         providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
@@ -73,7 +77,7 @@ public class ServifyController {
             ServiceProviderServify save = dbServiceProvider.save(provider);
             return ResponseEntity.status(200).body(save);
 
-        } catch (ServiceProvideError | EmptyFieldReceivedError | EmptyDTOError e) {
+        } catch (ServiceProviderError | EmptyFieldReceivedError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -87,7 +91,7 @@ public class ServifyController {
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
             user.addService(CategoryManager.createService(provider.getCategory()));
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-        } catch (ServiceProvideError | NoExistentCategoryError | EmptyDTOError  e) {
+        } catch (ServiceProviderError | NoExistentCategoryError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -105,7 +109,7 @@ public class ServifyController {
             ServiceProviderServify save = dbServiceProvider.save(provider);
 
             return ResponseEntity.status(201).body(save);
-        } catch (  EmptyDTOError | ServiceProvideError e) {
+        } catch (  EmptyDTOError | ServiceProviderError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -120,7 +124,7 @@ public class ServifyController {
             user.remove(CategoryManager.getCategory(provider.getCategory()));
 
             return ResponseEntity.status(200).body(dbServiceProvider.save(user));
-        } catch (EmptyDTOError | ServiceProvideError e) {
+        } catch (EmptyDTOError | ServiceProviderError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -136,11 +140,11 @@ public class ServifyController {
                 dbServiceProvider.save(sp);
             }
             if (sp == null || ! sp.canLoginWith(loginDTO.getPassword())) {
-                throw new ServiceProvideError("Usuario o contraseña incorrectos");
+                throw new ServiceProviderError("Usuario o contraseña incorrectos");
             }
             String token = Jtoken.getTokenFor(sp.getName());
             return ResponseEntity.status(200).body(new TokenResponse(token));
-        } catch (ServiceProvideError  e) {
+        } catch (ServiceProviderError  e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -151,7 +155,7 @@ public class ServifyController {
             ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
             sp.changePassword(loginDTO.getPassword());
             return ResponseEntity.status(200).body("se cambio correctamente");
-        } catch (ServiceProvideError e) {
+        } catch (ServiceProviderError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -162,7 +166,7 @@ public class ServifyController {
             checkToken(token, user.getUsername());
             return  ResponseEntity.status(200).body("estas Logueado");
         }
-        catch (ServiceProvideError e){
+        catch (ServiceProviderError e){
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -184,6 +188,23 @@ public class ServifyController {
             return ResponseEntity.status(201).body("Calificacion agregada con exito");
 
         } catch (EmptyDTOError | WrongValueError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping("/provider/service/scope")
+    public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
+        System.out.print(scopeDTO.getScope() + "\n");
+        System.out.print("\nap");
+
+        try {
+            scopeDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(scopeDTO.getServiceCategory());
+            user.modifyServiceWithScope(category, scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList()));
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+        } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

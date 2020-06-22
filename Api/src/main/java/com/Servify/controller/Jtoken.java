@@ -1,6 +1,6 @@
 package com.Servify.controller;
 
-import com.Servify.model.ServiceProvideError;
+import com.Servify.model.ServiceProviderError;
 import io.jsonwebtoken.*;
 
 import java.sql.Date;
@@ -23,14 +23,14 @@ public class Jtoken {
         try {
             String jotName = getTokenName(token);
             if (!jotName.equals(tokenOwner)) {
-                throw new ServiceProvideError("No tiene permiso o session caducada");
+                throw new ServiceProviderError("No tiene permiso o session caducada");
 
             }
             return ;
         }
         catch ( ExpiredJwtException| UnsupportedJwtException| MalformedJwtException| SignatureException | IllegalArgumentException e){
 
-            throw new ServiceProvideError("No tiene permiso o session caducada");
+            throw new ServiceProviderError("No tiene permiso o session caducada");
         }
         }
     static private String getTokenName(String token){
