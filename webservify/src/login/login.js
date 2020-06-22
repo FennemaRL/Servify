@@ -4,24 +4,22 @@ import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
 
-const ViewProfileAndCloseSession = ({setIslog}) => {
+const ViewProfileAndCloseSession = ({closeSession, Username}) => {
     let history = useHistory();
     return (
         < div style={{display: 'flex'}}>
-            <NavLink to={`/Servify/Profile/${localStorage.removeItem("UserName")}`} exact
+            <NavLink to={`/Servify/Profile/${Username}`} exact
                      activeStyle={{borderBottom: '4px solid #1890ff', borderRadius: '2px'}}
                      style={{minWidth: '6vw', textAlign: 'center'}}><h4>Ver Perfil</h4></NavLink>
             <Button onClick={() => {
-                setIslog(false);
-                localStorage.removeItem("tokenUser");
-                localStorage.removeItem("UserName");
+                closeSession();
                 history.push('/Servify/')
             }} danger type="text" style={{marginTop: '7px', marginLeft: '1vw',}}>Cerrar Sesión</Button>
         </div>
     )
 }
 
-const FormPop = ({setIslog}) => {
+const FormPop = ({openSession}) => {
     let history = useHistory();
     const [form] = Form.useForm();
     const [, forceUpdate] = useState();
@@ -35,9 +33,7 @@ const FormPop = ({setIslog}) => {
             ...values
         })
             .then(res => {
-                localStorage.setItem("tokenUser", res.data.token)
-                localStorage.setItem("userName", values.username)
-                setIslog(true)
+                openSession(res.data.token,values.username)
                 history.push(`/Servify/Profile/${values.username}`)
             })
             .catch(err => message.error(err.response.data))
@@ -89,17 +85,17 @@ const FormPop = ({setIslog}) => {
         </Form>
     );
 }
-const LoginForm = ({setIslog}) => {
+const LoginForm = ({openSession}) => {
     return (
-        <Popover placement="topLeft" content={<FormPop setIslog={setIslog}/>} trigger="click">
+        <Popover placement="topLeft" content={<FormPop openSession={openSession}/>} trigger="click">
             <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer', marginTop: '5px'}}> Ingresá</p>
         </Popover>
     )
 }
 
-function ButtonLogin({islog, setIslog}) {
+function ButtonLogin({islog, closeSession, openSession}) {
 
-    return islog ? <ViewProfileAndCloseSession setIslog={setIslog}/> : <LoginForm setIslog={setIslog}/>
+    return islog ? <ViewProfileAndCloseSession closeSession={closeSession}/> : <LoginForm openSession={openSession}/>
 
 }
 

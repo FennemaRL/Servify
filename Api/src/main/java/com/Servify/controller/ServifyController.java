@@ -163,6 +163,7 @@ public class ServifyController {
     @PostMapping("/tokenVerify")
     public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
         try{
+            System.out.print(token);
             checkToken(token, user.getUsername());
             return  ResponseEntity.status(200).body("estas Logueado");
         }
