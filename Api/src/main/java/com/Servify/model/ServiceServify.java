@@ -29,6 +29,7 @@ public class ServiceServify {
         this.category = category;
         this.califications = new ArrayList<Calification>();
         this.scopeAreas = new ArrayList<ScopeService>();
+        this.califications = new ArrayList<>();
     }
 
     public Long getId() {
@@ -51,11 +52,11 @@ public class ServiceServify {
         this.category = category;
     }
 
-    public boolean sameCategory(ServiceServify serv) {
+    public Boolean sameCategory(ServiceServify serv) {
         return serv.sameCategory(this.category);
     }
 
-    public boolean sameCategory(CategoryService categoryService) {
+    public Boolean sameCategory(CategoryService categoryService) {
         return this.category.equals(categoryService);
     }
 
@@ -71,7 +72,7 @@ public class ServiceServify {
         this.califications.add(calificacion);
     }
 
-    public List<Calification> getCalifications(){
+    public List<Calification> getCalifications() {
         return this.califications;
     }
 
@@ -79,4 +80,12 @@ public class ServiceServify {
 
     public void setScope(List scope) { this.scopeAreas = scope;}
 
+    public Boolean hasCalifications() {
+        return !califications.isEmpty();
+    }
+
+    public Double getCalificationAverage() {
+        return califications.stream().mapToInt(Calification::getCalificationValue).average()
+                .orElse(0d);
+    }
 }

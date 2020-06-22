@@ -15,7 +15,7 @@ public class ServiceProviderServify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @Column
+    @Column(unique = true)
     private String name;
     @Column
     private String phoneNmbr;
@@ -27,21 +27,30 @@ public class ServiceProviderServify {
     private String residence;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceServify> offerServices;
+    @Column
+    private String password;
 
     protected ServiceProviderServify() {
     }
 
-    public ServiceProviderServify(String name){
+    public ServiceProviderServify(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.offerServices = new ArrayList<ServiceServify>();
+    }
+
+    public ServiceProviderServify(String name) {
         this.name = name;
         this.offerServices = new ArrayList<ServiceServify>();
     }
-    public ServiceProviderServify(String name,String phoneNmbr, String celNmbr, String webPage, String residence) {
+
+    public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
         this.name = name;
         this.phoneNmbr = phoneNmbr;
         this.celNmbr = celNmbr;
-        this. webPage = webPage;
+        this.webPage = webPage;
         this.residence = residence;
-        offerServices = new ArrayList<ServiceServify>();
+        offerServices = new ArrayList<>();
     }
 
     public Boolean hasServicesWithCategory(String category) {
@@ -75,15 +84,19 @@ public class ServiceProviderServify {
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
         if (description.isEmpty()) throw new EmptyDescriptionError();
-        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         services.get(0).setDescription(description);
     }
 
     public void addNewCalificationToService(CategoryService c, Integer calificationValue) throws WrongValueError {
         List<ServiceServify> services = filterByCategory(c);
-        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue);
         services.get(0).addCalification(newCalification);
+    }
+
+    private void assertServiceIsProvided(List<ServiceServify> services) {
+        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
     }
 
     private List<ServiceServify> filterByCategory(CategoryService c) {
@@ -94,24 +107,29 @@ public class ServiceProviderServify {
     public String getServiceDescription(CategoryService c) {
         return filterByCategory(c).get(0).getDescription();
     }
-
-    public String getName() { return name; }
     public String getPhoneNmbr() { return phoneNmbr; }
     public String getCelNmbr() { return celNmbr; }
     public String getWebPage() { return webPage;}
     public String getResidence() { return residence; }
+    public Double getServiceAverage(CategoryService c){
+        return filterByCategory(c).get(0).getCalificationAverage();
+    }
+    public String getName() {
+        return name;
+    }
 
     public void setPersonalInformation(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
+        assertAnyFieldsAreEmpty(name, phoneNmbr, cellNmbr, webpage, residence);
+        this.name = name;
+        this.phoneNmbr = phoneNmbr;
+        this.celNmbr = cellNmbr;
+        this.webPage = webpage;
+        this.residence = residence;
+    }
 
-        if(name.equals("")||phoneNmbr.equals("")||cellNmbr.equals("")||webpage.equals("")|| residence.equals("")){
-
+    private void assertAnyFieldsAreEmpty(String name, String phoneNmbr, String cellNmbr, String webpage, String residence) throws EmptyFieldReceivedError {
+        if (name.equals("") || phoneNmbr.equals("") || cellNmbr.equals("") || webpage.equals("") || residence.equals("")) {
             throw new EmptyFieldReceivedError("There is an empty missing field");
-        }else{
-            this.name = name;
-            this.phoneNmbr = phoneNmbr;
-            this.celNmbr = cellNmbr;
-            this.webPage = webpage;
-            this.residence = residence;
         }
     }
 
@@ -123,5 +141,17 @@ public class ServiceProviderServify {
         List<ServiceServify> services = filterByCategory(category);
         if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
         services.get(0).setScope(scope);
+    }
+
+    public Boolean canLoginWith( String password) {
+        return this.password.equals(password);
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public List<ServiceServify> getServices() {
+        return offerServices;
     }
 }

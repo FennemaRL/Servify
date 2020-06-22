@@ -32,3 +32,23 @@ code {
   border-color: #fff;
   background: #fff;
 }
+.catOfferSize{
+  width: 70vw;
+}
+.formEditableInfo{
+  width: 40vw;
+
+}
+.cardResize{
+  width:280px;
+}
+@media screen and (max-width: 48em) {
+
+  .catOfferSize{
+    width: 95vw;
+  }
+  .formEditableInfo{
+    width: 80vw;
+  
+  }
+}

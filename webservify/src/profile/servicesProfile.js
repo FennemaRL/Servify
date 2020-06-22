@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs, Typography, Select, message, Tag} from 'antd';
+import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag} from 'antd';
 import axios from "axios";
-import { FormEditService, Service } from "./contentServiceProfile";
-import { Redirect } from 'react-router-dom';
+import {FormEditService, Service} from "./contentServiceProfile";
+import {Redirect} from 'react-router-dom';
 
-const { Title } = Typography;
+
+const {Title, Paragraph} = Typography;
 const {TabPane} = Tabs;
 const categories = [
     {value: "Plomeria", label: " Plomeria"},
@@ -33,16 +34,19 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
         if (selectCategory[0]) {
             setproviderSevices(prevCate => [...prevCate, {category: {categoryName: selectCategory[0]}}])
             setActiveCategorie(selectCategory)
-            axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`, {
-                username: username,
-                category: selectCategory[0]
-            })
+            axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service`, 
+            {
+                    username: username,
+                    category: selectCategory[0]
+            }, 
+            {headers:{
+                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+            }})
                 .then(() => {
-                    alert("se agrego con exito")
+                    message.success("se agrego el servicio "+selectCategory[0]+" con exito")
                 })
                 .catch(err => {
-                    alert(err.response.data)
-                    window.location.reload();
+                    message.error(err.response.data +" se recargara la pagina")
                 })
         }
     }
@@ -55,27 +59,29 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
             data: {
                 username: username,
                 category: targetKey
+            },
+            headers:{
+                'token': 'Bearer ' + localStorage.getItem("tokenUser")
             }
         })
             .then(() => {
-                alert("se borro con exito")
+                message.success("se borro el servicio " +targetKey+" con exito")
             })
             .catch(err => {
-                alert(err.response.data.message)
-                window.location.reload();
+                message.error(err.response.data +" se recargara la pagina")
             })
     }
     const onEdit = (targetKey, action) => action === 'add' ? add(targetKey) : remove(targetKey);
-    const operations = <div><Cascader options={categories} onChange={onChange}
+    const operations = <div style={{display:'flex'}}><Cascader options={categories} onChange={onChange} style={{width:140}}
                                       placeholder="Seleccione Una categoria"/><Button type="primary"
                                                                                       onClick={add}>add</Button></div>
     const onChangeTab = key => setActiveCategorie(key);
    
     return (<>{ (err && <Redirect to={{
-        pathname: '/Servify/Error',
+        pathname: "/Servify/error",
         state: { message: err }
     }} /> ) ||
-    <div style={{width: '70vw', minHeight:"70vh"}}>
+    <div className='catOfferSize' >
             <Title style={{textAlign:'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container" >
                 <Tabs tabBarExtraContent={operations} type="editable-card" style={{minHeight:"70vh"}}
@@ -94,7 +100,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
     </div>
     }
     </>)
-   
+
 }
 
 function ZonesEditable({name, service}){
@@ -146,15 +152,15 @@ export function ViewService({username, providerSevices, category, err}) {
     const [activeCategory, setActiveCategorie] = useState();
     const onChangeTab = key => setActiveCategorie(key);
     useEffect(() => {
-        setActiveCategorie(category? category: providerSevices[0] ? providerSevices[0].categoryName : null)
-    }, [providerSevices,category])
+        setActiveCategorie(category ? category : providerSevices[0] ? providerSevices[0].categoryName : null)
+    }, [providerSevices, category])
 
-    return  (<>{ (err && <Redirect to={{
-        pathname: '/Servify/Error',
-        state: { message: err }
-    }} /> ) ||
+    return (<>{(err && <Redirect to={{
+            pathname: '/Servify/Error',
+            state: {message: err}
+        }}/>) ||
         <div style={{width: '70vw'}}>
-           <Title style={{textAlign:'center'}} level={4}>Categorias ofrecidas</Title>
+            <Title style={{textAlign: 'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container">
                 <Tabs type="editable-card"
                       activeKey={activeCategory}
@@ -162,14 +168,17 @@ export function ViewService({username, providerSevices, category, err}) {
                       hideAdd>
                     {providerSevices.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
-                            <Service username={username} service={ser}/>
-                            <ViewZones service={ser}/>
+                            <div>
+                                <Service username={username} service={ser}/>
+                                <Rating service={ser} serviceName={ser.category.categoryName} username={username}/>
+                                <ViewZones service={ser}/>                          
+                            </div>
                         </TabPane>))}
                 </Tabs>
             </div>
         </div>
         }
-    </>
+        </>
     )
 }
 
@@ -180,4 +189,54 @@ function ViewZones({service}){
             {service.scopes.map(scope => <Tag key={scope.scope}>{scope.scope}</Tag>)}
         </div>
     )  
+}
+function Rating({serviceName, username, service}) {
+
+    const [visible, setVisible] = useState(false);
+    const [averageRating, setAverageRating] = useState(0);
+
+    const calificate = (value) => {
+        setVisible(false)
+        axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`,
+            {
+                "providerName": username,
+                "serviceCategory": serviceName,
+                "calificationValue": value
+            }).then(res => {
+                message.success('This is a success message');
+                setTimeout(() => window.location.reload(true), 700)
+            }
+        ).catch(err => console.log(err.response.data))
+    }
+
+    const showModal = () => {
+        setVisible(true);
+    };
+
+    const handleOk = e => {
+        setVisible(false);
+    };
+
+    const handleCancel = e => {
+        setVisible(false);
+    };
+
+    return (
+        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
+            {/*            <Button type="primary" onClick={showModal}>
+                Calificar
+            </Button>
+            <Modal
+                title="Basic Modal"
+                visible={visible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <Rate onChange={calificate}/>
+            </Modal>*/}
+                {/*<Statistic title="Calificación promedio" value={service.calificationAverage} suffix="/5"/>*/}
+                <p>Calificación: </p>
+                <Rate defaultValue={service.calificationAverage} onChange={calificate}/>
+        </div>
+    );
 }

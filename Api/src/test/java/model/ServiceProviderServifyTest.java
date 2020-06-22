@@ -81,4 +81,24 @@ public class ServiceProviderServifyTest {
         }
         verify(mservice, atLeast(0)).setDescription("te");
     }
+
+    @Test
+    public void iLoginWithUsernameAndPassword() {
+        String name = "Lucas";
+        String password = "123456";
+        ServiceProviderServify sp = new ServiceProviderServify(name, password);
+        Boolean login = sp.canLoginWith( password);
+
+        Assert.assertTrue(login);
+    }
+
+    @Test
+    public void iDoNotLoginWithUsernameAndPassword() {
+        String name = "Lucas";
+        String password = "000000";
+        ServiceProviderServify sp = new ServiceProviderServify(name, password);
+        Boolean login = sp.canLoginWith( password + 1);
+
+        Assert.assertFalse(login);
+    }
 }

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class ServiceProviderStepdef {
     private ServiceProviderServify sp;
     private Boolean errorWasThrown;
+    private Boolean canLoginWith;
 
     @Given("A serviceProvider {string}")
     public void a_serviceProvider(String name) {
@@ -100,7 +101,7 @@ public class ServiceProviderStepdef {
         try{
             sp.setPersonalInformation("Pepe2", "", "0987654321", "www.pepeCarpinteria.com",
                     "");
-        }catch(EmptyFieldReceivedError error){
+        } catch (EmptyFieldReceivedError error) {
             errorWasThrown = true;
         }
     }
@@ -123,4 +124,23 @@ public class ServiceProviderStepdef {
         Assert.assertEquals(scopes.stream().filter(scopeService -> scopeService.getScope().equals(area)).collect(Collectors.toList()).get(0).getScope(), area);
     }
 
+    @Given("A serviceProvider with user {string} and password {string}")
+    public void aServiceProviderWithUserAndPassword(String user, String password) {
+        sp = new ServiceProviderServify(user, password);
+    }
+
+    @When("I login with user {string} and password {string}")
+    public void iLoginWithUserAndPassword(String user, String password) {
+        canLoginWith = sp.canLoginWith(password);
+    }
+
+    @Then("I login")
+    public void iLogin() {
+        Assert.assertTrue(canLoginWith);
+    }
+
+    @Then("I do not log in")
+    public void iDoNotLoggedIn() {
+        Assert.assertFalse(canLoginWith);
+    }
 }
