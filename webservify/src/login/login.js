@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Input, Popover} from 'antd';
+import {Button, Form, Input, message, Popover} from 'antd';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
@@ -36,7 +36,7 @@ const FormPop = ({openSession}) => {
                 openSession(res.data.token,values.username)
                 history.push(`/Servify/Profile/${values.username}`)
             })
-            .catch(err => {})
+            .catch(err => message.error(err.response.data))
     }
 
     return (
