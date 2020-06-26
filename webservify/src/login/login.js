@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Input, message, Popover} from 'antd';
+import {Button, Form, Input, message, Popover,Tooltip} from 'antd';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
@@ -14,7 +14,7 @@ const ViewProfileAndCloseSession = ({closeSession, Username}) => {
             <Button onClick={() => {
                 closeSession();
                 history.push('/Servify/')
-            }} danger type="text" style={{marginTop: '7px', marginLeft: '1vw',}}>Cerrar Sesión</Button>
+            }} danger type="text" style={{ marginLeft: '1vw'}}>Cerrar Sesión</Button>
         </div>
     )
 }
@@ -70,6 +70,8 @@ const FormPop = ({openSession}) => {
             </Form.Item>
             <Form.Item shouldUpdate>
                 {() => (
+                    <Tooltip title={!form.isFieldsTouched(true) ||
+                        form.getFieldsError().filter(({errors}) => errors.length).length? "Ingrese primero usuario y contraseña para ingresar "  :  "Ingresa"} >
                     <Button
                         type="primary"
                         htmlType="submit"
@@ -80,6 +82,7 @@ const FormPop = ({openSession}) => {
                     >
                         Log in
                     </Button>
+                    </Tooltip>
                 )}
             </Form.Item>
         </Form>
@@ -88,7 +91,7 @@ const FormPop = ({openSession}) => {
 const LoginForm = ({openSession}) => {
     return (
         <Popover placement="topLeft" content={<FormPop openSession={openSession}/>} trigger="click">
-            <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer', marginTop: '5px'}}> Ingresá</p>
+            <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer'}}> Ingresá</p>
         </Popover>
     )
 }

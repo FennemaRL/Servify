@@ -7,16 +7,16 @@ import { Redirect } from 'react-router-dom';
 const {Title} = Typography;
 
 function Search() {
-    let {category} = useParams();
+    let {category, zone} = useParams();
     const [providers, setCategories] = useState([]);
     const [err, seterr] = useState();
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/api/services/${category}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/api/services/${category}`) //  a modificar
             .then(res => {
                 setCategories(res.data)
             })
             .catch(err => seterr(err.response.data))
-    }, [category]);
+    }, [category, zone]);
 
     return (
         <>{ (err && <Redirect to={{
@@ -24,7 +24,8 @@ function Search() {
             state: { message: err }
         }} /> ) ||
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <Title style={{textAlign: 'center'}} level={2}>Búsqueda {category}</Title>
+            <Title style={{textAlign: 'center'}} level={2}>Búsqueda de {category}</Title>
+            {zone && <Title style={{textAlign: 'center'}} level={4}>en zona {zone}</Title>}
             <div style={{backgroundColor:'#d9d9d9', width:'45vw'}}>
             <List itemLayout="horizontal" dataSource={providers} size='large' renderItem={item => (
                 <List.Item style={{backgroundColor: '#d9d9d9', borderRadius: 5}}>
