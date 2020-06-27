@@ -29,6 +29,8 @@ public class ServiceProviderServify {
     private List<ServiceServify> offerServices;
     @Column
     private String password;
+    @Column
+    private Double averageRating;
 
     protected ServiceProviderServify() {
     }
@@ -71,6 +73,12 @@ public class ServiceProviderServify {
 
     public Boolean providesService(ServiceServify ser) {
         return offerServices.stream().filter(serv -> serv.sameCategory(ser)).count() == 1;
+    }
+
+    //TODO test
+    public Double getAverageRating() {
+        return offerServices.stream().mapToDouble(ServiceServify::getCalificationAverage).average()
+                .orElse(0d);
     }
 
     public void remove(CategoryService sc) {

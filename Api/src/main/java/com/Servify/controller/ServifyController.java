@@ -1,9 +1,6 @@
 package com.Servify.controller;
 
 import com.Servify.model.*;
-import com.Servify.model.EmptyFieldReceivedError;
-import com.Servify.model.InvalidCategoryError;
-import com.Servify.model.NoExistentCategoryError;
 import com.Servify.repository.services.ServiceProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,19 +43,33 @@ public class ServifyController {
     @GetMapping("/provider/{name}")
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
-        if(user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
-        return ResponseEntity.ok().body(new providerEditDTO(user.getName(), user.getCelNmbr(), user.getPhoneNmbr(),user.getResidence(),user.getWebPage(),user.getServices()));
+        if (user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
+        return ResponseEntity.ok().body(new ProviderEditDTO(user.getName(), user.getCelNmbr(),
+                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), user.getServices()));
+    }
+
+    @CrossOrigin
+    @GetMapping("/providers/best-rated")
+    public ResponseEntity getHighestRatedProviders() {
+        try {
+            List<ProviderRatingDTO> recommended = dbServiceProvider.bestRated()
+                    .stream().map(p -> new ProviderRatingDTO(p.getName(), p.getAverageRating()))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok().body(recommended);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @CrossOrigin
     @PostMapping("/provider")
-        public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
+    public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
 
         try {
-                providerLogUpDTO.assertEmpty();
-                ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
-                        providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
-                return ResponseEntity.status(201).body(dbServiceProvider.save(user));
+            providerLogUpDTO.assertEmpty();
+            ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
+                    providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
+            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
             } catch (EmptyDTOError emptyDTOError) {
                 return ResponseEntity.status(400).body("Bad_Request");
             }
@@ -100,14 +111,12 @@ public class ServifyController {
     @PostMapping("/provider/service/description")
     public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription,@RequestHeader  TokenResponse token) {
         try {
-
             this.checkToken(token, serviceDescription.getUsername());
             serviceDescription.assertEmpty();
             ServiceProviderServify provider = dbServiceProvider.findOne(serviceDescription.getUsername());
             CategoryService category = CategoryManager.getCategory(serviceDescription.getCategory());
             provider.setServiceWithDescription(category, serviceDescription.getDescription());
             ServiceProviderServify save = dbServiceProvider.save(provider);
-
             return ResponseEntity.status(201).body(save);
         } catch (  EmptyDTOError | ServiceProviderError e) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -196,8 +205,6 @@ public class ServifyController {
     @CrossOrigin
     @PutMapping("/provider/service/scope")
     public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
-
-
         try {
             scopeDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
