@@ -15,11 +15,17 @@ public class ServiceProviderService {
     @Autowired
     private ServiceProviderRepository serviceProviderRepository;
 
-    public List<ServiceProviderServify> findByCategory(String category) {
+    public List<ServiceProviderServify> findByCategoryAndScope(String category, String scope) {
         List<ServiceProviderServify> all = serviceProviderRepository.findAll();
-        return all.stream()
-                .filter(p -> p.hasServicesWithCategory(category))
-                .collect(Collectors.toList());
+        if(scope.isEmpty()){
+            return all.stream()
+                    .filter(p -> p.hasServicesWithCategory(category))
+                    .collect(Collectors.toList());
+        }else {
+            return all.stream()
+                    .filter(p -> p.hasServicesWithCategoryAndZone(category, scope))
+                    .collect(Collectors.toList());
+        }
     }
 
     public ServiceProviderServify save(ServiceProviderServify user) {

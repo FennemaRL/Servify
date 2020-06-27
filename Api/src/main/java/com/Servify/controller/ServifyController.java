@@ -28,10 +28,10 @@ public class ServifyController {
 
     @CrossOrigin
     @GetMapping("/services/{category}")
-    public ResponseEntity category(@PathVariable String category) {
+    public ResponseEntity category(@PathVariable String category, @RequestParam(defaultValue = "") String scope) {
         try{
             CategoryService categoryObj = CategoryManager.getCategory(category);
-            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
+            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategoryAndScope(category, scope)
                     .stream().map(sp ->
                             new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj),
                                     sp.getServiceAverage(categoryObj), category)
