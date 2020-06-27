@@ -44,6 +44,10 @@ public class ServiceServify {
         return this.category.getCategory().equals(category);
     }
 
+    public Boolean hasScope(String receivedScope) {
+        return this.scopeAreas.stream().anyMatch(scope -> scope.equals(receivedScope));
+    }
+
     public CategoryService getCategory() {
         return category;
     }
