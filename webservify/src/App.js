@@ -34,11 +34,11 @@ function PrivateRoute({ children,islog, ...rest }) {
 }
 function App() {
 
-  let {islog, closeSession, openSession} = IsAuth();
+  let {islog, closeSession, openSession, userName} = IsAuth();
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>
-        <Nav closeSession={closeSession} openSession={openSession} islog={islog}/>
+        <Nav closeSession={closeSession} openSession={openSession} islog={islog} userName={userName} />
         <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Content >
               <Switch>

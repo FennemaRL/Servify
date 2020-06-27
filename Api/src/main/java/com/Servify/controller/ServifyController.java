@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/api")
 public class ServifyController {
@@ -202,7 +202,8 @@ public class ServifyController {
             scopeDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(scopeDTO.getServiceCategory());
-            user.modifyServiceWithScope(category, scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList()));
+            List<ScopeService> sc = scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList());
+            user.modifyServiceWithScope(category, sc);
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());

@@ -11,7 +11,7 @@ function Search() {
     const [providers, setCategories] = useState([]);
     const [err, seterr] = useState();
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/api/services/${category}`) //  a modificar
+        axios.get(`${process.env.REACT_APP_API_URL}/api/services/${category}`,{params:{scope:zone}}) //  a modificar
             .then(res => {
                 setCategories(res.data)
             })

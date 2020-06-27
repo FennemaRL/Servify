@@ -117,7 +117,7 @@ function ZonesEditable({name, service}){
             message.success("Se modificaron las zonas de alcance con éxito")
         })
         .catch(err => {
-            message.error(err.response)
+            message.error(err.response.data)
         })
     };
 

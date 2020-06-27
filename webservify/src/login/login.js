@@ -4,17 +4,17 @@ import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
 
-const ViewProfileAndCloseSession = ({closeSession, Username}) => {
+const ViewProfileAndCloseSession = ({closeSession, userName}) => {
     let history = useHistory();
     return (
         < div style={{display: 'flex'}}>
-            <NavLink to={`/Servify/Profile/${Username}`} exact
+            <NavLink to={`/Servify/Profile/${userName}`} exact
                      activeStyle={{borderBottom: '4px solid #1890ff', borderRadius: '2px'}}
                      style={{minWidth: '6vw', textAlign: 'center'}}><h4>Ver Perfil</h4></NavLink>
             <Button onClick={() => {
                 closeSession();
                 history.push('/Servify/')
-            }} danger type="text" style={{ marginLeft: '1vw'}}>Cerrar Sesión</Button>
+            }} danger type="text" style={{ marginLeft: '1vw', marginTop: '8px'}}>Cerrar Sesión</Button>
         </div>
     )
 }
@@ -96,9 +96,9 @@ const LoginForm = ({openSession}) => {
     )
 }
 
-function ButtonLogin({islog, closeSession, openSession}) {
+function ButtonLogin({islog, closeSession, openSession, userName}) {
 
-    return islog ? <ViewProfileAndCloseSession closeSession={closeSession}/> : <LoginForm openSession={openSession}/>
+    return islog ? <ViewProfileAndCloseSession closeSession={closeSession} userName={userName} /> : <LoginForm openSession={openSession}/>
 
 }
 
