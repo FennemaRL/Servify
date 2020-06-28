@@ -42,7 +42,7 @@ public class ServiceStepdef {
 
     @When("calificate a specific service with the message {string}")
     public void calificate_a_specific_service_with_the_message(String message) throws WrongValueError {
-        Calification calificacion = new Calification(5, message, consumer);
+        Calification calificacion = new Calification(5, consumer, message);
         service.addCalification(calificacion);
     }
 
@@ -50,7 +50,7 @@ public class ServiceStepdef {
     public void a_calification_is_added_to_that_service_califications() {
         assertTrue(service.hasCalifications());
         assertEquals(service.getCalifications().get(0).getCalificationValue(), 5, 0);
-        assertEquals(service.getCalifications().get(0).getComments(), "Excelente servicio");
+        assertEquals(service.getCalifications().get(0).getMessage(), "Excelente servicio");
         assertEquals(service.getCalifications().get(0).getConsumer().getName(), "Pepe");
         assertEquals(service.getCalifications().get(0).getConsumer().getEmail(), "pepe@gmail.com");
     }

@@ -13,7 +13,7 @@ public class Calification {
     @OneToOne(cascade = CascadeType.ALL)
     private ServiceConsumer consumer;
     @Column
-    private String comments;
+    private String message;
 
     public Calification(){}
 
@@ -23,18 +23,18 @@ public class Calification {
             throw new WrongValueError("Invalid value for a calification");
         }else{
             this.calificationValue = aValue;
-            this.comments = "";
+            this.message = "";
         }
     }
 
-    public Calification(Integer aValue, String comments, ServiceConsumer consumer) throws WrongValueError {
+    public Calification(Integer aValue, ServiceConsumer consumer, String message) throws WrongValueError {
 
         if(aValue < 0 || aValue > 5){
             throw new WrongValueError("Invalid value for a calification");
         }else{
             this.calificationValue = aValue;
-            this.comments = comments;
             this.consumer = consumer;
+            this.message = message;
         }
     }
 
@@ -42,7 +42,7 @@ public class Calification {
         return this.calificationValue;
     }
 
-    public String getComments() { return comments; }
+    public String getMessage() { return message; }
 
     public ServiceConsumer getConsumer() { return consumer; }
 }
