@@ -14,6 +14,7 @@ public class ServiceStepdef {
     private ServiceServify service;
     private ServiceProviderServify provider;
     private Double average;
+    private ServiceConsumer consumer;
 
     @Given("A consumer")
     public void a_consumer() {
@@ -29,23 +30,29 @@ public class ServiceStepdef {
         assertFalse(result.isEmpty());
     }
 
+    @Given("A serviceConsumer {string} with an email {string}")
+    public void a_serviceConsumer(String name, String email) {
+        consumer = new ServiceConsumer(name, email);
+    }
+
     @Given("A specific service")
     public void a_specific_service() {
         service = CategoryManager.createService("Plomeria");
     }
 
-    @When("calificate a specific service")
-    public void calificate_a_specific_service() throws WrongValueError {
-
-        Calification calificacion = new Calification(5);
+    @When("calificate a specific service with the message {string}")
+    public void calificate_a_specific_service_with_the_message(String message) throws WrongValueError {
+        Calification calificacion = new Calification(5, message, consumer);
         service.addCalification(calificacion);
-
     }
 
     @Then("a calification is added to that service califications")
     public void a_calification_is_added_to_that_service_califications() {
         assertTrue(service.hasCalifications());
         assertEquals(service.getCalifications().get(0).getCalificationValue(), 5, 0);
+        assertEquals(service.getCalifications().get(0).getComments(), "Excelente servicio");
+        assertEquals(service.getCalifications().get(0).getConsumer().getName(), "Pepe");
+        assertEquals(service.getCalifications().get(0).getConsumer().getEmail(), "pepe@gmail.com");
     }
 
     @Given("a service {string} of {string} serviceProvider")
