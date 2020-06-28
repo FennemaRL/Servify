@@ -1,7 +1,6 @@
 package model;
 
 import com.Servify.model.*;
-import com.Servify.model.EmptyDescriptionError;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,10 +24,8 @@ public class ServiceProviderServifyTest {
 
         when(mservice.sameCategory(mservice)).thenReturn(true);
 
-
         sp.addService(mservice);
         sp.addService(mservice);
-
     }
 
     @Test
@@ -97,8 +94,26 @@ public class ServiceProviderServifyTest {
         String name = "Lucas";
         String password = "000000";
         ServiceProviderServify sp = new ServiceProviderServify(name, password);
-        Boolean login = sp.canLoginWith( password + 1);
+        Boolean login = sp.canLoginWith(password + 1);
 
         Assert.assertFalse(login);
+    }
+
+    @Test
+    public void whenAskedTheAverageRatingWithZeroRatingsIsZero() {
+        Double averageRating = sp.getAverageRating();
+
+        Assert.assertEquals(averageRating, 0, 0);
+    }
+
+    @Test
+    public void whenAskedTheAverageRatingWithAServiceWithFourStarRatingTheAverageRatingIsFour() throws WrongValueError {
+
+        ServiceServify service = CategoryManager.createService("Electricidad");
+        sp.addService(service);
+        sp.addNewCalificationToService(CategoryManager.getCategory("Electricidad"), 4);
+        Double averageRating = sp.getAverageRating();
+
+        Assert.assertEquals(4, averageRating, 0);
     }
 }

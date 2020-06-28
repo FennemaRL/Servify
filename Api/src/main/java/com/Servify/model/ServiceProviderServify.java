@@ -29,8 +29,6 @@ public class ServiceProviderServify {
     private List<ServiceServify> offerServices;
     @Column
     private String password;
-    @Column
-    private Double averageRating;
 
     protected ServiceProviderServify() {
     }
@@ -38,12 +36,12 @@ public class ServiceProviderServify {
     public ServiceProviderServify(String name, String password) {
         this.name = name;
         this.password = password;
-        this.offerServices = new ArrayList<ServiceServify>();
+        this.offerServices = new ArrayList<>();
     }
 
     public ServiceProviderServify(String name) {
         this.name = name;
-        this.offerServices = new ArrayList<ServiceServify>();
+        this.offerServices = new ArrayList<>();
     }
 
     public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
@@ -75,12 +73,6 @@ public class ServiceProviderServify {
         return offerServices.stream().filter(serv -> serv.sameCategory(ser)).count() == 1;
     }
 
-    //TODO test
-    public Double getAverageRating() {
-        return offerServices.stream().mapToDouble(ServiceServify::getCalificationAverage).average()
-                .orElse(0d);
-    }
-
     public void remove(CategoryService sc) {
         offerServices = offerServices.stream().filter(serv -> !serv.sameCategory(sc)).collect(Collectors.toList());
     }
@@ -101,6 +93,11 @@ public class ServiceProviderServify {
         assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue);
         services.get(0).addCalification(newCalification);
+    }
+
+    public Double getAverageRating() {
+        return offerServices.stream().mapToDouble(ServiceServify::getCalificationAverage).average()
+                .orElse(0d);
     }
 
     private void assertServiceIsProvided(List<ServiceServify> services) {
