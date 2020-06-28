@@ -3,18 +3,12 @@ import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag} from 'an
 import axios from "axios";
 import {FormEditService, Service} from "./contentServiceProfile";
 import {Redirect} from 'react-router-dom';
+import {categories, scopes} from '../catAndScopes'
 
 
-const {Title, Paragraph} = Typography;
+const {Title} = Typography;
 const {TabPane} = Tabs;
-const categories = [
-    {value: "Plomeria", label: " Plomeria"},
-    {value: "Electricidad", label: "Electricidad"},
-    {value: "Mecanica", label: "Mecanica"},
-    {value: "Carpinteria", label: "Carpinteria"},
-    {value: "Gas Natural", label: "Gas Natural"},
-];
-const scopes = ["CABA", "GBA SUR", "GBA NORTE", "GBA ESTE", "GBA OESTE"];
+
 
 export function ViewEditableService({username, providerSevices, setproviderSevices, err}) {
 
@@ -123,7 +117,7 @@ function ZonesEditable({name, service}){
             message.success("Se modificaron las zonas de alcance con éxito")
         })
         .catch(err => {
-            message.error(err.response)
+            message.error(err.response.data)
         })
     };
 
@@ -192,11 +186,11 @@ function ViewZones({service}){
 }
 function Rating({serviceName, username, service}) {
 
-    const [visible, setVisible] = useState(false);
-    const [averageRating, setAverageRating] = useState(0);
+    //const [visible, setVisible] = useState(false);
+   // const [averageRating, setAverageRating] = useState(0);
 
     const calificate = (value) => {
-        setVisible(false)
+        //setVisible(false)
         axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`,
             {
                 "providerName": username,
@@ -208,7 +202,7 @@ function Rating({serviceName, username, service}) {
             }
         ).catch(err => console.log(err.response.data))
     }
-
+/*
     const showModal = () => {
         setVisible(true);
     };
@@ -220,7 +214,7 @@ function Rating({serviceName, username, service}) {
     const handleCancel = e => {
         setVisible(false);
     };
-
+*/
     return (
         <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
             {/*            <Button type="primary" onClick={showModal}>
