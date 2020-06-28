@@ -17,16 +17,21 @@ public class ServiceProviderService {
 
     public List<ServiceProviderServify> findByCategoryAndScope(String category, String scope) {
         List<ServiceProviderServify> all = serviceProviderRepository.findAll();
-        if(scope.isEmpty()){
-            return all.stream()
-                    .filter(p -> p.hasServicesWithCategory(category))
-                    .collect(Collectors.toList());
-        }else {
+        if (scope.isEmpty()) {
+            return findByCategory(category, all);
+        } else {
             return all.stream()
                     .filter(p -> p.hasServicesWithCategoryAndZone(category, scope))
                     .collect(Collectors.toList());
         }
     }
+
+    private List<ServiceProviderServify> findByCategory(String category, List<ServiceProviderServify> all) {
+        return all.stream()
+                .filter(p -> p.hasServicesWithCategory(category))
+                .collect(Collectors.toList());
+    }
+
 
     public ServiceProviderServify save(ServiceProviderServify user) {
         return serviceProviderRepository.save(user);
