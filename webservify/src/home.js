@@ -65,7 +65,7 @@ function BestProviders() {
                                     src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
                                 title={<p>{provider.username}</p>}
                                 description={
-                                    <div style={{display: "flex", flexDirection: "row"}}>
+                                    <div >
                                         <Rate allowHalf disabled defaultValue={provider.averageRating}/>
                                         <div style={{
                                             display: "flex", flexDirection: "row", justifyContent: "center",

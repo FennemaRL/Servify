@@ -10,7 +10,7 @@ public class Calification {
     private Long id;
     @Column
     private Integer calificationValue;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private ServiceConsumer consumer;
     @Column
     private String message;

@@ -11,7 +11,7 @@ public class ServiceConsumer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-    @Column(unique = true)
+    @Column
     private String name;
     @Column
     private String email;

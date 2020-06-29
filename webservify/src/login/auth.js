@@ -10,11 +10,15 @@ export function IsAuth() {
     const [userName, setUserName]  = useState('');
     
     useEffect(()=>{
-        Axios.post(`${process.env.REACT_APP_API_URL}/api/tokenVerify`,{username:localStorage.getItem("userName")},{headers:{
-            'token': 'Bearer ' + localStorage.getItem("token")
-        }}).then(res=> {setIslog(true)
-                        setUserName(localStorage.getItem("userName"))
-        }).catch(err=>()=>{});
+        let token = localStorage.getItem("token")
+        let user = localStorage.getItem("userName")
+        if( token && user){
+            Axios.post(`${process.env.REACT_APP_API_URL}/api/tokenVerify`,{username:localStorage.getItem("userName")},{headers:{
+                'token': 'Bearer ' + localStorage.getItem("token")
+                 }}).then(res=> {setIslog(true)
+                         setUserName(localStorage.getItem("userName"))
+          }).catch(err=>()=>{});
+    }
     },[])
     const closeSession = ()=>{
         localStorage.removeItem("userName")

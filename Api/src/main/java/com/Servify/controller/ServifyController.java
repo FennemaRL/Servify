@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,8 +56,9 @@ public class ServifyController {
             List<ProviderRatingDTO> recommended = dbServiceProvider.bestRated()
                     .stream().map(p -> new ProviderRatingDTO(p.getName(), p.getAverageRating(), p.getServices()))
                     .collect(Collectors.toList());
+            System.out.print(recommended);
             return ResponseEntity.ok().body(recommended);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
@@ -96,7 +98,6 @@ public class ServifyController {
     @PostMapping("/provider/service")
     public ResponseEntity addService(@RequestBody ProviderDTO provider, @RequestHeader TokenResponse token) {
         try {
-            System.out.print(token);
             this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
@@ -196,7 +197,7 @@ public class ServifyController {
             user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("Calificacion agregada con exito");
-        } catch (EmptyDTOError | WrongValueError e) {
+        } catch (EmptyDTOError | WrongValueError e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
