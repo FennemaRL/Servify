@@ -1,6 +1,5 @@
 package com.Servify.controller;
 
-import com.Servify.model.ServiceConsumer;
 import lombok.Data;
 
 @Data
@@ -24,13 +23,23 @@ public class ServiceNewCalificationDTO implements DTOServify{
         return this.providerName;
     }
 
-    public String getServiceCategory(){
+    public String getServiceCategory() {
         return this.serviceCategory;
     }
 
-    public Integer getCalificationValue(){
+    public Integer getCalificationValue() {
         return this.calificationValue;
     }
 
-    public String getMessage() { return message; }
+    public String getMessage() {
+        return message;
+    }
+
+    public String getConsumerName() {
+        return consumerName;
+    }
+
+    public String getConsumerEmail() {
+        return consumerEmail;
+    }
 }

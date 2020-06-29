@@ -29,6 +29,8 @@ public class ServiceProviderServify {
     private List<ServiceServify> offerServices;
     @Column
     private String password;
+    @Column
+    private Double averageRating = 0d;
 
     protected ServiceProviderServify() {
     }
@@ -36,12 +38,12 @@ public class ServiceProviderServify {
     public ServiceProviderServify(String name, String password) {
         this.name = name;
         this.password = password;
-        this.offerServices = new ArrayList<ServiceServify>();
+        this.offerServices = new ArrayList<>();
     }
 
     public ServiceProviderServify(String name) {
         this.name = name;
-        this.offerServices = new ArrayList<ServiceServify>();
+        this.offerServices = new ArrayList<>();
     }
 
     public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
@@ -96,6 +98,12 @@ public class ServiceProviderServify {
         assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue, consumer, message);
         services.get(0).addCalification(newCalification);
+        averageRating = getAverageRating();
+    }
+
+    public Double getAverageRating() {
+        return offerServices.stream().mapToDouble(ServiceServify::getCalificationAverage).average()
+                .orElse(0d);
     }
 
     private void assertServiceIsProvided(List<ServiceServify> services) {

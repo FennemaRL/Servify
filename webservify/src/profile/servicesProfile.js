@@ -294,7 +294,7 @@ function ShowCalifications({califications}){
             <List.Item.Meta
               title={<div> 
                    <p>{calification.consumer.name}</p>            
-                  <Rate disabled defaultValue={calification.calificationValue}/>
+                  <Rate allowHalf disabled defaultValue={calification.calificationValue}/>
                   </div>}
                     description={calification.message}/>
           </List.Item>
