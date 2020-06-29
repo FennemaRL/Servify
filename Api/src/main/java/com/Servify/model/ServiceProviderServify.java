@@ -29,6 +29,8 @@ public class ServiceProviderServify {
     private List<ServiceServify> offerServices;
     @Column
     private String password;
+    @Column
+    private Double averageRating = 0d;
 
     protected ServiceProviderServify() {
     }
@@ -93,6 +95,7 @@ public class ServiceProviderServify {
         assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue);
         services.get(0).addCalification(newCalification);
+        averageRating = averageRating();
     }
 
     public Double getAverageRating() {
