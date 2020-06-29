@@ -47,7 +47,7 @@ public class RecomendationStepdef {
         providers.forEach(p -> {
             CategoryService category = CategoryManager.getCategory("Electricidad");
             try {
-                p.addNewCalificationToService(category, 5);
+                p.addNewCalificationToService(category, 5, new ServiceConsumer("",""),"");
             } catch (WrongValueError wrongValueError) {
                 wrongValueError.printStackTrace();
             }
@@ -106,11 +106,12 @@ public class RecomendationStepdef {
         providers.add(provider2);
 
         CategoryService category = CategoryManager.getCategory("Electricidad");
-        provider1.addNewCalificationToService(category, 5);
-        provider2.addNewCalificationToService(category, 4);
-        provider3.addNewCalificationToService(category, 3);
-        provider4.addNewCalificationToService(category, 2);
-        provider5.addNewCalificationToService(category, 1);
+        ServiceConsumer mockconsumer = new ServiceConsumer("", "");
+        provider1.addNewCalificationToService(category, 5, mockconsumer, "");
+        provider2.addNewCalificationToService(category, 4, mockconsumer, "");
+        provider3.addNewCalificationToService(category, 3, mockconsumer, "");
+        provider4.addNewCalificationToService(category, 2, mockconsumer, "");
+        provider5.addNewCalificationToService(category, 1, mockconsumer, "");
 
     }
 

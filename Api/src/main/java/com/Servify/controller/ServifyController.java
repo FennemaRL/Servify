@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/api")
 public class ServifyController {
@@ -25,10 +25,10 @@ public class ServifyController {
 
     @CrossOrigin
     @GetMapping("/services/{category}")
-    public ResponseEntity category(@PathVariable String category) {
+    public ResponseEntity category(@PathVariable String category, @RequestParam(defaultValue = "") String scope) {
         try{
             CategoryService categoryObj = CategoryManager.getCategory(category);
-            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
+            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategoryAndScope(category, scope)
                     .stream().map(sp ->
                             new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj),
                                     sp.getServiceAverage(categoryObj), category)
@@ -49,11 +49,11 @@ public class ServifyController {
     }
 
     @CrossOrigin
-    @GetMapping("/providers/best-rated")
+    @GetMapping("/providers/bestRated")
     public ResponseEntity getHighestRatedProviders() {
         try {
             List<ProviderRatingDTO> recommended = dbServiceProvider.bestRated()
-                    .stream().map(p -> new ProviderRatingDTO(p.getName(), p.getAverageRating()))
+                    .stream().map(p -> new ProviderRatingDTO(p.getName(), p.getAverageRating(), p.getServices()))
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(recommended);
         } catch (RuntimeException e) {
@@ -63,8 +63,7 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping("/provider")
-    public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-
+        public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
         try {
             providerLogUpDTO.assertEmpty();
             ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
@@ -97,6 +96,7 @@ public class ServifyController {
     @PostMapping("/provider/service")
     public ResponseEntity addService(@RequestBody ProviderDTO provider, @RequestHeader TokenResponse token) {
         try {
+            System.out.print(token);
             this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
@@ -141,7 +141,6 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider/login")
     public ResponseEntity loginWith(@RequestBody LoginDTO loginDTO) {
-
         try {
             ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
             if(sp != null){
@@ -157,6 +156,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
     @CrossOrigin
     @PutMapping("/provider/password")
     public ResponseEntity changePassword(@RequestBody LoginDTO loginDTO){
@@ -168,6 +168,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
     @CrossOrigin
     @PostMapping("/tokenVerify")
     public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
@@ -182,21 +183,19 @@ public class ServifyController {
 
     private void checkToken(TokenResponse token, String name){
         Jtoken.isValidToken(token.getToken().split(" ")[1],name);
-
-
     }
+
     @CrossOrigin
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
-
             newCalificationDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
-            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue());
+            ServiceConsumer consumer = new ServiceConsumer(newCalificationDTO.getConsumerName(), newCalificationDTO.getConsumerEmail());
+            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("Calificacion agregada con exito");
-
         } catch (EmptyDTOError | WrongValueError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -209,7 +208,8 @@ public class ServifyController {
             scopeDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(scopeDTO.getServiceCategory());
-            user.modifyServiceWithScope(category, scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList()));
+            List<ScopeService> sc = scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList());
+            user.modifyServiceWithScope(category, sc);
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());

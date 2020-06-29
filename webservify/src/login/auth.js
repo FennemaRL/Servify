@@ -1,25 +1,34 @@
 import {useState, useEffect} from 'react';
 import Axios from 'axios';
 
+export function GetToken(){
+    return(localStorage.getItem("token"))
+}
 
-export function IsAuth(user) {
+export function IsAuth() {
     const [islog, setIslog]  = useState(false);
-
-
+    const [userName, setUserName]  = useState('');
+    
     useEffect(()=>{
         Axios.post(`${process.env.REACT_APP_API_URL}/api/tokenVerify`,{username:localStorage.getItem("userName")},{headers:{
             'token': 'Bearer ' + localStorage.getItem("token")
-        }}).then(res=> setIslog(true)).catch(err=>()=>{});
-    },[user])
+        }}).then(res=> {setIslog(true)
+                        setUserName(localStorage.getItem("userName"))
+        }).catch(err=>()=>{});
+    },[])
     const closeSession = ()=>{
         localStorage.removeItem("userName")
         localStorage.removeItem("token")
-        setIslog(false);
+        setUserName('')
+        setIslog(false)
     }
     const openSession = (token, userName)=>{
+        localStorage.removeItem("userName")
+        localStorage.removeItem("token")
         localStorage.setItem("userName", userName)
         localStorage.setItem("token", token)
-        setIslog(true);
+        setUserName(userName)
+        setIslog(true)
     }
-    return {islog, closeSession, openSession}
+    return {islog, closeSession, openSession, userName}
 }

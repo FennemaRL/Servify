@@ -1,19 +1,24 @@
 package com.Servify.controller;
 
+import com.Servify.model.ServiceServify;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ProviderRatingDTO implements DTOServify {
 
+    private List<ServiceServify> services;
     private Double averageRating;
     private String username;
 
     ProviderRatingDTO() {
     }
 
-    ProviderRatingDTO(String username, Double averageRating) {
+    ProviderRatingDTO(String username, Double averageRating, List<ServiceServify> services) {
         this.username = username;
         this.averageRating = averageRating;
+        this.services = services;
     }
 
     @Override

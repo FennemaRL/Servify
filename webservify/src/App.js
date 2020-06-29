@@ -1,25 +1,18 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, NavLink, Redirect, Route, Switch} from "react-router-dom";
-import {Layout, Menu} from 'antd';
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {Layout} from 'antd'
 import Home from "./home";
 import Search from "./search";
 import TestAdd from "./testadd";
 import {ProfileEditable, ConsumerView} from "./profile/profile";
 import Error from "./error";
-import ButtonLogin from './login/login'
 import {IsAuth} from './login/auth';
+import Nav from './nav';
 const {Content, Footer,} = Layout;
 
 
 
-function Nav({islog, closeSession, openSession}) {
-  return <Menu mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', marginLeft:'2vw', marginRight:'2vw',paddingLeft:'1vw', paddingRight:'1vw', width:'96vw', display:'flex'}}>
-          <Menu.Item><NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}} style={{minWidth:'6vw', textAlign:'center'}}><h3> Servify </h3></NavLink></Menu.Item>
-          <div style={{flex:1}}></div>
-          <ButtonLogin closeSession={closeSession} openSession ={openSession} islog={islog}/>
-        </Menu>
-}
 function PrivateRoute({ children,islog, ...rest }) {
   return(
     <Route
@@ -41,15 +34,15 @@ function PrivateRoute({ children,islog, ...rest }) {
 }
 function App() {
 
-  let {islog, closeSession, openSession} = IsAuth();
+  let {islog, closeSession, openSession, userName} = IsAuth();
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>
-        <Nav closeSession={closeSession} openSession={openSession} islog={islog}/>
+        <Nav closeSession={closeSession} openSession={openSession} islog={islog} userName={userName} />
         <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <Content >
               <Switch>
-                  <Route exact path="/Servify/search/:category" component={Search}/>
+                  <Route exact path="/Servify/search/:category/:zone?" component={Search}/>
                   <Route exact path="/Servify/testadd"><TestAdd/></Route>
                   <PrivateRoute exact path="/Servify/profile/:username" children={<ProfileEditable/>} islog={islog}>
                   </PrivateRoute>

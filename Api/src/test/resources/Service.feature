@@ -5,10 +5,10 @@ Feature:  Services offer
     When  Ask for the list of categories
     Then  Get the list of categories
     
-  Scenario: Add Empty Calification
-    Given A consumer
+  Scenario: Add a Calification
+    Given A serviceConsumer "Pepe" with an email "pepe@gmail.com"
     And A specific service
-    When calificate a specific service
+    When calificate a specific service with the message "Excelente servicio"
     Then a calification is added to that service califications
   
   Scenario: provider service with no calification average

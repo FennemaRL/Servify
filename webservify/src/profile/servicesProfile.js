@@ -1,20 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag} from 'antd';
+import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag, Modal, Form, Input, List} from 'antd';
 import axios from "axios";
 import {FormEditService, Service} from "./contentServiceProfile";
 import {Redirect} from 'react-router-dom';
+import {categories, scopes} from '../catAndScopes'
+import {GetToken} from '../login/auth'
 
-
-const {Title, Paragraph} = Typography;
+const {Title} = Typography;
 const {TabPane} = Tabs;
-const categories = [
-    {value: "Plomeria", label: " Plomeria"},
-    {value: "Electricidad", label: "Electricidad"},
-    {value: "Mecanica", label: "Mecanica"},
-    {value: "Carpinteria", label: "Carpinteria"},
-    {value: "Gas Natural", label: "Gas Natural"},
-];
-const scopes = ["CABA", "GBA SUR", "GBA NORTE", "GBA ESTE", "GBA OESTE"];
+
 
 export function ViewEditableService({username, providerSevices, setproviderSevices, err}) {
 
@@ -40,7 +34,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                     category: selectCategory[0]
             }, 
             {headers:{
-                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+                'token': 'Bearer ' + GetToken()
             }})
                 .then(() => {
                     message.success("se agrego el servicio "+selectCategory[0]+" con exito")
@@ -61,7 +55,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                 category: targetKey
             },
             headers:{
-                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+                'token': 'Bearer ' + GetToken()
             }
         })
             .then(() => {
@@ -111,7 +105,7 @@ function ZonesEditable({name, service}){
     scopes.map(zone => children.push(<Option key={zone}>{zone}</Option>))
 
     useEffect(() => {
-        setzones(service.scopes.map(scope => scope.scope))
+        if(service.scopes) setzones(service.scopes.map(scope => scope.scope))
     }, [service])
 
     const onSend = () => {
@@ -123,7 +117,7 @@ function ZonesEditable({name, service}){
             message.success("Se modificaron las zonas de alcance con éxito")
         })
         .catch(err => {
-            message.error(err.response)
+            message.error(err.response.data)
         })
     };
 
@@ -166,14 +160,16 @@ export function ViewService({username, providerSevices, category, err}) {
                       activeKey={activeCategory}
                       onChange={onChangeTab}
                       hideAdd>
-                    {providerSevices.map(ser => (
+                    {providerSevices.map(ser => { console.log(ser); return (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
                             <div>
                                 <Service username={username} service={ser}/>
                                 <Rating service={ser} serviceName={ser.category.categoryName} username={username}/>
+                                <ShowCalifications califications={ser.califications}/>
                                 <ViewZones service={ser}/>                          
                             </div>
-                        </TabPane>))}
+                        </TabPane>)})
+                        }
                 </Tabs>
             </div>
         </div>
@@ -190,10 +186,10 @@ function ViewZones({service}){
         </div>
     )  
 }
-function Rating({serviceName, username, service}) {
 
+function ModalRate({serviceName, username}){
     const [visible, setVisible] = useState(false);
-    const [averageRating, setAverageRating] = useState(0);
+    const [form] = Form.useForm()
 
     const calificate = (value) => {
         setVisible(false)
@@ -201,7 +197,11 @@ function Rating({serviceName, username, service}) {
             {
                 "providerName": username,
                 "serviceCategory": serviceName,
-                "calificationValue": value
+                "calificationValue": value.rating,
+                "message": value.comment,
+                "consumerName": value.consumerName,
+                "consumerEmail": value.consumerEmail
+
             }).then(res => {
                 message.success('This is a success message');
                 setTimeout(() => window.location.reload(true), 700)
@@ -213,30 +213,105 @@ function Rating({serviceName, username, service}) {
         setVisible(true);
     };
 
-    const handleOk = e => {
-        setVisible(false);
-    };
-
     const handleCancel = e => {
         setVisible(false);
     };
 
     return (
         <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
-            {/*            <Button type="primary" onClick={showModal}>
+            <Button type="primary" onClick={showModal}>
                 Calificar
             </Button>
             <Modal
-                title="Basic Modal"
+                title="Califica"
                 visible={visible}
-                onOk={handleOk}
                 onCancel={handleCancel}
-            >
-                <Rate onChange={calificate}/>
-            </Modal>*/}
-                {/*<Statistic title="Calificación promedio" value={service.calificationAverage} suffix="/5"/>*/}
+                footer={null}>
+                
+        <       Form form={form} onFinish={calificate}>
+                <Form.Item
+                    label="Nombre y Apellido"
+                    name="consumerName"
+                    rules={[{
+                        required: true,
+                        message: 'Por favor completa con tu nombre completo',
+                    },]}>
+                <Input />
+                </Form.Item>
+                <Form.Item
+                    label="Correo electrónico"
+                    name="consumerEmail"
+                    rules={[{
+                        required: true,
+                        message: 'Por favor completa con tu correo electrónico',
+                    },]}>
+                <Input />
+                </Form.Item>
+                <Form.Item name="comment" label="Escribí tu opinión">
+                    <Input.TextArea />
+                </Form.Item>
+                <Form.Item 
+                        name="rating" 
+                        label= "Seleccioná un puntaje"  
+                        rules={[{
+                        required: true,
+                        message: 'Por favor completa el puntaje',
+                    },]}>
+                <Rate/>
+                </Form.Item>
+                <Form.Item shouldUpdate>
+                {() => (
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        disabled={ 
+                           (!form.isFieldsTouched(["consumerName"]) || !form.isFieldsTouched(["consumerEmail"]) || !form.isFieldsTouched(["rating"])) ||
+                           form.getFieldsError().filter(({errors}) => errors.length).length
+                        }
+                    >
+                        Enviar
+                    </Button>
+                )}
+                 </Form.Item>
+                 </Form>
+
+            </Modal>
+            </div>
+
+    )
+}
+
+function ShowCalifications({califications}){
+    return(
+    <div>
+        <div style={{backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", marginLeft:"6.5vw", marginRight:"6.5vw"}}>
+        <List
+        bordered= {true}
+        itemLayout="horizontal"
+        dataSource={califications}
+        renderItem={calification => (
+          <List.Item>
+            <List.Item.Meta
+              title={<div> 
+                   <p>{calification.consumer.name}</p>            
+                  <Rate allowHalf disabled defaultValue={calification.calificationValue}/>
+                  </div>}
+                    description={calification.message}/>
+          </List.Item>
+        )}
+      />
+        </div>
+    </div>
+    )
+}
+
+function Rating({serviceName, username, service}) {
+    return (
+        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"2vh", marginBottom:"1vw"}}>
                 <p>Calificación: </p>
-                <Rate defaultValue={service.calificationAverage} onChange={calificate}/>
+                <Rate style={{marginLeft:"1vw"}} disabled defaultValue={service.calificationAverage}/>
+                <ModalRate serviceName={service.category.categoryName} username={username}/>
+
         </div>
     );
 }

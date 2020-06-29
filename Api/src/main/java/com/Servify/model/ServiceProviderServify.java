@@ -54,6 +54,9 @@ public class ServiceProviderServify {
         this.residence = residence;
         offerServices = new ArrayList<>();
     }
+    public boolean hasServicesWithCategoryAndZone(String category, String scope) {
+        return this.offerServices.stream().anyMatch(s -> s.hasCategory(category) && s.hasScope(scope));
+    }
 
     public Boolean hasServicesWithCategory(String category) {
         return this.offerServices.stream().anyMatch(s -> s.hasCategory(category));
@@ -90,12 +93,12 @@ public class ServiceProviderServify {
         services.get(0).setDescription(description);
     }
 
-    public void addNewCalificationToService(CategoryService c, Integer calificationValue) throws WrongValueError {
+    public void addNewCalificationToService(CategoryService c, Integer calificationValue, ServiceConsumer consumer, String message) throws WrongValueError {
         List<ServiceServify> services = filterByCategory(c);
         assertServiceIsProvided(services);
-        Calification newCalification = new Calification(calificationValue);
+        Calification newCalification = new Calification(calificationValue, consumer, message);
         services.get(0).addCalification(newCalification);
-        averageRating = averageRating();
+        averageRating = getAverageRating();
     }
 
     public Double getAverageRating() {

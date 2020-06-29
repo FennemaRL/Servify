@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, Input, message, Popover} from 'antd';
+import {Button, Form, Input, message, Popover,Tooltip} from 'antd';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {NavLink, useHistory} from "react-router-dom";
 import axios from 'axios';
 
-const ViewProfileAndCloseSession = ({closeSession, Username}) => {
+const ViewProfileAndCloseSession = ({closeSession, userName}) => {
     let history = useHistory();
     return (
         < div style={{display: 'flex'}}>
-            <NavLink to={`/Servify/Profile/${Username}`} exact
+            <NavLink to={`/Servify/Profile/${userName}`} exact
                      activeStyle={{borderBottom: '4px solid #1890ff', borderRadius: '2px'}}
                      style={{minWidth: '6vw', textAlign: 'center'}}><h4>Ver Perfil</h4></NavLink>
             <Button onClick={() => {
                 closeSession();
                 history.push('/Servify/')
-            }} danger type="text" style={{marginTop: '7px', marginLeft: '1vw',}}>Cerrar Sesión</Button>
+            }} danger type="text" style={{ marginLeft: '1vw', marginTop: '8px'}}>Cerrar Sesión</Button>
         </div>
     )
 }
@@ -70,6 +70,8 @@ const FormPop = ({openSession}) => {
             </Form.Item>
             <Form.Item shouldUpdate>
                 {() => (
+                    <Tooltip title={!form.isFieldsTouched(true) ||
+                        form.getFieldsError().filter(({errors}) => errors.length).length? "Ingrese primero usuario y contraseña para ingresar "  :  "Ingresa"} >
                     <Button
                         type="primary"
                         htmlType="submit"
@@ -80,6 +82,7 @@ const FormPop = ({openSession}) => {
                     >
                         Log in
                     </Button>
+                    </Tooltip>
                 )}
             </Form.Item>
         </Form>
@@ -88,14 +91,14 @@ const FormPop = ({openSession}) => {
 const LoginForm = ({openSession}) => {
     return (
         <Popover placement="topLeft" content={<FormPop openSession={openSession}/>} trigger="click">
-            <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer', marginTop: '5px'}}> Ingresá</p>
+            <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer'}}> Ingresá</p>
         </Popover>
     )
 }
 
-function ButtonLogin({islog, closeSession, openSession}) {
+function ButtonLogin({islog, closeSession, openSession, userName}) {
 
-    return islog ? <ViewProfileAndCloseSession closeSession={closeSession}/> : <LoginForm openSession={openSession}/>
+    return islog ? <ViewProfileAndCloseSession closeSession={closeSession} userName={userName} /> : <LoginForm openSession={openSession}/>
 
 }
 

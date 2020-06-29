@@ -8,18 +8,12 @@ public class ServiceNewCalificationDTO implements DTOServify{
     private String providerName;
     private String serviceCategory;
     private Integer calificationValue;
-
-    public ServiceNewCalificationDTO(String providerName, String serviceCategory,
-                                     Integer calificationValue){
-
-        this.providerName = providerName;
-        this.serviceCategory = serviceCategory;
-        this.calificationValue = calificationValue;
-    }
+    private String message;
+    private String consumerName;
+    private String consumerEmail;
 
     @Override
     public void assertEmpty() throws EmptyDTOError {
-
         if(providerName.isEmpty() || serviceCategory.isEmpty() || calificationValue == null){
             throw new EmptyDTOError();
         }
@@ -29,11 +23,23 @@ public class ServiceNewCalificationDTO implements DTOServify{
         return this.providerName;
     }
 
-    public String getServiceCategory(){
+    public String getServiceCategory() {
         return this.serviceCategory;
     }
 
-    public Integer getCalificationValue(){
+    public Integer getCalificationValue() {
         return this.calificationValue;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getConsumerName() {
+        return consumerName;
+    }
+
+    public String getConsumerEmail() {
+        return consumerEmail;
     }
 }

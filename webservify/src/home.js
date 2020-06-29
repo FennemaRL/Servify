@@ -1,9 +1,10 @@
 import React, {useState, useEffect,} from 'react';
 import axios from 'axios';
-import {Typography, Card, Col, Row} from 'antd';
+import {Typography, Card, Col, Row, Tag} from 'antd';
 import {NavLink} from 'react-router-dom';
 import Avatar from "antd/es/avatar";
 import List from "antd/es/list";
+import Rate from "antd/es/rate";
 
 const {Title, Paragraph} = Typography;
 const {Meta} = Card;
@@ -43,9 +44,10 @@ function Servicios() {
 function BestProviders() {
     const [bestProviders, setBestProviders] = useState([]);
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_API_URL}/api/providers/best-rated`)
-            .then(res => setBestProviders(res.data))
-            .then(res=>console.log(res))
+        axios.get(`${process.env.REACT_APP_API_URL}/api/providers/bestRated`)
+            .then(res => {
+                setBestProviders(res.data)
+            })
             .catch(err => console.error(err))
     }, []);
 
@@ -56,13 +58,28 @@ function BestProviders() {
                 itemLayout="horizontal"
                 dataSource={bestProviders}
                 renderItem={provider => (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                            title={<a href="https://ant.design">{}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                        />
-                    </List.Item>
+                    <NavLink to={`/Servify/view/${provider.username}`}>
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar
+                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
+                                title={<p>{provider.username}</p>}
+                                description={
+                                    <div style={{display: "flex", flexDirection: "row"}}>
+                                        <Rate allowHalf disabled defaultValue={provider.averageRating}/>
+                                        <div style={{
+                                            display: "flex", flexDirection: "row", justifyContent: "center",
+                                            alignItems: "center"
+                                        }}>
+                                            {provider.services.map(s => <Tag key={s.category.categoryName}>
+                                                {s.category.categoryName}</Tag>)}
+                                        </div>
+                                    </div>
+                                }
+                            />
+                        </List.Item>
+                    </NavLink>
+
                 )}
             />
         </div>)

@@ -111,7 +111,7 @@ public class ServiceProviderServifyTest {
 
         ServiceServify service = CategoryManager.createService("Electricidad");
         sp.addService(service);
-        sp.addNewCalificationToService(CategoryManager.getCategory("Electricidad"), 4);
+        sp.addNewCalificationToService(CategoryManager.getCategory("Electricidad"), 4, new ServiceConsumer("", ""), "");
         Double averageRating = sp.getAverageRating();
 
         Assert.assertEquals(4, averageRating, 0);
