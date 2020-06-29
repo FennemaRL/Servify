@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/api")
 public class ServifyController {
@@ -28,10 +28,10 @@ public class ServifyController {
 
     @CrossOrigin
     @GetMapping("/services/{category}")
-    public ResponseEntity category(@PathVariable String category) {
+    public ResponseEntity category(@PathVariable String category, @RequestParam(defaultValue = "") String scope) {
         try{
             CategoryService categoryObj = CategoryManager.getCategory(category);
-            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategory(category)
+            List<ServiceDescriptionDTO> byCategory = dbServiceProvider.findByCategoryAndScope(category, scope)
                     .stream().map(sp ->
                             new ServiceDescriptionDTO(sp.getName(), sp.getServiceDescription(categoryObj),
                                     sp.getServiceAverage(categoryObj), category)
@@ -198,7 +198,8 @@ public class ServifyController {
             scopeDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(scopeDTO.getServiceCategory());
-            user.modifyServiceWithScope(category, scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList()));
+            List<ScopeService> sc = scopeDTO.getScope().stream().map(scopeName -> ScopeManager.getScope(scopeName)).collect(Collectors.toList());
+            user.modifyServiceWithScope(category, sc);
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());

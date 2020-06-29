@@ -42,6 +42,10 @@ code {
 .cardResize{
   width:280px;
 }
+
+.cascaderMobile{
+  border-radius: 15px
+}
 @media screen and (max-width: 48em) {
 
   .catOfferSize{
@@ -50,5 +54,15 @@ code {
   .formEditableInfo{
     width: 80vw;
   
+  }
+
+  .cascaderMobile{
+    display:'block'
+  }
+}
+@media screen and (min-width: 48em) {
+
+  .divFlex{
+    flex: 1;
   }
 }

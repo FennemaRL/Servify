@@ -1,21 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag, Modal, Form, Input, List} from 'antd';
-import InfiniteScroll from 'react-infinite-scroller';
 import axios from "axios";
 import {FormEditService, Service} from "./contentServiceProfile";
 import {Redirect} from 'react-router-dom';
-
+import {categories, scopes} from '../catAndScopes'
+import {GetToken} from '../login/auth'
 
 const {Title} = Typography;
 const {TabPane} = Tabs;
-const categories = [
-    {value: "Plomeria", label: " Plomeria"},
-    {value: "Electricidad", label: "Electricidad"},
-    {value: "Mecanica", label: "Mecanica"},
-    {value: "Carpinteria", label: "Carpinteria"},
-    {value: "Gas Natural", label: "Gas Natural"},
-];
-const scopes = ["CABA", "GBA SUR", "GBA NORTE", "GBA ESTE", "GBA OESTE"];
+
 
 export function ViewEditableService({username, providerSevices, setproviderSevices, err}) {
 
@@ -41,7 +34,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                     category: selectCategory[0]
             }, 
             {headers:{
-                'token': 'Bearer ' + localStorage.getItem("token")
+                'token': 'Bearer ' + GetToken()
             }})
                 .then(() => {
                     message.success("se agrego el servicio "+selectCategory[0]+" con exito")
@@ -62,7 +55,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                 category: targetKey
             },
             headers:{
-                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+                'token': 'Bearer ' + GetToken()
             }
         })
             .then(() => {
@@ -124,7 +117,7 @@ function ZonesEditable({name, service}){
             message.success("Se modificaron las zonas de alcance con éxito")
         })
         .catch(err => {
-            message.error(err.response)
+            message.error(err.response.data)
         })
     };
 
@@ -199,7 +192,6 @@ function ModalRate({serviceName, username}){
     const [form] = Form.useForm()
 
     const calificate = (value) => {
-        console.log(value)
         setVisible(false)
         axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`,
             {
@@ -225,13 +217,8 @@ function ModalRate({serviceName, username}){
         setVisible(false);
     };
 
-    const [, forceUpdate] = useState();
-
-    useEffect(() => {
-        forceUpdate({});
-    }, []);
-
-    return (<div style={{marginLeft:"2vw"}}>
+    return (
+        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
             <Button type="primary" onClick={showModal}>
                 Calificar
             </Button>

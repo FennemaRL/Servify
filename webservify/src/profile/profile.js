@@ -3,6 +3,8 @@ import {ViewEditableService, ViewService,} from "./servicesProfile";
 import {useProvider} from "./useProviderServices";
 import {Button, Descriptions, Form, Input, message, Typography} from 'antd';
 import axios from 'axios';
+import {GetToken} from '../login/auth'
+
 
 const {Title,} = Typography;
 
@@ -35,7 +37,7 @@ function ProfileInfoEditable({personalInfo}) {
             newResidence: values.residence
         }, {
             headers: {
-                'token': 'Bearer ' + localStorage.getItem("tokenUser")
+                'token': 'Bearer ' + GetToken()
             }
         }).then(() => {
             message.success("Se modifico al informacion personal con exito");

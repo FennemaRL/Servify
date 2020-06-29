@@ -52,6 +52,9 @@ public class ServiceProviderServify {
         this.residence = residence;
         offerServices = new ArrayList<>();
     }
+    public boolean hasServicesWithCategoryAndZone(String category, String scope) {
+        return this.offerServices.stream().anyMatch(s -> s.hasCategory(category) && s.hasScope(scope));
+    }
 
     public Boolean hasServicesWithCategory(String category) {
         return this.offerServices.stream().anyMatch(s -> s.hasCategory(category));
