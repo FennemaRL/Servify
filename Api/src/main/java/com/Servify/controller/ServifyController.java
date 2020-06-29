@@ -85,6 +85,7 @@ public class ServifyController {
     @PostMapping("/provider/service")
     public ResponseEntity addService(@RequestBody ProviderDTO provider, @RequestHeader TokenResponse token) {
         try {
+            System.out.print(token);
             this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
@@ -181,7 +182,8 @@ public class ServifyController {
             newCalificationDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
-            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), newCalificationDTO.getConsumer(), newCalificationDTO.getMessage());
+            ServiceConsumer consumer = new ServiceConsumer(newCalificationDTO.getConsumerName(), newCalificationDTO.getConsumerEmail());
+            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("Calificacion agregada con exito");
         } catch (EmptyDTOError | WrongValueError e) {
