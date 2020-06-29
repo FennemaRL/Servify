@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Form, Input, message} from 'antd';
 import axios from 'axios';
+import {GetToken} from '../login/auth'
 
 const {TextArea} = Input;
 
@@ -13,7 +14,7 @@ export function FormEditService({username, service}) {
             category: service.category.categoryName
         }
         , {headers:{
-            'token': 'Bearer ' + localStorage.getItem("tokenUser")
+            'token': 'Bearer ' + GetToken()
         }})
             .then(res => {
                 message.success("se modifico la descripcion del servicio "+service.category.categoryName+" con exito")

@@ -53,7 +53,6 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider")
         public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-
         try {
                 providerLogUpDTO.assertEmpty();
                 ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
@@ -86,6 +85,7 @@ public class ServifyController {
     @PostMapping("/provider/service")
     public ResponseEntity addService(@RequestBody ProviderDTO provider, @RequestHeader TokenResponse token) {
         try {
+            System.out.print(token);
             this.checkToken(token, provider.getName());
             provider.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(provider.getName());
@@ -100,7 +100,6 @@ public class ServifyController {
     @PostMapping("/provider/service/description")
     public ResponseEntity addDescription(@RequestBody ServiceDescriptionDTO serviceDescription,@RequestHeader  TokenResponse token) {
         try {
-
             this.checkToken(token, serviceDescription.getUsername());
             serviceDescription.assertEmpty();
             ServiceProviderServify provider = dbServiceProvider.findOne(serviceDescription.getUsername());
@@ -132,7 +131,6 @@ public class ServifyController {
     @CrossOrigin
     @PostMapping("/provider/login")
     public ResponseEntity loginWith(@RequestBody LoginDTO loginDTO) {
-
         try {
             ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
             if(sp != null){
@@ -148,6 +146,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
     @CrossOrigin
     @PutMapping("/provider/password")
     public ResponseEntity changePassword(@RequestBody LoginDTO loginDTO){
@@ -159,6 +158,7 @@ public class ServifyController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
     @CrossOrigin
     @PostMapping("/tokenVerify")
     public ResponseEntity validateToken(@RequestBody LoginDTO user,@RequestHeader TokenResponse token){
@@ -173,21 +173,19 @@ public class ServifyController {
 
     private void checkToken(TokenResponse token, String name){
         Jtoken.isValidToken(token.getToken().split(" ")[1],name);
-
-
     }
+
     @CrossOrigin
     @PostMapping("/provider/service/calification")
     public ResponseEntity addCalification(@RequestBody ServiceNewCalificationDTO newCalificationDTO) {
         try {
-
             newCalificationDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
-            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue());
+            ServiceConsumer consumer = new ServiceConsumer(newCalificationDTO.getConsumerName(), newCalificationDTO.getConsumerEmail());
+            user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("Calificacion agregada con exito");
-
         } catch (EmptyDTOError | WrongValueError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -196,8 +194,6 @@ public class ServifyController {
     @CrossOrigin
     @PutMapping("/provider/service/scope")
     public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
-
-
         try {
             scopeDTO.assertEmpty();
             ServiceProviderServify user = dbServiceProvider.findOne(scopeDTO.getProviderName());

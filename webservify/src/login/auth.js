@@ -1,11 +1,14 @@
 import {useState, useEffect} from 'react';
 import Axios from 'axios';
 
+export function GetToken(){
+    return(localStorage.getItem("token"))
+}
 
 export function IsAuth() {
     const [islog, setIslog]  = useState(false);
     const [userName, setUserName]  = useState('');
-
+    
     useEffect(()=>{
         Axios.post(`${process.env.REACT_APP_API_URL}/api/tokenVerify`,{username:localStorage.getItem("userName")},{headers:{
             'token': 'Bearer ' + localStorage.getItem("token")
