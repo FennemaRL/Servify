@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs, Typography,  message } from 'antd';
+import {Button, Cascader, Tabs, Typography,  message, /*Tooltip,*/ Comment, Form, Input,Row, Col} from 'antd';
 import axios from "axios";
 import {FormEditService, Service} from "./contentServiceProfile";
 import {Redirect} from 'react-router-dom';
@@ -9,6 +9,8 @@ import Rating from './serviceConsumerViewComponents/rating'
 import ViewZones from './serviceConsumerViewComponents/viewZones'
 import ShowCalifications from './serviceConsumerViewComponents/showCalifications'
 import ZonesEditable from './serviceProviderViewComponents/zonesEditable'
+
+//import {  LikeOutlined, LikeFilled } from '@ant-design/icons';
 const {Title} = Typography;
 const {TabPane} = Tabs;
 
@@ -120,15 +122,17 @@ export function ViewService({username, providerSevices, category, err}) {
                       activeKey={activeCategory}
                       onChange={onChangeTab}
                       hideAdd>
-                    {providerSevices.map(ser => { console.log(ser); return (
+                    {providerSevices.map(ser => (
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
                             <div>
                                 <Service username={username} service={ser}/>
                                 <Rating service={ser} serviceName={ser.category.categoryName} username={username}/>
                                 <ShowCalifications califications={ser.califications}/>
-                                <ViewZones service={ser}/>                          
+                                <ViewZones service={ser}/>  
+                                <QuestionComponent questionsback={ ser.questions} serviceName={ser.category.categoryName} providerName={username} />
+                                                   
                             </div>
-                        </TabPane>)})
+                        </TabPane>))
                         }
                 </Tabs>
             </div>
@@ -137,5 +141,108 @@ export function ViewService({username, providerSevices, category, err}) {
         </>
     )
 }
+function QuestionComponent({questionsback, serviceName, providerName}){
+    const  [questions, setQuestions] = useState([]);
+    const addQuestion  = question => {
+        setQuestions(prevsquest=> [question,...prevsquest])
+    }
+    useEffect(()=>{
+        setQuestions(prevsquest=> [...prevsquest,...questionsback])
+    },[questionsback])
 
+    return (
+        <div style={{marginTop:'2vh'}}>
+            <p>Realiza una pregunta</p>
+            <div  style={{ marginLeft:"6.5vw", marginRight:"6.5vw", marginTop:"1vh"}}>
+                <QuestionForm serviceName={serviceName} providerName={providerName} addQuestion={addQuestion}/>
+                <div  style={{backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", marginTop:"1vh"}}>
+        
+                    {questions.map( question =>(
+                        <Question {...question} key={question.id} providerName={providerName}/>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+  }
 
+const Question  = ({question, consumerName,  providerName, response}) => {
+    return(
+        <Comment   author={<p>{consumerName}</p>}  content={<p>{question}</p>}>
+            {response &&  <Comment author={<p>{providerName}</p>}  content={<p>{response}</p>}/>}
+        </Comment>
+    )
+}
+
+const QuestionForm = ({providerName,serviceName, addQuestion}) => {
+    const [form] = Form.useForm();
+    const [, forceUpdate] = useState();
+    useEffect(() => {
+      forceUpdate({});
+    }, []);
+  
+    const onFinish = values => {
+        axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/question`, 
+        {
+                providerName : providerName,
+                serviceCategory: serviceName,
+                ...values
+        }, 
+        )
+            .then(() => {
+                message.success("se agrego la pregunta con exito")
+                form.setFieldsValue({question:''})
+            })
+            .catch(err => {
+                message.error(err.response.data +" se recargara la pagina")
+            })
+        addQuestion({ providerName : providerName,
+            serviceCategory: serviceName,
+            ...values, id:Date.now.toString})
+    }
+    return (
+      <Form form={form} name="horizontal" layout="inline" onFinish={onFinish} >
+          <Row gutter={[24, 8]}>
+          <Col span={12} >
+        <Form.Item
+          name="consumerName"
+          rules={[{ required: true, message: 'Por favor ingrese su nombre!' }]}
+        >
+          <Input placeholder="Ingrese su nombre" />
+        </Form.Item>
+        </Col>
+        <Col span={12} >
+        <Form.Item
+          name="consumerEmail"
+          rules={[{ required: true, message: 'Por favor ingrese su mail!' }]}
+        >
+          <Input placeholder="Ingrese su mail" />
+        </Form.Item>
+        </Col>
+        <Col span={24} >
+        <Form.Item
+          name="question"
+          rules={[{ required: true, message: 'Porfavor ingrese su pregunta' }]}
+        >
+          <Input.TextArea placeholder="Ingrese su pregunta"  autoSize={ {minRows: 2, maxRows: 4}}/>
+        </Form.Item>
+        </Col>
+        <Col span={8} >
+        <Form.Item shouldUpdate={true}>
+          {() => (
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={
+                !form.isFieldsTouched(true) || form.getFieldsError().filter(({ errors }) => errors.length).length || 150 < (form.getFieldsValue().question ? form.getFieldsValue().question.length : 0) 
+              }
+            >
+              Enviar
+            </Button>
+          )}
+        </Form.Item>
+        </Col>
+        </Row>
+      </Form>
+    );
+  };
