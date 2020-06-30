@@ -20,7 +20,8 @@ public class ServiceServify {
     private String description;
     @ManyToMany (cascade = CascadeType.ALL)
     private List<ScopeService> scopeAreas;
-
+    @OneToMany (cascade = CascadeType.ALL)
+    private List<ServiceQuestion> questions;
     public ServiceServify() {
     }
 
@@ -30,6 +31,7 @@ public class ServiceServify {
         this.califications = new ArrayList<Calification>();
         this.scopeAreas = new ArrayList<ScopeService>();
         this.califications = new ArrayList<>();
+        this.questions = new ArrayList<>();
     }
 
     public Long getId() {
@@ -91,5 +93,13 @@ public class ServiceServify {
     public Double getCalificationAverage() {
         return califications.stream().mapToInt(Calification::getCalificationValue).average()
                 .orElse(0d);
+    }
+
+    public List<ServiceQuestion> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion(ServiceQuestion sq) {
+        questions.add(sq);
     }
 }
