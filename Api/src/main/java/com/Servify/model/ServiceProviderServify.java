@@ -165,4 +165,9 @@ public class ServiceProviderServify {
     public List<ServiceServify> getServices() {
         return offerServices;
     }
+
+    public void addQuestionToService(CategoryService category, ServiceQuestion sq) {
+        ServiceServify s = filterByCategory(category).get(0);
+        s.addQuestion(sq);
+    }
 }

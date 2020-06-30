@@ -16,6 +16,8 @@ code {
 }
 .card-container > .ant-tabs-card .ant-tabs-content {
   margin-top: -16px;
+
+  margin-bottom: 5vw;
 }
 .card-container > .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
   background: #fff;

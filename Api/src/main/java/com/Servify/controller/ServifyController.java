@@ -203,6 +203,24 @@ public class ServifyController {
     }
 
     @CrossOrigin
+    @PostMapping("/provider/service/question")
+    public ResponseEntity addQuestion(@RequestBody ServiceNewQuestionDTO newCalificationDTO) {
+        try {
+            newCalificationDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
+            ServiceQuestion serviceQuestion = new ServiceQuestion(newCalificationDTO.getQuestion(),newCalificationDTO.getConsumerName(),newCalificationDTO.getConsumerEmail());
+            user.addQuestionToService(category,serviceQuestion);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("Pregunta agregada con exito");
+        } catch (EmptyDTOError  | InvalidQuestion e ) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+
+
+    @CrossOrigin
     @PutMapping("/provider/service/scope")
     public ResponseEntity modifyScope(@RequestBody ServiceScopeDTO scopeDTO){
         try {

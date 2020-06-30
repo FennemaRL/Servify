@@ -116,4 +116,16 @@ public class ServiceProviderServifyTest {
 
         Assert.assertEquals(4, averageRating, 0);
     }
+    @Test
+    public void addAQuestionToTheServiceElectricity() {
+
+        ServiceServify service = CategoryManager.createService("Electricidad");
+        sp.addService(service);
+        try {
+            sp.addQuestionToService(CategoryManager.getCategory("Electricidad"), new ServiceQuestion("tene papa ","pepa ","helado"));
+        } catch (InvalidQuestion invalidQuestion) {
+        }
+
+        Assert.assertFalse(sp.getServices().get(0).getQuestions().isEmpty() );
+    }
 }
