@@ -170,4 +170,9 @@ public class ServiceProviderServify {
         ServiceServify s = filterByCategory(category).get(0);
         s.addQuestion(sq);
     }
+
+    public void addAnswerToServiceInQuestion(String response, CategoryService category, String question) throws InvalidQuestion {
+        ServiceServify s = filterByCategory(category).get(0);
+        s.addResponseToQuestion(response,question);
+    }
 }

@@ -128,4 +128,17 @@ public class ServiceProviderServifyTest {
 
         Assert.assertFalse(sp.getServices().get(0).getQuestions().isEmpty() );
     }
+    @Test
+    public void addAnAnswerToTheQuestionInTheServiceElectricity() {
+
+        ServiceServify service = CategoryManager.createService("Electricidad");
+        sp.addService(service);
+        try {
+            sp.addQuestionToService(CategoryManager.getCategory("Electricidad"), new ServiceQuestion("tene papa ","pepa ","helado"));
+            sp.addAnswerToServiceInQuestion("si don",CategoryManager.getCategory("Electricidad"),"tene papa ");
+        } catch (InvalidQuestion invalidQuestion) {
+        }
+
+        Assert.assertEquals(sp.getServices().get(0).getQuestions().get(0).getAnswer(), "si don");
+    }
 }

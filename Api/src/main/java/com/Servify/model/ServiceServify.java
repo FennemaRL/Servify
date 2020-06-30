@@ -102,4 +102,12 @@ public class ServiceServify {
     public void addQuestion(ServiceQuestion sq) {
         questions.add(sq);
     }
+
+    public void addResponseToQuestion(String response, String question) throws InvalidQuestion {
+        List<ServiceQuestion> questionsfind = questions.stream().filter(serviceQuestion -> serviceQuestion.getQuestion().equals(question) ).collect(Collectors.toList());
+        if(questionsfind.isEmpty()){
+            throw new InvalidQuestion("El servicio "+category.getCategory() +" no tiene la pregunta "+question);
+        }
+        questionsfind.get(0).addAnswer(response);
+    }
 }
