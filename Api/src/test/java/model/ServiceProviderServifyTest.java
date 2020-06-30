@@ -122,9 +122,8 @@ public class ServiceProviderServifyTest {
         ServiceServify service = CategoryManager.createService("Electricidad");
         sp.addService(service);
         try {
-            sp.addQuestionToService(CategoryManager.getCategory("Electricidad"), new ServiceQuestion("","",""));
+            sp.addQuestionToService(CategoryManager.getCategory("Electricidad"), new ServiceQuestion("tene papa ","pepa ","helado"));
         } catch (InvalidQuestion invalidQuestion) {
-            invalidQuestion.printStackTrace();
         }
 
         Assert.assertFalse(sp.getServices().get(0).getQuestions().isEmpty() );
