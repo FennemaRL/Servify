@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Cascader, Tabs, Rate, Typography, Select, message, Tag, Modal, Form, Input, List} from 'antd';
+import {Button, Cascader, Tabs, Typography,  message } from 'antd';
 import axios from "axios";
 import {FormEditService, Service} from "./contentServiceProfile";
 import {Redirect} from 'react-router-dom';
-import {categories, scopes} from '../catAndScopes'
+import {categories} from '../catAndScopes'
 import {GetToken} from '../login/auth'
-
+import Rating from './serviceConsumerViewComponents/rating'
+import ViewZones from './serviceConsumerViewComponents/viewZones'
+import ShowCalifications from './serviceConsumerViewComponents/showCalifications'
+import ZonesEditable from './serviceProviderViewComponents/zonesEditable'
 const {Title} = Typography;
 const {TabPane} = Tabs;
 
@@ -97,50 +100,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
 
 }
 
-function ZonesEditable({name, service}){
-    const [zones, setzones] = useState([]) 
-    const { Option } = Select;
-    const children = [];
-    const filteredOptions = scopes.filter(o => !zones.includes(o));
-    scopes.map(zone => children.push(<Option key={zone}>{zone}</Option>))
 
-    useEffect(() => {
-        if(service.scopes) setzones(service.scopes.map(scope => scope.scope))
-    }, [service])
-
-    const onSend = () => {
-        axios.put(`${process.env.REACT_APP_API_URL}/api/provider/service/scope`, {
-            providerName: name,
-            serviceCategory: service.category.categoryName,
-            scopes: zones
-        }).then(() => {
-            message.success("Se modificaron las zonas de alcance con éxito")
-        })
-        .catch(err => {
-            message.error(err.response.data)
-        })
-    };
-
-    function handleChange(values) {setzones(values);}
-        return (
-            <div styles={{display:"flex"}}>
-            <p style={{textAlign:'left',marginTop:"2vh", marginBottom: "1vh"}} >Zonas de alcance:</p>
-            <Select
-                mode="multiple"
-                style={{ width: '55%', marginRight:"1vw"}}
-                placeholder="Por favor seleccione una zona"
-                value={zones}
-                onChange={handleChange}>
-                {filteredOptions.map(zone => <Option key={zone}>{zone}</Option>)}
-            </Select>
-            <Button type="primary" onClick={onSend}>
-                Guardar
-            </Button>
-            </div>)
-}
-
-
-///Non editable
 export function ViewService({username, providerSevices, category, err}) {
 
     const [activeCategory, setActiveCategorie] = useState();
@@ -178,140 +138,4 @@ export function ViewService({username, providerSevices, category, err}) {
     )
 }
 
-function ViewZones({service}){
-    return  (
-        <div styles={{display:"flex"}}>
-            <p style={{textAlign:'left',marginTop:"2vh", marginBottom: "1vh"}} >Zonas de alcance:</p>
-            {service.scopes.map(scope => <Tag key={scope.scope}>{scope.scope}</Tag>)}
-        </div>
-    )  
-}
 
-function ModalRate({serviceName, username}){
-    const [visible, setVisible] = useState(false);
-    const [form] = Form.useForm()
-
-    const calificate = (value) => {
-        setVisible(false)
-        axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`,
-            {
-                "providerName": username,
-                "serviceCategory": serviceName,
-                "calificationValue": value.rating,
-                "message": value.comment,
-                "consumerName": value.consumerName,
-                "consumerEmail": value.consumerEmail
-
-            }).then(res => {
-                message.success('This is a success message');
-                setTimeout(() => window.location.reload(true), 700)
-            }
-        ).catch(err => console.log(err.response.data))
-    }
-
-    const showModal = () => {
-        setVisible(true);
-    };
-
-    const handleCancel = e => {
-        setVisible(false);
-    };
-
-    return (
-        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
-            <Button type="primary" onClick={showModal}>
-                Calificar
-            </Button>
-            <Modal
-                title="Califica"
-                visible={visible}
-                onCancel={handleCancel}
-                footer={null}>
-                
-        <       Form form={form} onFinish={calificate}>
-                <Form.Item
-                    label="Nombre y Apellido"
-                    name="consumerName"
-                    rules={[{
-                        required: true,
-                        message: 'Por favor completa con tu nombre completo',
-                    },]}>
-                <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Correo electrónico"
-                    name="consumerEmail"
-                    rules={[{
-                        required: true,
-                        message: 'Por favor completa con tu correo electrónico',
-                    },]}>
-                <Input />
-                </Form.Item>
-                <Form.Item name="comment" label="Escribí tu opinión">
-                    <Input.TextArea />
-                </Form.Item>
-                <Form.Item 
-                        name="rating" 
-                        label= "Seleccioná un puntaje"  
-                        rules={[{
-                        required: true,
-                        message: 'Por favor completa el puntaje',
-                    },]}>
-                <Rate/>
-                </Form.Item>
-                <Form.Item shouldUpdate>
-                {() => (
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        disabled={ 
-                           (!form.isFieldsTouched(["consumerName"]) || !form.isFieldsTouched(["consumerEmail"]) || !form.isFieldsTouched(["rating"])) ||
-                           form.getFieldsError().filter(({errors}) => errors.length).length
-                        }
-                    >
-                        Enviar
-                    </Button>
-                )}
-                 </Form.Item>
-                 </Form>
-
-            </Modal>
-            </div>
-
-    )
-}
-
-function ShowCalifications({califications}){
-    return(
-    <div>
-        <div style={{backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", marginLeft:"6.5vw", marginRight:"6.5vw"}}>
-        <List
-        bordered= {true}
-        itemLayout="horizontal"
-        dataSource={califications}
-        renderItem={calification => (
-          <List.Item>
-            <List.Item.Meta
-              title={<div> 
-                   <p>{calification.consumer.name}</p>            
-                  <Rate allowHalf disabled defaultValue={calification.calificationValue}/>
-                  </div>}
-                    description={calification.message}/>
-          </List.Item>
-        )}
-      />
-        </div>
-    </div>
-    )
-}
-
-function Rating({serviceName, username, service}) {
-    return (
-        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"2vh", marginBottom:"1vw"}}>
-                <p>Calificación: </p>
-                <Rate style={{marginLeft:"1vw"}} disabled defaultValue={service.calificationAverage}/>
-                <ModalRate serviceName={service.category.categoryName} username={username}/>
-
-        </div>
-    );
-}
