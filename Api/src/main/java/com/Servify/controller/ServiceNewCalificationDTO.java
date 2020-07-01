@@ -14,7 +14,9 @@ public class ServiceNewCalificationDTO implements DTOServify{
 
     @Override
     public void assertEmpty() throws EmptyDTOError {
-        if(providerName.isEmpty() || serviceCategory.isEmpty() || calificationValue == null){
+        if(providerName.isEmpty() || serviceCategory.isEmpty() || calificationValue == null ||
+                consumerName.isEmpty() ||  consumerEmail.isEmpty()
+        ){
             throw new EmptyDTOError();
         }
     }

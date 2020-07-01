@@ -23,7 +23,6 @@ public class BasicStepdef {
 
     @Then("^The keyboard is broke$")
     public void theKeyboardIsBroke() {
-        System.out.println(akeyboard.isBroke());
         assertTrue(akeyboard.isBroke());
     }
 }

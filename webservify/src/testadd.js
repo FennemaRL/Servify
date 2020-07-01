@@ -13,18 +13,15 @@ const HorizontalLoginForm = () => {
   }, []);
 
   const onFinishAddDescription = values => {
-    console.log({...values})
     axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/description`,
         {...values})
-      .then(res=> {alert("Se agregó con éxito")
-                   console.log(res.data)})
+      .then(res=> alert("Se agregó con éxito"))
       .catch(err=>alert(err.response.data))
   };
 
   const onFinish = values => {
     axios.post(`${process.env.REACT_APP_API_URL}/api/provider`,{name:values.username, phoneNmbr:"1234",  celPhoneNmbr:"12346",  webPage:"www.google.com",  residence:"Ezeiza"})
-        .then(res=> {alert("Se agregó con éxito")
-          console.log(res.data)})
+        .then(res=> alert("Se agregó con éxito"))
         .catch(err=>alert(err.response.data))
   };
 

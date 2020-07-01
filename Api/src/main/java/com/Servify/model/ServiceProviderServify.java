@@ -150,7 +150,7 @@ public class ServiceProviderServify {
 
     public void modifyServiceWithScope(CategoryService category, List<ScopeService> scope) {
         List<ServiceServify> services = filterByCategory(category);
-        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         services.get(0).setScope(scope);
     }
 
@@ -169,5 +169,11 @@ public class ServiceProviderServify {
     public void addQuestionToService(CategoryService category, ServiceQuestion sq) {
         ServiceServify s = filterByCategory(category).get(0);
         s.addQuestion(sq);
+    }
+
+    public void addAnswerToServiceInQuestion(String response, CategoryService category, String question) throws InvalidQuestion {
+        List<ServiceServify> services = filterByCategory(category);
+        assertServiceIsProvided(services);
+        services.get(0).addResponseToQuestion(response,question);
     }
 }

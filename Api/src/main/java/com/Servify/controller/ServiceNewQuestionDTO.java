@@ -13,7 +13,7 @@ public class ServiceNewQuestionDTO implements DTOServify{
 
     @Override
     public void assertEmpty() throws EmptyDTOError {
-
+        if (providerName.equals("") || serviceCategory.equals("") || question.equals("") || consumerEmail.equals("") || consumerName.equals("") ) throw new EmptyDTOError();
     }
 
     public String getProviderName() {

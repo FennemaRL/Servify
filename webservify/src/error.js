@@ -4,7 +4,6 @@ import csc from './img/404.jpg'
 
 
 function Error(props){
-    console.log(props)
     return (
         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignContent:'center', alignItems:'center'}}>
             {(!props.location.state && <Redirect to="/Servify/" /> )||(

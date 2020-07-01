@@ -17,6 +17,7 @@ public class ServiceQuestion {
     private String mail;
 
     private String question;
+    private String answer;
 
 
     public ServiceQuestion(){}
@@ -30,4 +31,18 @@ public class ServiceQuestion {
         this.consumerName= consumerName;
         this.mail= mail;
     }
+
+    public void addAnswer(String resp) throws InvalidQuestion {
+        if(resp.isEmpty() ){
+            throw new InvalidQuestion("la respuesta no puede estar vacia");
+        }
+        this.answer = resp;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public String getQuestion() {
+        return question ;   }
 }

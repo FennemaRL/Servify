@@ -3,7 +3,7 @@ package com.Servify.controller;
 import lombok.Data;
 
 @Data
-public class LoginDTO {
+public class LoginDTO implements DTOServify{
     private String username;
     private String password;
 
@@ -21,5 +21,12 @@ public class LoginDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public void assertEmpty() throws EmptyDTOError {
+        if (username.equals("") ||  password.equals("")) {
+            throw new EmptyDTOError();
+        }
     }
 }

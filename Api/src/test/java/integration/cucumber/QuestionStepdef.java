@@ -7,7 +7,6 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class QuestionStepdef {
@@ -43,5 +42,33 @@ public class QuestionStepdef {
     public void theProviderDonTHaveANewQuestionInTheService(String providerName, String serviceName) {
         ServiceServify service = providers.get(0).getServices().stream().filter(serviceServify -> serviceServify.sameCategory(CategoryManager.getCategory(serviceName))).collect(Collectors.toList()).get(0);
         Assert.assertTrue(service.getQuestions().isEmpty());
+    }
+
+
+    @Then("The provider {string} in the service {string} in the question {string} has the answer {string}")
+    public void theProviderInTheServiceInTheQuestionHasTheAnswer(String provName, String serviceName, String question, String answer) {
+        ServiceServify service = providers.get(0).getServices().stream().filter(serviceServify -> serviceServify.sameCategory(CategoryManager.getCategory(serviceName))).collect(Collectors.toList()).get(0);
+        ServiceQuestion questionf = service.getQuestions().get(0);
+        Assert.assertEquals(answer, questionf.getAnswer());
+
+    }
+
+    @When("I answer the question {string} in service {string} with {string}")
+    public void iAnswerTheQuestionInServiceWith(String question, String serviceName, String response) {
+        ServiceProviderServify provider = providers.get(0);
+        try {
+            provider.addAnswerToServiceInQuestion(response,CategoryManager.getCategory(serviceName),question);
+        } catch (InvalidQuestion invalidQuestion) {
+        }
+    }
+
+    @Then("I answer the question {string} in service {string} with {string} throw Error {string}")
+    public void iAnswerTheQuestionInServiceWithThrowError(String question, String serviceName, String response, String errMesage) {
+        ServiceProviderServify provider = providers.get(0);
+        try {
+            provider.addAnswerToServiceInQuestion(response,CategoryManager.getCategory(serviceName),question);
+        } catch (InvalidQuestion invalidQuestion) {
+            Assert.assertEquals(errMesage,invalidQuestion.getMessage());
+        }
     }
 }
