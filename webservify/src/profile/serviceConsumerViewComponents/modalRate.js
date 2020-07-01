@@ -1,6 +1,7 @@
-import React, { useState} from 'react';
-import {Button,  Rate,   message, Modal, Form, Input} from 'antd';
+import React, {useState} from 'react';
+import {Button, Rate, message, Modal, Form, Input} from 'antd';
 import axios from "axios";
+
 
 function ModalRate({serviceName, username, addCalification}){
     const [visible, setVisible] = useState(false);
@@ -40,8 +41,18 @@ function ModalRate({serviceName, username, addCalification}){
         setVisible(false);
     };
 
+    function simpleFormItem(label, name, rules) {
+        return <Form.Item
+            label={label}
+            name={name}
+            rules={rules}
+        >
+            <Input/>
+        </Form.Item>;
+    }
+
     return (
-        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"1vh"}}>
+        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop: "1vh"}}>
             <Button type="primary" onClick={showModal}>
                 Calificar
             </Button>
@@ -50,57 +61,48 @@ function ModalRate({serviceName, username, addCalification}){
                 visible={visible}
                 onCancel={handleCancel}
                 footer={null}>
-                
-        <       Form form={form} onFinish={calificate}>
-                <Form.Item
-                    label="Nombre y Apellido"
-                    name="consumerName"
-                    rules={[{
+
+                <       Form form={form} onFinish={calificate}>
+                    {simpleFormItem("Nombre y Apellido", "consumerName", [{
                         required: true,
                         message: 'Por favor completa con tu nombre completo',
-                    },]}>
-                <Input />
-                </Form.Item>
-                <Form.Item
-                    label="Correo electrónico"
-                    name="consumerEmail"
-                    rules={[{
+                    },])}
+                    {simpleFormItem("Correo electrónico", "consumerEmail", [{
                         required: true,
                         message: 'Por favor completa con tu correo electrónico',
-                    },]}>
-                <Input />
-                </Form.Item>
-                <Form.Item name="comment" label="Escribí tu opinión">
-                    <Input.TextArea />
-                </Form.Item>
-                <Form.Item 
-                        name="rating" 
-                        label= "Seleccioná un puntaje"  
+                    },])}
+                    <Form.Item name="comment" label="Escribí tu opinión">
+                        <Input.TextArea/>
+                    </Form.Item>
+                    <Form.Item
+                        name="rating"
+                        label="Seleccioná un puntaje"
                         rules={[{
-                        required: true,
-                        message: 'Por favor completa el puntaje',
-                    },]}>
-                <Rate/>
-                </Form.Item>
-                <Form.Item shouldUpdate>
-                {() => (
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                        disabled={ 
-                           (!form.isFieldsTouched(["consumerName"]) || !form.isFieldsTouched(["consumerEmail"]) || !form.isFieldsTouched(["rating"])) ||
-                           form.getFieldsError().filter(({errors}) => errors.length).length
-                        }
-                    >
-                        Enviar
-                    </Button>
-                )}
-                 </Form.Item>
-                 </Form>
+                            required: true,
+                            message: 'Por favor completa el puntaje',
+                        },]}>
+                        <Rate/>
+                    </Form.Item>
+                    <Form.Item shouldUpdate>
+                        {() => (
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                disabled={
+                                    (!form.isFieldsTouched(["consumerName"]) || !form.isFieldsTouched(["consumerEmail"]) || !form.isFieldsTouched(["rating"])) ||
+                                    form.getFieldsError().filter(({errors}) => errors.length).length
+                                }
+                            >
+                                Enviar
+                            </Button>
+                        )}
+                    </Form.Item>
+                </Form>
 
             </Modal>
-            </div>
+        </div>
 
     )
 }
+
 export default ModalRate
