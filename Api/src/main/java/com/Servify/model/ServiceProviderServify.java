@@ -88,6 +88,7 @@ public class ServiceProviderServify {
 
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
+        if (description.isEmpty()) throw new EmptyDescriptionError();
         assertServiceIsProvided(services);
         services.get(0).setDescription(description);
     }
