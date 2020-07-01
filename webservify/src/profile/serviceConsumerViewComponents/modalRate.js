@@ -2,12 +2,21 @@ import React, { useState} from 'react';
 import {Button,  Rate,   message, Modal, Form, Input} from 'antd';
 import axios from "axios";
 
-function ModalRate({serviceName, username}){
+function ModalRate({serviceName, username, addCalification}){
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm()
 
     const calificate = (value) => {
         setVisible(false)
+        addCalification(serviceName, {
+            "providerName": username,
+            "serviceCategory": serviceName,
+            "calificationValue": value.rating,
+            "message": value.comment,
+            "consumerName": value.consumerName,
+            "consumerEmail": value.consumerEmail
+
+        })
         axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/calification`,
             {
                 "providerName": username,
@@ -17,11 +26,10 @@ function ModalRate({serviceName, username}){
                 "consumerName": value.consumerName,
                 "consumerEmail": value.consumerEmail
 
-            }).then(res => {
-                message.success('This is a success message');
-                setTimeout(() => window.location.reload(true), 700)
-            }
-        ).catch(err => console.log(err.response.data))
+            }).then(res =>  message.success('This is a success message')
+            
+        ).catch(err => {message.error(err.response.data+ ' se recargara la pagina')
+                        setTimeout(() => window.location.reload(true), 700)})
     }
 
     const showModal = () => {

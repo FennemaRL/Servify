@@ -56,7 +56,6 @@ public class ServifyController {
             List<ProviderRatingDTO> recommended = dbServiceProvider.bestRated()
                     .stream().map(p -> new ProviderRatingDTO(p.getName(), p.getAverageRating(), p.getServices()))
                     .collect(Collectors.toList());
-            System.out.print(recommended);
             return ResponseEntity.ok().body(recommended);
         } catch (RuntimeException e ) {
             return ResponseEntity.status(400).body(e.getMessage());
@@ -204,16 +203,31 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping("/provider/service/question")
-    public ResponseEntity addQuestion(@RequestBody ServiceNewQuestionDTO newCalificationDTO) {
+    public ResponseEntity addQuestion(@RequestBody ServiceNewQuestionDTO questionDTO) {
         try {
-            newCalificationDTO.assertEmpty();
-            ServiceProviderServify user = dbServiceProvider.findOne(newCalificationDTO.getProviderName());
-            CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
-            ServiceQuestion serviceQuestion = new ServiceQuestion(newCalificationDTO.getQuestion(),newCalificationDTO.getConsumerName(),newCalificationDTO.getConsumerEmail());
+            questionDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(questionDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(questionDTO.getServiceCategory());
+            ServiceQuestion serviceQuestion = new ServiceQuestion(questionDTO.getQuestion(),questionDTO.getConsumerName(),questionDTO.getConsumerEmail());
             user.addQuestionToService(category,serviceQuestion);
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("Pregunta agregada con exito");
-        } catch (EmptyDTOError  | InvalidQuestion e ) {
+        } catch (EmptyDTOError  | InvalidQuestion | ServiceProviderError e ) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+    @CrossOrigin
+    @PostMapping("/provider/service/questionAnswer")
+    public ResponseEntity addResponse(@RequestBody ServiceQuestionAnswerDTO answerDTO, @RequestHeader TokenResponse token) {
+        try {
+            this.checkToken(token, answerDTO.getProviderName());
+            answerDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(answerDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(answerDTO.getServiceCategory());
+            user.addAnswerToServiceInQuestion(answerDTO.getResponse(), category, answerDTO.getQuestion());
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("Pregunta agregada con exito");
+        } catch (EmptyDTOError  | InvalidQuestion | ServiceProviderError e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

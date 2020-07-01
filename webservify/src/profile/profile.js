@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {ViewEditableService, ViewService,} from "./servicesProfile";
+import {ViewEditableService, ViewService,} from "./servicesComponents";
 import {useProvider} from "./useProviderServices";
 import {Button, Descriptions, Form, Input, message, Typography} from 'antd';
 import axios from 'axios';
@@ -46,10 +46,6 @@ function ProfileInfoEditable({personalInfo}) {
         });
     };
 
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
-
     useEffect(() => {
 
         formRef.current.setFieldsValue({
@@ -79,7 +75,6 @@ function ProfileInfoEditable({personalInfo}) {
                       remember: true,
                   }}
                   onFinish={onFinish}
-                  onFinishFailed={onFinishFailed}
             >
 
                 {itemProfileInfo("Nombre", "username", [

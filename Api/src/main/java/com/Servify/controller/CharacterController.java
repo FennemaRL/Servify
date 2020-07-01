@@ -16,13 +16,11 @@ public class CharacterController {
     @CrossOrigin
     @GetMapping("/characters")
     public List<MetalslugCharacter> getAllCharacters(){
-        System.out.println("get");
         return (List<MetalslugCharacter>) repository.findAll();
     }
 
     @PostMapping("/character")
     public ResponseEntity newCharacter(@RequestBody MetalslugCharacter newChar){
-        System.out.println("post "+newChar);
         repository.save(newChar);
         return ResponseEntity.ok().body(newChar);
     }

@@ -88,7 +88,6 @@ public class ServiceProviderServify {
 
     public void setServiceWithDescription(CategoryService c, String description) {
         List<ServiceServify> services = filterByCategory(c);
-        if (description.isEmpty()) throw new EmptyDescriptionError();
         assertServiceIsProvided(services);
         services.get(0).setDescription(description);
     }
@@ -150,7 +149,7 @@ public class ServiceProviderServify {
 
     public void modifyServiceWithScope(CategoryService category, List<ScopeService> scope) {
         List<ServiceServify> services = filterByCategory(category);
-        if (services.isEmpty()) throw new ServiceProviderError("Error: Servicio no provisto");
+        assertServiceIsProvided(services);
         services.get(0).setScope(scope);
     }
 
@@ -172,7 +171,8 @@ public class ServiceProviderServify {
     }
 
     public void addAnswerToServiceInQuestion(String response, CategoryService category, String question) throws InvalidQuestion {
-        ServiceServify s = filterByCategory(category).get(0);
-        s.addResponseToQuestion(response,question);
+        List<ServiceServify> services = filterByCategory(category);
+        assertServiceIsProvided(services);
+        services.get(0).addResponseToQuestion(response,question);
     }
 }
