@@ -37,7 +37,8 @@ function Search() {
     }
 
     function orderByDropdown() {
-        return <Dropdown overlay={menu}>
+        let areProviders = providers.length >= 1;
+        return <Dropdown overlay={menu} disabled={!areProviders}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                 Ordenar por <DownOutlined/>
             </a>
