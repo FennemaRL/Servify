@@ -8,7 +8,6 @@ function Rating({serviceName, username, service, addCalification}) {
                 <p>Calificación: </p>
                 <Rate style={{marginLeft:"1vw"}} disabled defaultValue={service.calificationAverage}/>
                 <ModalRate serviceName={serviceName} username={username} addCalification={addCalification}/>
-
         </div>
     );
 }
