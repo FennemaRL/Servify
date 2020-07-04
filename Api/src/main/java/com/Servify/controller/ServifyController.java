@@ -70,7 +70,7 @@ public class ServifyController {
             ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
                     providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-            } catch (EmptyDTOError emptyDTOError) {
+            } catch (EmptyDTOError | EmptyFieldReceivedError emptyDTOError) {
                 return ResponseEntity.status(400).body("Bad_Request");
             }
     }
