@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {NavLink, Redirect, useParams} from "react-router-dom";
-import {Avatar, List, Typography} from 'antd';
+import {List, Typography} from 'antd';
 import axios from "axios";
 import Menu from "antd/es/menu";
 import Dropdown from "antd/es/dropdown";
 import {DownOutlined} from '@ant-design/icons';
+import Rate from "antd/es/rate";
 
 const {Title} = Typography;
 
 function Search() {
+
     const {category, zone} = useParams();
-    const [providers, setCategories] = useState([]);
+    const [providers, setProviders] = useState([]);
     const [err, seterr] = useState();
     const menu = (
         <Menu>
@@ -24,16 +26,14 @@ function Search() {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/services/${category}`, {params: {scope: zone}})
             .then(res => {
-                setCategories(res.data)
+                setProviders(res.data)
             })
             .catch(err => seterr(err.response.data))
     }, [category, zone]);
 
     function sortByAverage() {
-        setCategories(
-            [...providers].sort((a, b) => {
-                return (a.average < b.average) ? 1 : -1
-            }))
+        setProviders(prevProviders => [...prevProviders].sort((a, b) => (a.average < b.average) ? 1 : -1
+        ))
     }
 
     function orderByDropdown() {
@@ -52,10 +52,21 @@ function Search() {
                 <List.Item style={{backgroundColor: '#d9d9d9', borderRadius: 5}}>
                     <NavLink to={`/Servify/view/${item.username}/${category}`}>
                         <List.Item.Meta
-                            avatar={<Avatar
-                                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
-                            title={<p>{item.username}</p>}
-                            description={item.description ? item.description : noContieneDescripcion}
+                            title={
+                                <div style={{
+                                    display: "flex", flexDirection: "row", justifyContent: "space-between",
+                                    alignContent: "center", width: 200, alignItems: "center"
+                                }}><p style={{marginTop: 24}}>{item.username}</p>
+                                    <Rate allowHalf disabled value={item.average}/>
+                                </div>
+                            }
+                            description={
+                                <div style={{
+                                    display: "flex", flexDirection: "row", justifyContent: "space-between",
+                                    alignItems: "center"
+                                }}>
+                                    {item.description ? item.description : noContieneDescripcion}
+                                </div>}
                         />
                     </NavLink>
                 </List.Item>
@@ -78,7 +89,7 @@ function Search() {
         }}/>) ||
         <div style={{display: 'flex', flexDirection: 'column'}}>
             {searchTitle()}
-            <div style={{width: 441, height: 50}}>
+            <div style={{display: "flex", flexDirection: "row-reverse", minWidth: 441}}>
                 {orderByDropdown()}
             </div>
             <div style={{backgroundColor: '#d9d9d9', width: '45vw'}}>
