@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Rate, message, Modal, Form, Input} from 'antd';
+import {Button, Form, Input, message, Modal, Rate} from 'antd';
 import axios from "axios";
 
 
@@ -29,8 +29,10 @@ function ModalRate({serviceName, username, addCalification}){
 
             }).then(res =>  message.success('This is a success message')
             
-        ).catch(err => {message.error(err.response.data+ ' se recargara la pagina')
-                        setTimeout(() => window.location.reload(true), 700)})
+        ).catch(err => {
+            message.error(err.response.data + ' se recargara la pagina')
+            setTimeout(() => window.location.reload(true), 700)
+        })
     }
 
     const showModal = () => {
