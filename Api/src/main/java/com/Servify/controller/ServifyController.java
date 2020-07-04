@@ -2,6 +2,7 @@ package com.Servify.controller;
 
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
+import integration.cucumber.NameAlreadyInUseError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -134,6 +135,25 @@ public class ServifyController {
 
             return ResponseEntity.status(200).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError | ServiceProviderError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/provider/register")
+    public ResponseEntity registerWith(@RequestBody RegisterDTO registerDTO) {
+        try {
+            ServiceProviderServify sp = dbServiceProvider.findOne(registerDTO.getName());
+            if(sp != null){
+                throw new NameAlreadyInUseError("Name is already in use");
+            }else {
+                ServiceProviderServify newProvider = new ServiceProviderServify(registerDTO.getName(), registerDTO.getPhoneNmbr(),
+                    registerDTO.getCelNmbr(), registerDTO.getWebPage(), registerDTO.getResidence());
+                dbServiceProvider.save(newProvider);
+                String token = Jtoken.getTokenFor(newProvider.getName());
+                return ResponseEntity.status(200).body(new TokenResponse(token));
+            }
+        } catch (NameAlreadyInUseError | EmptyFieldReceivedError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
