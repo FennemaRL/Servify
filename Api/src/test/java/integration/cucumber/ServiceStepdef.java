@@ -92,4 +92,6 @@ public class ServiceStepdef {
         assertTrue(service.hasCalifications());
         assertEquals(average, 5, 0);
     }
+
+
 }

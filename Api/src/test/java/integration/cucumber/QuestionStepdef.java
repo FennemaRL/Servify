@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class QuestionStepdef {
-    private ArrayList<ServiceProviderServify> providers ;
+    private ArrayList<ServiceProviderServify> providers = new ArrayList<>() ;;
 
     @And("A serviceProvider {string} with Service {string}")
     public void a_serviceProvider_with_Service(String providerName, String serviceName) {
-        providers = new ArrayList<>() ;
+
         ServiceProviderServify p = new ServiceProviderServify(providerName,"","","","");
         p.addService(CategoryManager.createService(serviceName));
         providers.add(p);
