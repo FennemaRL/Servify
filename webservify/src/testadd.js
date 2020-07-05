@@ -104,8 +104,9 @@ const HorizontalLoginForm = () => {
           </Button>
         )}
       </Form.Item>
-    </Form>    
+    </Form> 
     </div>
   );
 };
+
 export default HorizontalLoginForm;

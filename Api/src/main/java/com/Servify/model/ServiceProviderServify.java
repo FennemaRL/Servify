@@ -176,4 +176,17 @@ public class ServiceProviderServify {
         assertServiceIsProvided(services);
         services.get(0).addResponseToQuestion(response,question);
     }
+
+    public void addImageToService(ServifyImage image, CategoryService category){
+        List<ServiceServify> services = filterByCategory(category);
+        assertServiceIsProvided(services);
+        services.get(0).addImage(image);
+    }
+
+    public void deleteImageToService(String imagename, String imagetype, CategoryService category) {
+        List<ServiceServify> services = filterByCategory(category);
+        assertServiceIsProvided(services);
+        services.get(0).removeImage(imagename, imagetype);
+
+    }
 }

@@ -3,13 +3,18 @@ package com.Servify.controller;
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.SQLException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 
 @RestController
@@ -45,8 +50,13 @@ public class ServifyController {
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if (user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
+        List<ServiceServify> withDecompresedImage = user.getServices().stream().map(serviceServify -> {
+            List<ServifyImage> images= serviceServify.getImages();
+            images.forEach(imageToModify ->imageToModify.setBytes(decompressBytes(imageToModify.getBytes())));
+        return serviceServify;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok().body(new ProviderEditDTO(user.getName(), user.getCelNmbr(),
-                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), user.getServices()));
+                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), withDecompresedImage));
     }
 
     @CrossOrigin
@@ -232,6 +242,39 @@ public class ServifyController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping(value="/provider/service/img" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity addImage(@ModelAttribute ServiceImageDTO imgDTO,@RequestParam("imageFile") MultipartFile file, @RequestHeader TokenResponse token){
+        try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
+            ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
+            ServifyImage img = new ServifyImage(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
+            user.addImageToService(img,category);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("se agrego con exito");
+        } catch (IOException | ServiceProviderError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+    }
+    @CrossOrigin
+    @DeleteMapping(value="/provider/service/img")
+    public ResponseEntity deleteImage(@RequestBody ServiceImageDTO imgDTO,@RequestHeader TokenResponse token){
+        try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
+            ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
+            user.deleteImageToService(imgDTO.getImageName(),imgDTO.getType(),category);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("se borro con exito");
+        } catch (ServiceProviderError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+    }
 
 
     @CrossOrigin
@@ -247,5 +290,39 @@ public class ServifyController {
         } catch (EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
+    }
+
+    public static byte[] compressBytes(byte[] data) {
+        Deflater deflater = new Deflater();
+        deflater.setInput(data);
+        deflater.finish();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished()) {
+            int count = deflater.deflate(buffer);
+            outputStream.write(buffer, 0, count);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+        }
+        return outputStream.toByteArray();
+    }
+
+    public static byte[] decompressBytes(byte[] data) {
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            outputStream.close();
+        } catch (IOException ioe) {
+        } catch (DataFormatException e) {
+        }
+        return outputStream.toByteArray();
     }
 }

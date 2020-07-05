@@ -141,4 +141,25 @@ public class ServiceProviderServifyTest {
 
         Assert.assertEquals(sp.getServices().get(0).getQuestions().get(0).getAnswer(), "si don");
     }
+    @Test
+    public void addAImage2AExistentService(){
+        ServiceServify service = CategoryManager.createService("Electricidad");
+        sp.addService(service);
+
+        sp.addImageToService(new ServifyImage(),CategoryManager.getCategory("Electricidad"));
+
+        Assert.assertEquals(1, sp.getServices().get(0).getImages().size());
+
+    }
+    @Test
+    public void addAImage2ANonExistentService(){
+        ServiceServify service = CategoryManager.createService("Electricidad");
+        sp.addService(service);
+        try {
+            sp.addImageToService(new ServifyImage(), CategoryManager.getCategory("Plomeria"));
+        }
+        catch (ServiceProviderError e){
+            Assert.assertEquals("Error: Servicio no provisto",e.getMessage());
+        }
+    }
 }

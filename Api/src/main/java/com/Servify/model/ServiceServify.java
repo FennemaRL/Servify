@@ -20,10 +20,13 @@ public class ServiceServify {
     private List<Calification> califications;
     @Column
     private String description;
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<ScopeService> scopeAreas;
-    @OneToMany (cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceQuestion> questions;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ServifyImage> images;
+
     public ServiceServify() {
     }
 
@@ -34,6 +37,7 @@ public class ServiceServify {
         this.scopeAreas = new ArrayList<ScopeService>();
         this.califications = new ArrayList<>();
         this.questions = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
     public Long getId() {
@@ -111,5 +115,24 @@ public class ServiceServify {
             throw new InvalidQuestion("El servicio "+category.getCategory() +" no tiene la pregunta "+question);
         }
         questionsfind.get(0).addAnswer(response);
+    }
+
+    public List<ServifyImage> getImages() {
+        return images;
+    }
+
+    public void addImage(ServifyImage image) {
+        if(images.stream().anyMatch(servifyImage -> servifyImage.sameNameAndType(image.getName(),image.getType()) )){
+           throw new ServiceProviderError("Error : no pueden haber 2 imagenes con el mismo nombre y tipo");
+        }
+        images.add(image);
+    }
+
+    public void removeImage(String imageName, String imageType) {
+       images.removeIf(servifyImage -> servifyImage.sameNameAndType(imageName,imageType));
+    }
+
+    public void resetImages() {
+        images= new ArrayList<>();
     }
 }
