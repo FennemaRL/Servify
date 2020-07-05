@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -212,8 +213,9 @@ public class ServifyController {
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
             ServiceConsumer consumer = new ServiceConsumer(newCalificationDTO.getConsumerName(), newCalificationDTO.getConsumerEmail());
             user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
-            dbServiceProvider.save(user);
-            return ResponseEntity.status(201).body("Calificacion agregada con exito");
+            ServiceProviderServify serv = dbServiceProvider.save(user);
+            List<Calification> califications = serv.getServices().stream().filter(service -> service.sameCategory(category)).collect(Collectors.toList()).get(0).getCalifications();
+            return ResponseEntity.status(201).body(califications.get(califications.size() - 1));
         } catch (EmptyDTOError | WrongValueError e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -330,6 +332,21 @@ public class ServifyController {
             outputStream.close();
         } finally {
             return outputStream.toByteArray();
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping ("/provider/service/likereview")
+    public ResponseEntity likeReview(@RequestBody ServiceReviewDTO reviewDTO){
+        try {
+            reviewDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(reviewDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(reviewDTO.getServiceCategory());
+            user.addLikeToReview(category, reviewDTO.getId());
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("Like agregado con exito");
+        } catch (EmptyDTOError | InvalidReviewError | ServiceProviderError e ) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }

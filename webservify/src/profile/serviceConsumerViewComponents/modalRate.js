@@ -3,7 +3,7 @@ import {Button, Form, Input, message, Modal, Rate} from 'antd';
 import axios from "axios";
 
 
-function ModalRate({serviceName, username, addCalification}){
+function ModalRate({serviceName, username, addCalification, addIdCalification}){
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm()
 
@@ -27,7 +27,9 @@ function ModalRate({serviceName, username, addCalification}){
                 "consumerName": value.consumerName,
                 "consumerEmail": value.consumerEmail
 
-            }).then(res =>  message.success('This is a success message')
+            }).then(res => {message.success('This is a success message' )
+                    addIdCalification(serviceName, value.consumerName, value.consumerEmail, value.comment, res.data.id)
+        } 
             
         ).catch(err => {
             message.error(err.response.data + ' se recargara la pagina')

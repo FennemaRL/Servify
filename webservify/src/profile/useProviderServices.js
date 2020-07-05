@@ -8,14 +8,22 @@ export function useProvider() {
     const [providerSevices, setproviderSevices] = useState([])
     const [err, setErr] = useState()
     const [personalInfo, setPersonalInfo] = useState({})
+
+    const addIdCalification = (serviceName, consumerName, consumerEmail, comment, id) => {
+        let services = [...providerSevices]
+        let service = services.filter(service => service.category.categoryName === serviceName)[0]
+        let calification = service.califications.filter(calification => calification.consumer.name === consumerName
+                                     && calification.message === comment && calification.consumer.email === consumerEmail)[0]
+        calification.id = id
+        setproviderSevices(services)
+    }
+
     const addCalification  = (serviceName,calif)  => {
         let categoryf = [...providerSevices].filter(s=> s.category.categoryName === serviceName)
         if(categoryf.length){
             categoryf[0].califications.push({calificationValue:calif.calificationValue,message:calif.message,consumer:{email: calif.consumerEmail ,name: calif.consumerName}})
             setproviderSevices(categoryf)
         }
-
-
     }
 
     useEffect(() => {
@@ -27,6 +35,15 @@ export function useProvider() {
                             })
             .catch(err => setErr(err.response.data))
     }, [username])
-    return {username, providerSevices, setproviderSevices, personalInfo, setPersonalInfo, category, err, addCalification}
+
+    const addLike = (serviceCategory, id) => {
+        let categories = [...providerSevices]
+        let category = categories.filter(s=> s.category.categoryName === serviceCategory)[0]
+        let calification = category.califications.filter(calificacion => calificacion.id === id)[0]
+        calification.likes+=1
+        setproviderSevices(categories)
+    }
+
+    return {username, providerSevices, setproviderSevices, personalInfo, setPersonalInfo, category, err, addCalification, addIdCalification, addLike}
 }
 

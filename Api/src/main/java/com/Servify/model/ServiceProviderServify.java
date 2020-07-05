@@ -93,12 +93,13 @@ public class ServiceProviderServify {
         services.get(0).setDescription(description);
     }
 
-    public void addNewCalificationToService(CategoryService c, Integer calificationValue, ServiceConsumer consumer, String message) throws WrongValueError {
+    public Calification addNewCalificationToService(CategoryService c, Integer calificationValue, ServiceConsumer consumer, String message) throws WrongValueError {
         List<ServiceServify> services = filterByCategory(c);
         assertServiceIsProvided(services);
         Calification newCalification = new Calification(calificationValue, consumer, message);
         services.get(0).addCalification(newCalification);
         averageRating = getAverageRating();
+        return newCalification;
     }
 
     public Double getAverageRating() {
@@ -188,5 +189,11 @@ public class ServiceProviderServify {
         assertServiceIsProvided(services);
         services.get(0).removeImage(imagename, imagetype);
 
+    }
+
+    public void addLikeToReview(CategoryService category, Long id) throws InvalidReviewError{
+        List<ServiceServify> services = filterByCategory(category);
+        assertServiceIsProvided(services);
+        services.get(0).addLikeToReview(id);
     }
 }

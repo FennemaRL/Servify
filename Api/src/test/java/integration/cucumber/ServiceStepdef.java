@@ -15,6 +15,7 @@ public class ServiceStepdef {
     private ServiceProviderServify provider;
     private Double average;
     private ServiceConsumer consumer;
+    private Calification review;
 
     @Given("A consumer")
     public void a_consumer() {
@@ -93,5 +94,19 @@ public class ServiceStepdef {
         assertEquals(average, 5, 0);
     }
 
+    @Given("A specific review")
+    public void a_specific_review() {
+        review = new Calification();
+    }
+
+    @When("I add a like to that review")
+    public void i_add_a_like_to_that_review() {
+        review.addLike();
+    }
+
+    @Then("That review has one more like")
+    public void that_review_has_one_more_like() {
+        assertEquals(review.getLikes(),1);
+    }
 
 }
