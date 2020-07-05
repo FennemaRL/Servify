@@ -13,13 +13,12 @@ function getBase64(file) {
     });
   }
   
-  
+
 export function ImagesEditableView({images, providerName, serviceName, viewMode}){
     const [fileList,setFileList] = useState([])
     const [previewVisible,setPreviewVisible] = useState(false)
     const [previewTitle,setPreviewTitle] = useState('')
     const [previewImage,setPreviewImage] = useState('')
-    const [progress,setProgress] = useState(0)
   
     useEffect(() => {
        setFileList(prev=>[...prev,...images.map(image=>{return{uid:image.id, name:image.name, status:'done',type:image.type ,preview:`data:${image.type};base64,`+image.bytes, thumbUrl:`data:${image.type};base64,`+image.bytes}})])
@@ -51,17 +50,17 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
       setFileList(fileList);
     };
   
-    const handleUploadImage = async options => {
+    const handleUploadImage = options => {
       const { onSuccess, onError, file } = options;
-     
       const formData = new FormData();
       formData.append('imageFile',file);
       formData.append('name',file.name);
       formData.append('type',file.type);
+      formData.append('size', file.size)
       formData.append('providerName',providerName);
       formData.append('serviceName',serviceName);
   
-      await  axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/img`,
+       axios.post(`${process.env.REACT_APP_API_URL}/api/provider/service/img`,
           formData,{
             headers: {
               'accept': 'application/json',
@@ -73,12 +72,10 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
         .then(res=>  {onSuccess("Ok"); message.success(res.data)})
         .catch(err=>   {
           console.log("Eroor: ", err);
+          console.log({...err})
           message.error(err.response.data)
           onError({ ...err});
         })
-  
-  
-  
     };
     const handleRemove = (photo) =>{
         axios.delete(`${process.env.REACT_APP_API_URL}/api/provider/service/img`,{
@@ -104,7 +101,7 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
     }
     return(
       <div style={{marginTop:'2vh'}}>
-        <p>Imagenes del servicio</p>
+        <p>Imagenes del servicio:</p>
         <div className="clearfix" style={{ marginLeft:"6.5vw", marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"30vh", overflowY:"scroll", padding:"3vh"}}>
         <Upload
           listType="picture-card"
@@ -113,7 +110,6 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
           customRequest={viewMode? null :handleUploadImage}
           onChange={viewMode? null :handleOnChange}
           onRemove={viewMode? null :handleRemove}
-          
           accept=".png, .jpg"
         >
           {fileList.length >= 8 ? null : uploadButton}
@@ -138,7 +134,6 @@ export function ImagesView({images, providerName, serviceName, viewMode}) {
   const [previewVisible,setPreviewVisible] = useState(false)
   const [previewTitle,setPreviewTitle] = useState('')
   const [previewImage,setPreviewImage] = useState('')
-  const [progress,setProgress] = useState(0)
 
   useEffect(() => {
      setFileList(prev=>[...prev,...images.map(image=>{return{uid:image.id, name:image.name, status:'done',type:image.type ,preview:`data:${image.type};base64,`+image.bytes, thumbUrl:`data:${image.type};base64,`+image.bytes}})])
@@ -162,9 +157,9 @@ export function ImagesView({images, providerName, serviceName, viewMode}) {
     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
   }
   
-   return(<>{ fileList.length &&
+   return(<>{ !!fileList.length &&
     <div style={{marginTop:'2vh'}}>
-      <p>Imagenes del servicio</p>
+      <p>Imagenes del servicio:</p>
       <div  style={{ marginLeft:"6.5vw", display:'flex', marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"30vh", overflowY:"scroll", padding:"3vh"}}>
             {fileList.map(file => (
                 <div className="shadowhoverImage"  >

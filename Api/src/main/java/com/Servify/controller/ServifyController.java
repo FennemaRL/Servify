@@ -52,7 +52,15 @@ public class ServifyController {
         if (user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
         List<ServiceServify> withDecompresedImage = user.getServices().stream().map(serviceServify -> {
             List<ServifyImage> images= serviceServify.getImages();
-            images.forEach(imageToModify ->imageToModify.setBytes(decompressBytes(imageToModify.getBytes())));
+            images.forEach(imageToModify -> {
+                try {
+                    imageToModify.setBytes(decompressBytes(imageToModify.getBytes()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DataFormatException e) {
+                    e.printStackTrace();
+                }
+            });
         return serviceServify;
         }).collect(Collectors.toList());
         return ResponseEntity.ok().body(new ProviderEditDTO(user.getName(), user.getCelNmbr(),
@@ -269,7 +277,7 @@ public class ServifyController {
             CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
             user.deleteImageToService(imgDTO.getImageName(),imgDTO.getType(),category);
             dbServiceProvider.save(user);
-            return ResponseEntity.status(201).body("se borro con exito");
+            return ResponseEntity.status(200).body("se borro con exito");
         } catch (ServiceProviderError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -292,7 +300,7 @@ public class ServifyController {
         }
     }
 
-    public static byte[] compressBytes(byte[] data) {
+    public static byte[] compressBytes(byte[] data) throws IOException {
         Deflater deflater = new Deflater();
         deflater.setInput(data);
         deflater.finish();
@@ -304,12 +312,12 @@ public class ServifyController {
         }
         try {
             outputStream.close();
-        } catch (IOException e) {
+        } finally {
+            return outputStream.toByteArray();
         }
-        return outputStream.toByteArray();
     }
 
-    public static byte[] decompressBytes(byte[] data) {
+    public static byte[] decompressBytes(byte[] data) throws IOException, DataFormatException {
         Inflater inflater = new Inflater();
         inflater.setInput(data);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -320,9 +328,8 @@ public class ServifyController {
                 outputStream.write(buffer, 0, count);
             }
             outputStream.close();
-        } catch (IOException ioe) {
-        } catch (DataFormatException e) {
+        } finally {
+            return outputStream.toByteArray();
         }
-        return outputStream.toByteArray();
     }
 }

@@ -21,7 +21,7 @@ public class ServifyImage {
 
     }
     public ServifyImage(String name, String type, byte[] picByte) {
-        if( type.isEmpty() || ! ("image/png".contains(type) || "image/jpg".contains(type))){
+        if( type.isEmpty() || ! ("image/png".contains(type) || "image/jpg".contains(type) || "image/jpeg".contains(type))){
             throw new ServiceProviderError("Error : la imagen No puede de ser de otro tipo que png o jpg");
         }
         this.name = name;
