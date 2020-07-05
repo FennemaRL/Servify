@@ -48,6 +48,48 @@ code {
 .cascaderMobile{
   border-radius: 15px
 }
+.shadowhoverImage{
+  position: relative;
+  display: flex;
+  margin:0.5vh;
+}
+.shadowhoverImage img {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+
+}
+.shadowhoverImage img:hover {
+  opacity: .8;
+  transition: opacity 0.5s ease;
+}
+.shadow{
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 120px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.5s ease;
+  z-index:   2;
+}
+.shadowhoverImage:hover .shadow{
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+.ico{
+  position: absolute;
+  color: white;
+  opacity: 0;
+  top:40%;
+  left:45%;
+}
+.shadowhoverImage:hover .ico  {
+  opacity: 1;
+  z-index: 3;
+  cursor: pointer;
+}
+
+
 @media screen and (max-width: 48em) {
 
   .catOfferSize{

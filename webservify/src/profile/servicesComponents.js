@@ -11,8 +11,7 @@ import ShowCalifications from './serviceConsumerViewComponents/showCalifications
 import ZonesEditable from './serviceProviderViewComponents/zonesEditable'
 import QuestionComponent from './serviceConsumerViewComponents/questionsComponenConsumer'
 import QuestionsProvider from './serviceProviderViewComponents/questionsComponentProvider'
-import ImagesComponent from './serviceProviderViewComponents/imagesComponent'
-
+import {ImagesEditableView, ImagesView} from './serviceProviderViewComponents/imagesComponent'
 
 const {Title} = Typography;
 const {TabPane} = Tabs;
@@ -98,7 +97,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                             <FormEditService username={username} service={ser} />
                             <ZonesEditable name={username} service={ser}/>
                             <QuestionsProvider questionsback={ser.questions} providerName={username} serviceName={ser.category.categoryName}/>
-                            <ImagesComponent  images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>
+                            <ImagesEditableView  images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>
                         </TabPane>))}
                 </Tabs>
         </div>
@@ -133,9 +132,9 @@ export function ViewService({username, providerSevices, category, err, addCalifi
                                 <Service username={username} service={ser}/>
                                 <Rating service={ser} serviceName={ser.category.categoryName} username={username} addCalification={addCalification}/>
                                 <ShowCalifications califications={ser.califications}/>
+                                <ImagesView  viewMode={true} images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>  
                                 <ViewZones service={ser}/>  
-                                <QuestionComponent questionsback={ ser.questions} serviceName={ser.category.categoryName} providerName={username} />
-                                                   
+                                <QuestionComponent questionsback={ ser.questions} serviceName={ser.category.categoryName} providerName={username} />                
                             </div>
                         </TabPane>))
                         }
