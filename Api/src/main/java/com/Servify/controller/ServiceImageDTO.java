@@ -9,6 +9,8 @@ public class ServiceImageDTO  implements Serializable {
 
     private String providerName;
     private String serviceName;
+    private String nameImg;
+    private String type;
 
 
 
@@ -29,4 +31,10 @@ public class ServiceImageDTO  implements Serializable {
         return serviceName;
     }
 
+    public String getImageName() {
+    return nameImg;
+    }
+    public String getType(){
+        return type;
+    }
 }

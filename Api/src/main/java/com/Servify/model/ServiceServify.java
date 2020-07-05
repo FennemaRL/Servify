@@ -131,4 +131,8 @@ public class ServiceServify {
     public void removeImage(String imageName, String imageType) {
        images.removeIf(servifyImage -> servifyImage.sameNameAndType(imageName,imageType));
     }
+
+    public void resetImages() {
+        images= new ArrayList<>();
+    }
 }

@@ -40,4 +40,8 @@ public class ServifyImage {
     public String getType() {
         return type;
     }
+
+    public void setBytes(byte[] picByte) {
+        this.picByte= picByte;
+    }
 }

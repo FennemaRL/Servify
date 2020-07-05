@@ -50,8 +50,13 @@ public class ServifyController {
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if (user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
+        List<ServiceServify> withDecompresedImage = user.getServices().stream().map(serviceServify -> {
+            List<ServifyImage> images= serviceServify.getImages();
+            images.forEach(imageToModify ->imageToModify.setBytes(decompressBytes(imageToModify.getBytes())));
+        return serviceServify;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok().body(new ProviderEditDTO(user.getName(), user.getCelNmbr(),
-                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), user.getServices()));
+                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), withDecompresedImage));
     }
 
     @CrossOrigin
@@ -239,15 +244,33 @@ public class ServifyController {
 
     @CrossOrigin
     @PostMapping(value="/provider/service/img" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity addImage(@ModelAttribute ServiceImageDTO imgDTO,@RequestParam("imageFile") MultipartFile file){
+    public ResponseEntity addImage(@ModelAttribute ServiceImageDTO imgDTO,@RequestParam("imageFile") MultipartFile file, @RequestHeader TokenResponse token){
         try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
             ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
             CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
             ServifyImage img = new ServifyImage(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
             user.addImageToService(img,category);
             dbServiceProvider.save(user);
             return ResponseEntity.status(201).body("se agrego con exito");
-        } catch (IOException | ServiceProviderError e) {
+        } catch (IOException | ServiceProviderError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+    }
+    @CrossOrigin
+    @DeleteMapping(value="/provider/service/img")
+    public ResponseEntity deleteImage(@RequestBody ServiceImageDTO imgDTO,@RequestHeader TokenResponse token){
+        try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
+            ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
+            user.deleteImageToService(imgDTO.getImageName(),imgDTO.getType(),category);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("se borro con exito");
+        } catch (ServiceProviderError | EmptyDTOError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
 

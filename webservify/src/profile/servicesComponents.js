@@ -11,6 +11,7 @@ import ShowCalifications from './serviceConsumerViewComponents/showCalifications
 import ZonesEditable from './serviceProviderViewComponents/zonesEditable'
 import QuestionComponent from './serviceConsumerViewComponents/questionsComponenConsumer'
 import QuestionsProvider from './serviceProviderViewComponents/questionsComponentProvider'
+import ImagesComponent from './serviceProviderViewComponents/imagesComponent'
 
 
 const {Title} = Typography;
@@ -97,6 +98,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                             <FormEditService username={username} service={ser} />
                             <ZonesEditable name={username} service={ser}/>
                             <QuestionsProvider questionsback={ser.questions} providerName={username} serviceName={ser.category.categoryName}/>
+                            <ImagesComponent  images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>
                         </TabPane>))}
                 </Tabs>
         </div>
