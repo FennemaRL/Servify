@@ -122,7 +122,7 @@ public class ServiceServify {
     }
 
     public void addImage(ServifyImage image) {
-        if(!images.stream().filter(servifyImage -> servifyImage.sameNameAndType(image.getName(),image.getType()) ).collect(Collectors.toList()).isEmpty()){
+        if(images.stream().anyMatch(servifyImage -> servifyImage.sameNameAndType(image.getName(),image.getType()) )){
            throw new ServiceProviderError("Error : no pueden haber 2 imagenes con el mismo nombre y tipo");
         }
         images.add(image);
