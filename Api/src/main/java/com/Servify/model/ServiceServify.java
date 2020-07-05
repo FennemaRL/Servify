@@ -135,4 +135,13 @@ public class ServiceServify {
     public void resetImages() {
         images= new ArrayList<>();
     }
+
+    public void addLikeToReview(Long id) throws InvalidReviewError {
+        List<Calification> review = califications.stream().filter(cal -> cal.getId() == id).collect(Collectors.toList());
+        if(review.isEmpty()){
+            throw new InvalidReviewError("No existe la calificación con el id" + id.toString());
+        }
+        review.get(0).addLike();
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.Servify.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
+@Data
 @Entity
 public class Calification {
     @Id
@@ -14,6 +17,8 @@ public class Calification {
     private ServiceConsumer consumer;
     @Column
     private String message;
+    @Column
+    private Integer likes = 0;
 
     public Calification(){}
 
@@ -45,4 +50,12 @@ public class Calification {
     public String getMessage() { return message; }
 
     public ServiceConsumer getConsumer() { return consumer; }
+
+    public void addLike() { likes++; }
+
+    public int getLikes() { return likes; }
+
+    public long getId() { return id;}
+
+
 }
