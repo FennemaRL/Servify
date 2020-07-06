@@ -134,7 +134,7 @@ export function ImagesView({images, providerName, serviceName, viewMode}) {
   const [previewImage,setPreviewImage] = useState('')
 
   useEffect(() => {
-     setFileList(prev=>[...prev,...images.map(image=>{return{uid:image.id, name:image.name, status:'done',type:image.type ,preview:`data:${image.type};base64,`+image.bytes, thumbUrl:`data:${image.type};base64,`+image.bytes}})])
+     setFileList(prev=>[...prev,...images.map(image=>{return{uid:image.id, key:image.name+image.type, name:image.name, status:'done',type:image.type ,preview:`data:${image.type};base64,`+image.bytes, thumbUrl:`data:${image.type};base64,`+image.bytes}})])
          
 }, [images,providerName,serviceName])
 
@@ -160,7 +160,7 @@ export function ImagesView({images, providerName, serviceName, viewMode}) {
       <p>Imagenes del servicio:</p>
       <div  style={{ marginLeft:"6.5vw", display:'flex', marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"30vh", overflowY:"scroll", padding:"3vh"}}>
             {fileList.map(file => (
-                <div className="shadowhoverImage"  >
+                <div className="shadowhoverImage" key={file.uid} >
                   <img src={file.url || file.preview} alt="" height={120} />
                   <div className='shadow' />
                   <span className='ico'  onClick={()=>handlePreview(file)}>

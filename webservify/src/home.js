@@ -1,6 +1,6 @@
 import React, {useState, useEffect,} from 'react';
 import axios from 'axios';
-import {Typography, Card, Col, Row, Tag} from 'antd';
+import {Typography, Card, Col, Row, Tag, Tooltip} from 'antd';
 import {NavLink} from 'react-router-dom';
 import Avatar from "antd/es/avatar";
 import List from "antd/es/list";
@@ -51,6 +51,7 @@ function BestProviders() {
             .catch(err => console.error(err))
     }, []);
 
+    console.log(bestProviders)
     return (
         <div>
             <Title level={3} style={{textAlign: 'center'}}>Prestadores recomendados</Title>
@@ -61,12 +62,12 @@ function BestProviders() {
                     <NavLink to={`/Servify/view/${provider.username}`}>
                         <List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>}
                                 title={<p>{provider.username}</p>}
                                 description={
                                     <div >
-                                        <Rate allowHalf disabled defaultValue={provider.averageRating}/>
+                                        <div style={{
+                                            display: "flex"}}>
+                                        <Tooltip title={"promedio de "+provider.averageRating+" entre "+provider.services.length+" servicios"} ><div ><Rate allowHalf disabled defaultValue={provider.averageRating}/></div></Tooltip> </div>
                                         <div style={{
                                             display: "flex", flexDirection: "row", justifyContent: "center",
                                             alignItems: "center"

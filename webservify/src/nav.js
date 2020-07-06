@@ -30,7 +30,7 @@ const Searchbar=() =>{
     history.push(chooseZone? `/Servify/search/${chooseCat}/${chooseZone}`:`/Servify/search/${chooseCat}`)
   }  
   return  <div key='space0' style={{border: '2px solid rgba(28,110,164,0.12)', borderRadius: '12px', padding: '10px', marginTop: '-10px', height:'65px', position: 'relative'}} >
-  <span style={{position:'absolute',zIndex: '1', top:-12 ,left:10, height: 30, fontWeight:'500',}}>busca un servicio</span>
+  <span style={{position:'absolute',zIndex: '1', top:-12 ,left:10, height: 30, fontWeight:'500',}}>Busca un servicio</span>
   <Cascader options={categories} className='cascaderMobile' onChange={onChangeCat} placeholder="Selecciona una categoria"/>
   <Cascader options={scopesC} className='cascaderMobile' onChange={onChangeZone}   placeholder="Selecciona una zona"/>
   <Tooltip title={chooseCat? "Buscar" : "Seleccione una categoria primero para buscar"  } >
