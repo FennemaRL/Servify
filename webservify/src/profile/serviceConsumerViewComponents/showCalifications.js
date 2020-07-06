@@ -39,6 +39,7 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
             ];
 
             return( 
+              <>
               <Comment key={calification.id}
               actions={actions}
               author={<div style={{display:'flex'}}><p style={{paddingLeft:10,paddingRight:10, fontSize:'.85rem'}}>{calification.consumer.name}</p>
@@ -48,6 +49,8 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
                 {calification.message}
               </p>
             }/>
+            <hr style={{border:'0.1px solid #bfbfbf', width:'98%'}}/>
+            </>
             )}
           )
         }

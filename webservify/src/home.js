@@ -51,7 +51,6 @@ function BestProviders() {
             .catch(err => console.error(err))
     }, []);
 
-    console.log(bestProviders)
     return (
         <div>
             <Title level={3} style={{textAlign: 'center'}}>Prestadores recomendados</Title>
@@ -62,10 +61,10 @@ function BestProviders() {
                     <NavLink to={`/Servify/view/${provider.username}`}>
                         <List.Item>
                             <List.Item.Meta
-                                title={<p>{provider.username}</p>}
+                                title={<p style={{paddingLeft:5}}>{provider.username}</p>}
                                 description={
                                     <div >
-                                        <div style={{
+                                        <div style={{ paddingLeft:15,
                                             display: "flex"}}>
                                         <Tooltip title={"promedio de "+provider.averageRating+" entre "+provider.services.length+" servicios"} ><div ><Rate allowHalf disabled defaultValue={provider.averageRating}/></div></Tooltip> </div>
                                         <div style={{
@@ -74,7 +73,9 @@ function BestProviders() {
                                         }}>
                                             {provider.services.map(s => <Tag key={s.category.categoryName}>
                                                 {s.category.categoryName}</Tag>)}
+                                                
                                         </div>
+                                        <hr style={{border:'0.5px solid #bfbfbf'}}/>
                                     </div>
                                 }
                             />
