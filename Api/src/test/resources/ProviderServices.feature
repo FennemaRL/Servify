@@ -63,15 +63,15 @@ Feature: Service Provider
   
   Scenario: Register with an empty field
     Given The list of users of servify
-    When A new user who wants to register with name "" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp"
+    When A new user who wants to register with name "" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp" password "lol"
     Then An error is thrown
     
   Scenario: Register when the username is already in use
     Given The list of users of servify
-    When A new user who wants to register with name "lucas" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp"
+    When A new user who wants to register with name "lucas" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp" password "lol"
     Then An error is thrown
 
   Scenario: Register positive case
     Given The list of users of servify
-    When A new user who wants to register with name "Warmy" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp"
+    When A new user who wants to register with name "Warmy" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp" password "lol"
     Then A new account is created with name "Warmy" phoneNmbr "111" celNmbr "222" webPage "ooo" residence "ppp"

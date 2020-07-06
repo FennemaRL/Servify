@@ -160,13 +160,13 @@ public class ServiceProviderStepdef {
         registredProviders.add(ailin);
     }
 
-    @When("A new user who wants to register with name {string} phoneNmbr {string} celNmbr {string} webPage {string} residence {string}")
-    public void a_new_user_who_wants_to_register_with_name_phoneNmbr_celNmbr_webPage_residence(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
+    @When("A new user who wants to register with name {string} phoneNmbr {string} celNmbr {string} webPage {string} residence {string} password {string}")
+    public void a_new_user_who_wants_to_register_with_name_phoneNmbr_celNmbr_webPage_residence_password(String name, String phoneNmbr, String celNmbr, String webPage, String residence, String passeword) {
         try{
             if(registredProviders.stream().anyMatch(p -> p.getName().equals(name))){
                 throw new NameAlreadyInUseError("The user name is already in use");
             }else{
-                ServiceProviderServify provider = new ServiceProviderServify(name,phoneNmbr,celNmbr,webPage,residence);
+                ServiceProviderServify provider = new ServiceProviderServify(name,phoneNmbr,celNmbr,webPage,residence,passeword);
                 registredProviders.add(provider);
             }
         }catch(NameAlreadyInUseError | EmptyFieldReceivedError e){

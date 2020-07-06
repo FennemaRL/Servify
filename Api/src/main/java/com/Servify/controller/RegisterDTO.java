@@ -1,5 +1,8 @@
 package com.Servify.controller;
 
+import lombok.Data;
+
+@Data
 public class RegisterDTO implements DTOServify{
 
     private String name;
@@ -7,6 +10,7 @@ public class RegisterDTO implements DTOServify{
     private String celNmbr;
     private String webPage;
     private String residence;
+    private String password;
 
     public RegisterDTO(String aName, String aPhoneNmbr, String aCelNmbr, String aWebPage, String aResidence){
         this.name = aName;
@@ -19,7 +23,8 @@ public class RegisterDTO implements DTOServify{
     @Override
     public void assertEmpty() throws EmptyDTOError {
 
-        if(name.equals("") || phoneNmbr.equals("") || celNmbr.equals("") || webPage.equals("") || residence.equals("")){
+        if(name.equals("") || phoneNmbr.equals("") || celNmbr.equals("") || webPage.equals("") || residence.equals("") ||
+            password.equals("")){
             throw new EmptyDTOError();
         }
     }
@@ -29,4 +34,5 @@ public class RegisterDTO implements DTOServify{
     public String getCelNmbr() { return celNmbr; }
     public String getWebPage() { return webPage; }
     public String getResidence() { return residence; }
+    public String getPassword() { return password;}
 }

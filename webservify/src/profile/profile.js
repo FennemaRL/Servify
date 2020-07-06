@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import {ViewEditableService, ViewService,} from "./servicesComponents";
 import {useProvider} from "./useProviderServices";
-import {Button, Descriptions, Form, Input, message, Typography} from 'antd';
+import {Button, Descriptions, Form, Input, message, Typography, Collapse} from 'antd';
 import axios from 'axios';
 import {GetToken} from '../login/auth'
 
 
-const {Title,} = Typography;
+const {Title} = Typography;
+const { Panel } = Collapse;
 
 function ProfileInfoEditable({personalInfo}) {
 
@@ -66,8 +67,8 @@ function ProfileInfoEditable({personalInfo}) {
 
     return (
         <div>
-            <Title style={{textAlign: 'center'}} level={4}>Informacion Personal</Title>
-            <Form className='formEditableInfo'
+                <Title style={{textAlign: 'center'}} level={4}>Informacion Personal</Title>
+                <Form className='formEditableInfo'
                   ref={formRef}
                   {...layout}
                   name="basic"

@@ -38,7 +38,7 @@ const FormPop = ({openSession}) => {
             })
             .catch(err => message.error(err.response.data))
     }
-
+    
     return (
         <Form form={form} name="normal_login"
               className="login-form" onFinish={onFinish}>
@@ -68,6 +68,7 @@ const FormPop = ({openSession}) => {
                     placeholder="Contraseña"
                 />
             </Form.Item>
+            <div style={{display: "flex", flexDirection: "row"}}>
             <Form.Item shouldUpdate>
                 {() => (
                     <Tooltip title={!form.isFieldsTouched(true) ||
@@ -85,6 +86,10 @@ const FormPop = ({openSession}) => {
                     </Tooltip>
                 )}
             </Form.Item>
+            <Form.Item>
+                <Button type="link" onClick={()=>history.push("/Servify/register")}>Crear una cuenta</Button>
+            </Form.Item>
+            </div>
         </Form>
     );
 }
