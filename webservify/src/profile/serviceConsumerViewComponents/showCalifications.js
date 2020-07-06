@@ -28,7 +28,7 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
         
           {califications.map(calification => {
             const actions = [
-              <span key="comment-basic-like">
+              <span style={{paddingLeft:20,paddingTop:0,marginTop:0}} key="comment-basic-like">
                 <Tooltip title="Like">
                   {React.createElement(action === 'liked' ? LikeFilled : LikeOutlined, {
                     onClick: () => like(providerName, serviceCategory, calification.id, addLike),
@@ -41,10 +41,10 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
             return( 
               <Comment key={calification.id}
               actions={actions}
-              author={<div><p>{calification.consumer.name}&nbsp;</p>
+              author={<div style={{display:'flex'}}><p style={{paddingLeft:10,paddingRight:10, fontSize:'.85rem'}}>{calification.consumer.name}</p>
                 <Rate allowHalf disabled defaultValue={calification.calificationValue}/></div>}
               content={
-              <p>
+              <p style={{paddingLeft:20}}>
                 {calification.message}
               </p>
             }/>
