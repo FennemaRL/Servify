@@ -16,6 +16,11 @@ Proyecto integrador de Elementos de Ingenirería de Software. (UNQ)
 
 ### [Sprint 2](https://docs.google.com/document/d/1-vRJlkmKuRc4412piG9VX88-07x8jIRKaec71-Qi_NM/edit?usp=sharing).
 
-### [Sprint 3](https://docs.google.com/document/d/1KwbuoBkRqBGPWUBi6ypbDLiFjnAKGyoQKguJTgMsbeg/edit?usp=sharing)
+### [Sprint 3](https://docs.google.com/document/d/1KwbuoBkRqBGPWUBi6ypbDLiFjnAKGyoQKguJTgMsbeg/edit?usp=sharing).
 
-### [Sprint 4](https://docs.google.com/document/d/16gnWY2-gfko89EQoHklmoBgFFiZ0JVDvTwHk3Y-D_ek/edit?usp=sharing)
+### [Sprint 4](https://docs.google.com/document/d/16gnWY2-gfko89EQoHklmoBgFFiZ0JVDvTwHk3Y-D_ek/edit?usp=sharing).
+
+
+### [Sprint 5](https://docs.google.com/document/d/1w8IAibMxrnH_t_A9ET_DaBvt23UziH6QfgXeL-TPnqk/edit?usp=sharing).
+
+### [Reporte Global](https://docs.google.com/document/d/14oG5bgc3aujQl4yDXvafTPmVT4qbAfTCCaLKOHR46Mc/edit?usp=sharing).
