@@ -3,7 +3,6 @@ import {Rate} from 'antd';
 import ModalRate from './modalRate'
 
 function Rating({serviceName, username, service, addCalification, addIdCalification}) {
-    console.log(service)
     return (
         <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop:"2vh", marginBottom:"1vw"}}>
                 <p>Calificación: </p>

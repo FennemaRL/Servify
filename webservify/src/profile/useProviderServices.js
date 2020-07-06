@@ -21,7 +21,7 @@ export function useProvider() {
     const addCalification  = (serviceName,calif)  => {
         let categoryf = [...providerSevices].filter(s=> s.category.categoryName === serviceName)
         if(categoryf.length){
-            categoryf[0].califications.push({calificationValue:calif.calificationValue,message:calif.message,consumer:{email: calif.consumerEmail ,name: calif.consumerName}})
+            categoryf[0].califications.push({calificationValue:calif.calificationValue,message:calif.message,consumer:{email: calif.consumerEmail ,name: calif.consumerName}, likes:0})
             setproviderSevices(categoryf)
         }
     }

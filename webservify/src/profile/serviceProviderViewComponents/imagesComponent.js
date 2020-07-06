@@ -71,8 +71,6 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
           })
         .then(res=>  {onSuccess("Ok"); message.success(res.data)})
         .catch(err=>   {
-          console.log("Eroor: ", err);
-          console.log({...err})
           message.error(err.response.data)
           onError({ ...err});
         })
