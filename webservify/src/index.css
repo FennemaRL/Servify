@@ -51,6 +51,7 @@ code {
 .shadowhoverImage{
   position: relative;
   display: flex;
+  height: 120px;
   margin:0.5vh;
 }
 .shadowhoverImage img {
@@ -63,7 +64,6 @@ code {
   transition: opacity 0.5s ease;
 }
 .shadow{
-  cursor: pointer;
   position: absolute;
   width: 100%;
   height: 120px;
@@ -80,7 +80,7 @@ code {
   position: absolute;
   color: white;
   opacity: 0;
-  top:40%;
+  top:45%;
   left:45%;
 }
 .shadowhoverImage:hover .ico  {
@@ -98,7 +98,26 @@ code {
 .buttonsSesssion{
   display: flex;
 }
+.containerList{
+ background-color:#F7F9FC;
+ max-height:30vh;
+ min-height: 25vh;
+ overflow-y:scroll;
+ padding:3vh;
+ margin: 1vh 2vw 0 2vw;
+}
+.zones{
+  padding:3vh;
+  margin: 1vh 2vw 0 2vw; 
+  background-color:#F7F9FC ;
+  min-height: 1vh;
+  max-width:50vw;
+}
 @media screen and (max-width: 48em) {
+  .zones{
+    max-width: 100%;
+  }
+
   .buttonsSesssion{
     flex-direction: column-reverse;
   }

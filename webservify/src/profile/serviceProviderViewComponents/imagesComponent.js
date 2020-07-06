@@ -100,7 +100,7 @@ export function ImagesEditableView({images, providerName, serviceName, viewMode}
     return(
       <div style={{marginTop:'2vh'}}>
         <p>Imagenes del servicio:</p>
-        <div className="clearfix" style={{ marginLeft:"6.5vw", marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"30vh", overflowY:"scroll", padding:"3vh"}}>
+        <div className="clearfix containerList">
         <Upload
           listType="picture-card"
           fileList={fileList}
@@ -158,7 +158,7 @@ export function ImagesView({images, providerName, serviceName, viewMode}) {
    return(<>{ !!fileList.length &&
     <div style={{marginTop:'2vh'}}>
       <p>Imagenes del servicio:</p>
-      <div  style={{ marginLeft:"6.5vw", display:'flex', marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"30vh", overflowY:"scroll", padding:"3vh"}}>
+      <div className="containerList"  style={{ display:'flex',}}>
             {fileList.map(file => (
                 <div className="shadowhoverImage" key={file.uid} >
                   <img src={file.url || file.preview} alt="" height={120} />

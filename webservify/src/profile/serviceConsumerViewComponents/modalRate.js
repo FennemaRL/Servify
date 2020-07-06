@@ -56,7 +56,7 @@ function ModalRate({serviceName, username, addCalification, addIdCalification}){
     }
 
     return (
-        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop: "1vh"}}>
+        <div style={{display: "flex", flexdirection: "row", alignItems: "center", marginTop: "1vh", paddingLeft:'1vw'}}>
             <Button type="primary" onClick={showModal}>
                 Calificar
             </Button>

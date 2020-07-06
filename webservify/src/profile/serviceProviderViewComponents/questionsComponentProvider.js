@@ -57,7 +57,7 @@ export default function QuestionsProvider ({questionsback, providerName, service
                 <p style={{textAlign:'center'}}>{questions[selectedQuestion]?questions[selectedQuestion].question:undefined}</p>
                 <FormResponse onFinish={responsequestion}/>
             </Modal>
-            <div  style={{ marginLeft:"6.5vw", marginRight:"6.5vw", marginTop:"1vh",backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", padding:"3vh"}}>
+            <div  className="containerList">
             {questions.map( (question,indx)=>(
                     <Question {...question} key={question.id} providerName={providerName} actions={question.answer ? undefined : actions(indx)} />
             ))}

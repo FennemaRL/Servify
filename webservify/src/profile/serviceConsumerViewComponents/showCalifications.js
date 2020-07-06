@@ -24,7 +24,7 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
          
     return(
     <div>
-        <div style={{backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", marginLeft:"6.5vw", marginRight:"6.5vw"}}>
+        <div className="containerList" >
         
           {califications.map(calification => {
             const actions = [
@@ -39,7 +39,7 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
             ];
 
             return( 
-              <>
+              <div key={calification.id}>
               <Comment key={calification.id}
               actions={actions}
               author={<div style={{display:'flex'}}><p style={{paddingLeft:10,paddingRight:10, fontSize:'.85rem'}}>{calification.consumer.name}</p>
@@ -50,7 +50,7 @@ function ShowCalifications({califications, providerName, serviceCategory, addLik
               </p>
             }/>
             <hr style={{border:'0.1px solid #bfbfbf', width:'98%'}}/>
-            </>
+            </div>
             )}
           )
         }

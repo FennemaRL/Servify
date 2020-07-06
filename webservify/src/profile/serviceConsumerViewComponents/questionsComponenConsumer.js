@@ -16,14 +16,13 @@ function QuestionComponent({questionsback, serviceName, providerName}){
     return (
         <div style={{marginTop:'2vh'}}>
             <p>Realiza una pregunta:</p>
-            <div  style={{ marginLeft:"6.5vw", marginRight:"6.5vw", marginTop:"1vh"}}>
+            <div style={{ padding:'3vh', }}>
                 <QuestionForm serviceName={serviceName} providerName={providerName} addQuestion={addQuestion}/>
-                <div  style={{backgroundColor:"#F7F9FC", maxHeight:"20vh", overflowY:"scroll", marginTop:"1vh", padding:"3vh"}}>
-        
-                    {questions.map( question =>(
-                        <Question {...question} key={question.id} providerName={providerName}/>
-                    ))}
-                </div>
+            </div>
+            <div className="containerList" >
+                {questions.map( question =>(
+                  <Question {...question} key={question.id} providerName={providerName}/>
+                  ))}
             </div>
         </div>
     );

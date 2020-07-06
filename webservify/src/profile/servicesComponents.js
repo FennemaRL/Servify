@@ -119,7 +119,7 @@ export function ViewService({username, providerSevices, category, err, addCalifi
             pathname: '/Servify/Error',
             state: {message: err}
         }}/>) ||
-        <div style={{width: '70vw'}}>
+        <div className='catOfferSize'>
             <Title style={{textAlign: 'center'}} level={4}>Categorias ofrecidas</Title>
             <div className="card-container">
                 <Tabs type="editable-card"
