@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch, useParams} from "react-router-dom";
 import {Layout} from 'antd'
 import Home from "./home";
 import Search from "./search";
@@ -9,8 +9,8 @@ import {ProfileEditable, ConsumerView} from "./profile/profile";
 import Error from "./error";
 import {IsAuth} from './login/auth';
 import Nav from './nav';
+import Register from "./login/register"
 const {Content, Footer,} = Layout;
-
 
 
 function PrivateRoute({ children,islog, ...rest }) {
@@ -33,14 +33,13 @@ function PrivateRoute({ children,islog, ...rest }) {
         
 }
 function App() {
-
   let {islog, closeSession, openSession, userName} = IsAuth();
   return (
     <Layout style={{minHeight:'100vh'}}>
       <Router>
         <Nav closeSession={closeSession} openSession={openSession} islog={islog} userName={userName} />
         <Layout style={{marginTop:'2vh',minHeight:'70vh',display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <Content >
+          <Content>
               <Switch>
                   <Route exact path="/Servify/search/:category/:zone?" component={Search}/>
                   <Route exact path="/Servify/testadd"><TestAdd/></Route>
@@ -49,6 +48,7 @@ function App() {
                   <Route path="/Servify/view/:username/:category?" component={ConsumerView}/>
                   <Route path="/Servify/error" component={Error}/>
                   <Route exact path="/Servify/"><Home/></Route>
+                  <Route exact path="/Servify/register"><Register openSession={openSession} /></Route>
                   <Redirect to={{pathname: "/Servify/"}}/>
               </Switch>
           </Content>

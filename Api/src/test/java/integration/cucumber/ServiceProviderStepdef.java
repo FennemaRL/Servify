@@ -19,6 +19,7 @@ public class ServiceProviderStepdef {
     private ServiceProviderServify sp;
     private Boolean errorWasThrown;
     private Boolean canLoginWith;
+    private ArrayList<ServiceProviderServify> registredProviders;
 
     @Given("A serviceProvider {string}")
     public void a_serviceProvider(String name) {
@@ -144,4 +145,44 @@ public class ServiceProviderStepdef {
         Assert.assertFalse(canLoginWith);
     }
 
+    @Given("The list of users of servify")
+    public void the_list_of_users_of_servify() {
+        registredProviders = new ArrayList<ServiceProviderServify>();
+
+        ServiceProviderServify lucas = new ServiceProviderServify("lucas");
+        ServiceProviderServify nacho = new ServiceProviderServify("nacho");
+        ServiceProviderServify ailin = new ServiceProviderServify("ailin");
+        ServiceProviderServify fran = new ServiceProviderServify("fran");
+
+        registredProviders.add(lucas);
+        registredProviders.add(fran);
+        registredProviders.add(nacho);
+        registredProviders.add(ailin);
+    }
+
+    @When("A new user who wants to register with name {string} phoneNmbr {string} celNmbr {string} webPage {string} residence {string} password {string}")
+    public void a_new_user_who_wants_to_register_with_name_phoneNmbr_celNmbr_webPage_residence_password(String name, String phoneNmbr, String celNmbr, String webPage, String residence, String passeword) {
+        try{
+            if(registredProviders.stream().anyMatch(p -> p.getName().equals(name))){
+                throw new NameAlreadyInUseError("The user name is already in use");
+            }else{
+                ServiceProviderServify provider = new ServiceProviderServify(name,phoneNmbr,celNmbr,webPage,residence,passeword);
+                registredProviders.add(provider);
+            }
+        }catch(NameAlreadyInUseError | EmptyFieldReceivedError e){
+            errorWasThrown = true;
+        }
+    }
+
+    @Then("An error is thrown")
+    public void an_error_is_thrown() {
+        Assert.assertTrue(errorWasThrown);
+    }
+
+    @Then("A new account is created with name {string} phoneNmbr {string} celNmbr {string} webPage {string} residence {string}")
+    public void a_new_account_is_created_with_name_phoneNmbr_celNmbr_webPage_residence(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
+        Assert.assertEquals(5, registredProviders.size());
+        Assert.assertTrue(registredProviders.stream().anyMatch(p -> p.getName().equals(name) && p.getPhoneNmbr().equals(phoneNmbr) &&
+                p.getCelNmbr().equals(celNmbr) && p.getWebPage().equals(webPage) && p.getResidence().equals(residence)));
+    }
 }

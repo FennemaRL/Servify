@@ -2,6 +2,7 @@ package com.Servify.controller;
 
 import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
+import integration.cucumber.NameAlreadyInUseError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -82,19 +83,6 @@ public class ServifyController {
     }
 
     @CrossOrigin
-    @PostMapping("/provider")
-        public ResponseEntity addProvider(@RequestBody ProviderLogUpDTO providerLogUpDTO) {
-        try {
-            providerLogUpDTO.assertEmpty();
-            ServiceProviderServify user = new ServiceProviderServify(providerLogUpDTO.getName(), providerLogUpDTO.getPhoneNmbr(),
-                    providerLogUpDTO.getCelNmbr(), providerLogUpDTO.getWebPage(), providerLogUpDTO.getResidence());
-            return ResponseEntity.status(201).body(dbServiceProvider.save(user));
-            } catch (EmptyDTOError emptyDTOError) {
-                return ResponseEntity.status(400).body("Bad_Request");
-            }
-    }
-
-    @CrossOrigin
     @PutMapping("/provider")
     public ResponseEntity editPersonalInfo(@RequestBody ProviderPersonalInfoDTO providerPersonalInfo,@RequestHeader TokenResponse token) {
         try {
@@ -153,6 +141,25 @@ public class ServifyController {
 
             return ResponseEntity.status(200).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError | ServiceProviderError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/provider/register")
+    public ResponseEntity registerWith(@RequestBody RegisterDTO registerDTO) {
+        try {
+            ServiceProviderServify sp = dbServiceProvider.findOne(registerDTO.getName());
+            if(sp != null){
+                throw new NameAlreadyInUseError("El nombre ya se encuentra en uso");
+            }else {
+                ServiceProviderServify newProvider = new ServiceProviderServify(registerDTO.getName(), registerDTO.getPhoneNmbr(),
+                    registerDTO.getCelNmbr(), registerDTO.getWebPage(), registerDTO.getResidence(), registerDTO.getPassword());
+                dbServiceProvider.save(newProvider);
+                String token = Jtoken.getTokenFor(newProvider.getName());
+                return ResponseEntity.status(200).body(new TokenResponse(token));
+            }
+        } catch (NameAlreadyInUseError | EmptyFieldReceivedError e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

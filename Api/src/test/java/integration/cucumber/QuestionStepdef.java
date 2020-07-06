@@ -13,9 +13,9 @@ public class QuestionStepdef {
     private ArrayList<ServiceProviderServify> providers = new ArrayList<>() ;;
 
     @And("A serviceProvider {string} with Service {string}")
-    public void a_serviceProvider_with_Service(String providerName, String serviceName) {
-
-        ServiceProviderServify p = new ServiceProviderServify(providerName,"","","","");
+    public void a_serviceProvider_with_Service(String providerName, String serviceName) throws EmptyFieldReceivedError {
+        providers = new ArrayList<>() ;
+        ServiceProviderServify p = new ServiceProviderServify(providerName,"11","22","oo","pp", "pass");
         p.addService(CategoryManager.createService(serviceName));
         providers.add(p);
     }

@@ -46,12 +46,19 @@ public class ServiceProviderServify {
         this.offerServices = new ArrayList<>();
     }
 
-    public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence) {
+    public ServiceProviderServify(String name, String phoneNmbr, String celNmbr, String webPage, String residence,String password) throws EmptyFieldReceivedError {
+
+        if(name.equals("") || phoneNmbr.equals("") || celNmbr.equals("") || webPage.equals("") || residence.equals("") ||
+            password.equals("")){
+            throw new EmptyFieldReceivedError("empty field was received");
+        }
+
         this.name = name;
         this.phoneNmbr = phoneNmbr;
         this.celNmbr = celNmbr;
         this.webPage = webPage;
         this.residence = residence;
+        this.password = password;
         offerServices = new ArrayList<>();
     }
     public boolean hasServicesWithCategoryAndZone(String category, String scope) {
