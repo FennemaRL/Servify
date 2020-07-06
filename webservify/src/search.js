@@ -17,9 +17,9 @@ function Search() {
     const menu = (
         <Menu>
             <Menu.Item>
-                <a target="ratings_desc" onClick={sortByAverage}>
+                <p target="ratings_desc" onClick={sortByAverage}>
                     Mejor rating
-                </a>
+                </p>
             </Menu.Item>
         </Menu>
     );
@@ -39,19 +39,20 @@ function Search() {
     function orderByDropdown() {
         let areProviders = providers.length >= 1;
         return <Dropdown overlay={menu} disabled={!areProviders}>
-            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+            <p className="ant-dropdown-link" style={{cursor:'pointer'}} onClick={e => e.preventDefault()}>
                 Ordenar por <DownOutlined/>
-            </a>
+            </p>
         </Dropdown>;
     }
 
     function listOfProviders() {
-        return <List itemLayout="horizontal" dataSource={providers} size='large' renderItem={item => {
-            const noContieneDescripcion = "No contiene descripción";
+        return <div className="listSearch">
+            <List itemLayout="horizontal" dataSource={providers} size='large' renderItem={item => {
+            const noContieneDescripcion = "No contiene descripción"
             return (
-                <List.Item style={{backgroundColor: '#d9d9d9', borderRadius: 5}}>
+                <List.Item className="resSearchItem" style={{backgroundColor: '#d9d9d9', borderRadius: 5}}>
                     <NavLink to={`/Servify/view/${item.username}/${category}`}>
-                        <List.Item.Meta
+                        <List.Item.Meta 
                             title={
                                 <div style={{
                                     display: "flex", flexDirection: "row", justifyContent: "space-between",
@@ -63,7 +64,7 @@ function Search() {
                             description={
                                 <div style={{
                                     display: "flex", flexDirection: "row", justifyContent: "space-between",
-                                    alignItems: "center"
+                                    alignItems: "center", paddingLeft:10
                                 }}>
                                     {item.description ? item.description : noContieneDescripcion}
                                 </div>}
@@ -72,7 +73,8 @@ function Search() {
                 </List.Item>
             );
         }}
-        />;
+        />
+        </div>
     }
 
     function searchTitle() {
@@ -89,10 +91,10 @@ function Search() {
         }}/>) ||
         <div style={{display: 'flex', flexDirection: 'column'}}>
             {searchTitle()}
-            <div style={{display: "flex", flexDirection: "row-reverse", minWidth: 441}}>
+            <div style={{display: "flex", flexDirection: "row-reverse"}}>
                 {orderByDropdown()}
             </div>
-            <div style={{backgroundColor: '#d9d9d9', width: '45vw'}}>
+            <div style={{backgroundColor: '#d9d9d9'}}>
                 {listOfProviders()}
             </div>
         </div>

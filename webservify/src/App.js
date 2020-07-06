@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Redirect, Route, Switch, useParams} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import {Layout} from 'antd'
 import Home from "./home";
 import Search from "./search";

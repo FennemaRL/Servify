@@ -88,16 +88,41 @@ code {
   z-index: 3;
   cursor: pointer;
 }
-
-
+.searchBar{
+  height:65px;
+  padding: 10px;
+}
+.listSearch{
+  min-width: 45vw;
+}
+.buttonsSesssion{
+  display: flex;
+}
 @media screen and (max-width: 48em) {
-
+  .buttonsSesssion{
+    flex-direction: column-reverse;
+  }
+  .listSearch{
+    display: flex;
+    min-width: 85vw;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  .resSearchItem{
+    min-width:85vw;
+  }
+  .searchBar{
+    display: flex;
+    flex-direction: column;
+    height: 125px;
+    padding-top: 15px;
+  }
   .catOfferSize{
     width: 95vw;
   }
   .formEditableInfo{
     width: 80vw;
-  
   }
 
   .cascaderMobile{

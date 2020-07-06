@@ -2,7 +2,6 @@ import React, {useState, useEffect,} from 'react';
 import axios from 'axios';
 import {Typography, Card, Col, Row, Tag, Tooltip} from 'antd';
 import {NavLink} from 'react-router-dom';
-import Avatar from "antd/es/avatar";
 import List from "antd/es/list";
 import Rate from "antd/es/rate";
 

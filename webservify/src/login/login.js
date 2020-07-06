@@ -7,7 +7,7 @@ import axios from 'axios';
 const ViewProfileAndCloseSession = ({closeSession, userName}) => {
     let history = useHistory();
     return (
-        < div style={{display: 'flex'}}>
+        < div className="buttonsSesssion">
             <NavLink to={`/Servify/Profile/${userName}`} exact
                      activeStyle={{borderBottom: '4px solid #1890ff', borderRadius: '2px'}}
                      style={{minWidth: '6vw', textAlign: 'center'}}><h4>Ver Perfil</h4></NavLink>

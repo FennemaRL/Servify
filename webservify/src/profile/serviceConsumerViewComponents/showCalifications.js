@@ -5,7 +5,7 @@ import {LikeFilled, LikeOutlined} from '@ant-design/icons';
 
 
 function ShowCalifications({califications, providerName, serviceCategory, addLike}){
-  const [action, setAction] = useState(null);
+  const [action, ] = useState(null);
 
   const like = (providerName, serviceCategory, id) => {
     addLike(serviceCategory, id) 

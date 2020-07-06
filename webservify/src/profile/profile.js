@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
 import {ViewEditableService, ViewService,} from "./servicesComponents";
 import {useProvider} from "./useProviderServices";
-import {Button, Descriptions, Form, Input, message, Typography, Collapse} from 'antd';
+import {Button, Descriptions, Form, Input, message, Typography} from 'antd';
 import axios from 'axios';
 import {GetToken} from '../login/auth'
 
 
 const {Title} = Typography;
-const { Panel } = Collapse;
 
 function ProfileInfoEditable({personalInfo}) {
 
