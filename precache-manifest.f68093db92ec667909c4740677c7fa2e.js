@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "eb7387ff293d2b4aed6bcb2b7fa2fe94",
+    "revision": "b0417800d631f9e96a0cd34b12198a21",
     "url": "/Servify/index.html"
   },
   {
-    "revision": "6a5ec6cf728d5b9a6c39",
+    "revision": "54557c9eb220447e74f6",
     "url": "/Servify/static/css/2.3cb76441.chunk.css"
   },
   {
-    "revision": "fbe99e8b44a4b2e1e4e8",
+    "revision": "e1aeb66b5bc39cbf9b17",
     "url": "/Servify/static/css/main.8ea72c27.chunk.css"
   },
   {
-    "revision": "6a5ec6cf728d5b9a6c39",
-    "url": "/Servify/static/js/2.01f3cdbb.chunk.js"
+    "revision": "54557c9eb220447e74f6",
+    "url": "/Servify/static/js/2.51ec2a1c.chunk.js"
   },
   {
     "revision": "3453b8997016469371284a28c0e873e2",
-    "url": "/Servify/static/js/2.01f3cdbb.chunk.js.LICENSE.txt"
+    "url": "/Servify/static/js/2.51ec2a1c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "fbe99e8b44a4b2e1e4e8",
-    "url": "/Servify/static/js/main.a0f1bbd8.chunk.js"
+    "revision": "e1aeb66b5bc39cbf9b17",
+    "url": "/Servify/static/js/main.3de606db.chunk.js"
   },
   {
     "revision": "b426c8f3a7f151f344b3",
