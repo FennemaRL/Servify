@@ -10,7 +10,7 @@ function QuestionComponent({questionsback, serviceName, providerName}){
         setQuestions(prevsquest=> [question,...prevsquest])
     }
     useEffect(()=>{
-        setQuestions(prevsquest=> [...prevsquest,...questionsback])
+        setQuestions(prevsquest=> [...prevsquest,...questionsback].reverse())
     },[questionsback])
 
     return (

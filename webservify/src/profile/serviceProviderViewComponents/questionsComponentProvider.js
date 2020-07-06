@@ -8,7 +8,9 @@ export default function QuestionsProvider ({questionsback, providerName, service
     const  [visible, setVisible] = useState(false);
     const  [selectedQuestion, setSelectedQuestion] = useState(-1);
     useEffect(()=>{
-        setQuestions(questionsback)
+        let withResponse = questionsback.filter(q=>!!q.answer)
+        let withoutResponse = questionsback.filter(q=>!q.answer)
+        setQuestions([...withoutResponse,...withResponse])
     },[questionsback])
 
     const responsequestion= (values)=>{
@@ -101,7 +103,7 @@ export default function QuestionsProvider ({questionsback, providerName, service
             htmlType="submit"
             disabled={
               !form.isFieldsTouched(true) ||
-              form.getFieldsError().filter(({ errors }) => errors.length).length
+              form.getFieldsError().filter(({ errors }) => errors.length).length || 150 < (form.getFieldsValue().answer ? form.getFieldsValue().answer.length : 0)
             }
           >
             Responder
