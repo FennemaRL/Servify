@@ -169,10 +169,10 @@ public class ServifyController {
     public ResponseEntity loginWith(@RequestBody LoginDTO loginDTO) {
         try {
             ServiceProviderServify sp = dbServiceProvider.findOne(loginDTO.getUsername());
-            if(sp != null){
+            /*if(sp != null){
                 sp.changePassword(sp.getName());
                 dbServiceProvider.save(sp);
-            }
+            }*/
             if (sp == null || ! sp.canLoginWith(loginDTO.getPassword())) {
                 throw new ServiceProviderError("Usuario o contraseña incorrectos");
             }
