@@ -20,10 +20,13 @@ public class ServiceServify {
     private List<Calification> califications;
     @Column
     private String description;
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<ScopeService> scopeAreas;
-    @OneToMany (cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ServiceQuestion> questions;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ServifyImage> images;
+
     public ServiceServify() {
     }
 
@@ -34,6 +37,7 @@ public class ServiceServify {
         this.scopeAreas = new ArrayList<ScopeService>();
         this.califications = new ArrayList<>();
         this.questions = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
     public Long getId() {
@@ -112,4 +116,32 @@ public class ServiceServify {
         }
         questionsfind.get(0).addAnswer(response);
     }
+
+    public List<ServifyImage> getImages() {
+        return images;
+    }
+
+    public void addImage(ServifyImage image) {
+        if(images.stream().anyMatch(servifyImage -> servifyImage.sameNameAndType(image.getName(),image.getType()) )){
+           throw new ServiceProviderError("Error : no pueden haber 2 imagenes con el mismo nombre y tipo");
+        }
+        images.add(image);
+    }
+
+    public void removeImage(String imageName, String imageType) {
+       images.removeIf(servifyImage -> servifyImage.sameNameAndType(imageName,imageType));
+    }
+
+    public void resetImages() {
+        images= new ArrayList<>();
+    }
+
+    public void addLikeToReview(Long id) throws InvalidReviewError {
+        List<Calification> review = califications.stream().filter(cal -> cal.getId() == id).collect(Collectors.toList());
+        if(review.isEmpty()){
+            throw new InvalidReviewError("No existe la calificación con el id" + id.toString());
+        }
+        review.get(0).addLike();
+    }
+
 }

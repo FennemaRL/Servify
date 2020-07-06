@@ -4,13 +4,19 @@ import com.Servify.model.*;
 import com.Servify.repository.services.ServiceProviderService;
 import integration.cucumber.NameAlreadyInUseError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.SQLException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 
 @RestController
@@ -46,8 +52,21 @@ public class ServifyController {
     public ResponseEntity getUser(@PathVariable String name) {
         ServiceProviderServify user = dbServiceProvider.findOne(name);
         if (user == null) return ResponseEntity.status(400).body("No existe ese proveedor");
+        List<ServiceServify> withDecompresedImage = user.getServices().stream().map(serviceServify -> {
+            List<ServifyImage> images= serviceServify.getImages();
+            images.forEach(imageToModify -> {
+                try {
+                    imageToModify.setBytes(decompressBytes(imageToModify.getBytes()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DataFormatException e) {
+                    e.printStackTrace();
+                }
+            });
+        return serviceServify;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok().body(new ProviderEditDTO(user.getName(), user.getCelNmbr(),
-                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), user.getServices()));
+                user.getPhoneNmbr(), user.getResidence(), user.getWebPage(), withDecompresedImage));
     }
 
     @CrossOrigin
@@ -201,8 +220,9 @@ public class ServifyController {
             CategoryService category = CategoryManager.getCategory(newCalificationDTO.getServiceCategory());
             ServiceConsumer consumer = new ServiceConsumer(newCalificationDTO.getConsumerName(), newCalificationDTO.getConsumerEmail());
             user.addNewCalificationToService(category, newCalificationDTO.getCalificationValue(), consumer, newCalificationDTO.getMessage());
-            dbServiceProvider.save(user);
-            return ResponseEntity.status(201).body("Calificacion agregada con exito");
+            ServiceProviderServify serv = dbServiceProvider.save(user);
+            List<Calification> califications = serv.getServices().stream().filter(service -> service.sameCategory(category)).collect(Collectors.toList()).get(0).getCalifications();
+            return ResponseEntity.status(201).body(califications.get(califications.size() - 1));
         } catch (EmptyDTOError | WrongValueError e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
@@ -239,6 +259,39 @@ public class ServifyController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping(value="/provider/service/img" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity addImage(@ModelAttribute ServiceImageDTO imgDTO,@RequestParam("imageFile") MultipartFile file, @RequestHeader TokenResponse token){
+        try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
+            ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
+            ServifyImage img = new ServifyImage(file.getOriginalFilename(), file.getContentType(), compressBytes(file.getBytes()));
+            user.addImageToService(img,category);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("se agrego con exito");
+        } catch (IOException | ServiceProviderError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+    }
+    @CrossOrigin
+    @DeleteMapping(value="/provider/service/img")
+    public ResponseEntity deleteImage(@RequestBody ServiceImageDTO imgDTO,@RequestHeader TokenResponse token){
+        try {
+            imgDTO.assertEmpty();
+            this.checkToken(token, imgDTO.getProviderName());
+            ServiceProviderServify user = dbServiceProvider.findOne(imgDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(imgDTO.getServiceCategory());
+            user.deleteImageToService(imgDTO.getImageName(),imgDTO.getType(),category);
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(200).body("se borro con exito");
+        } catch (ServiceProviderError | EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+    }
 
 
     @CrossOrigin
@@ -252,6 +305,54 @@ public class ServifyController {
             user.modifyServiceWithScope(category, sc);
             return ResponseEntity.status(201).body(dbServiceProvider.save(user));
         } catch (EmptyDTOError e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    public static byte[] compressBytes(byte[] data) throws IOException {
+        Deflater deflater = new Deflater();
+        deflater.setInput(data);
+        deflater.finish();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        while (!deflater.finished()) {
+            int count = deflater.deflate(buffer);
+            outputStream.write(buffer, 0, count);
+        }
+        try {
+            outputStream.close();
+        } finally {
+            return outputStream.toByteArray();
+        }
+    }
+
+    public static byte[] decompressBytes(byte[] data) throws IOException, DataFormatException {
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            outputStream.close();
+        } finally {
+            return outputStream.toByteArray();
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping ("/provider/service/likereview")
+    public ResponseEntity likeReview(@RequestBody ServiceReviewDTO reviewDTO){
+        try {
+            reviewDTO.assertEmpty();
+            ServiceProviderServify user = dbServiceProvider.findOne(reviewDTO.getProviderName());
+            CategoryService category = CategoryManager.getCategory(reviewDTO.getServiceCategory());
+            user.addLikeToReview(category, reviewDTO.getId());
+            dbServiceProvider.save(user);
+            return ResponseEntity.status(201).body("Like agregado con exito");
+        } catch (EmptyDTOError | InvalidReviewError | ServiceProviderError e ) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }

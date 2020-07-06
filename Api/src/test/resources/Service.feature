@@ -20,3 +20,9 @@ Feature:  Services offer
     Given a service "Electricidad" of "Lucas" serviceProvider
     When i ask the average calification of a service with some calification
     Then the average is returned
+
+  Scenario: Like a review
+    Given A specific review
+    When I add a like to that review
+    Then That review has one more like
+

@@ -11,7 +11,7 @@ import ShowCalifications from './serviceConsumerViewComponents/showCalifications
 import ZonesEditable from './serviceProviderViewComponents/zonesEditable'
 import QuestionComponent from './serviceConsumerViewComponents/questionsComponenConsumer'
 import QuestionsProvider from './serviceProviderViewComponents/questionsComponentProvider'
-
+import {ImagesEditableView, ImagesView} from './serviceProviderViewComponents/imagesComponent'
 
 const {Title} = Typography;
 const {TabPane} = Tabs;
@@ -97,6 +97,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
                             <FormEditService username={username} service={ser} />
                             <ZonesEditable name={username} service={ser}/>
                             <QuestionsProvider questionsback={ser.questions} providerName={username} serviceName={ser.category.categoryName}/>
+                            <ImagesEditableView  images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>
                         </TabPane>))}
                 </Tabs>
         </div>
@@ -107,7 +108,7 @@ export function ViewEditableService({username, providerSevices, setproviderSevic
 }
 
 
-export function ViewService({username, providerSevices, category, err, addCalification}) {
+export function ViewService({username, providerSevices, category, err, addCalification, addIdCalification, addLike}) {
 
     const [activeCategory, setActiveCategorie] = useState();
     const onChangeTab = key => setActiveCategorie(key);
@@ -129,11 +130,11 @@ export function ViewService({username, providerSevices, category, err, addCalifi
                         <TabPane tab={ser.category.categoryName} key={ser.category.categoryName} closable={false}>
                             <div>
                                 <Service username={username} service={ser}/>
-                                <Rating service={ser} serviceName={ser.category.categoryName} username={username} addCalification={addCalification}/>
-                                <ShowCalifications califications={ser.califications}/>
+                                <Rating service={ser} serviceName={ser.category.categoryName} username={username} addCalification={addCalification} addIdCalification={addIdCalification}/>
+                                <ShowCalifications califications={ser.califications} providerName={username} serviceCategory={ser.category.categoryName} addLike={addLike} />
+                                <ImagesView  viewMode={true} images={ser.images? ser.images : []}  providerName={username} serviceName={ser.category.categoryName}/>  
                                 <ViewZones service={ser}/>  
-                                <QuestionComponent questionsback={ ser.questions} serviceName={ser.category.categoryName} providerName={username} />
-                                                   
+                                <QuestionComponent questionsback={ ser.questions} serviceName={ser.category.categoryName} providerName={username} />                
                             </div>
                         </TabPane>))
                         }

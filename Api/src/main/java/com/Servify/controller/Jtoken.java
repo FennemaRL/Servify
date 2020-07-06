@@ -8,10 +8,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 public class Jtoken {
-    private static SignatureAlgorithm sA =SignatureAlgorithm.HS256;
-    private static String secret= "Blue";
-
+    private static final SignatureAlgorithm sA =SignatureAlgorithm.HS256;
+    private static final String secret= System.getenv("secret");
     static public String getTokenFor(String subject){
+
         Instant ins = Instant.now();
         return Jwts.builder().setSubject(subject)
                 .setIssuedAt(Date.from(ins))
