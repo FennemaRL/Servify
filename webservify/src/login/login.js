@@ -96,7 +96,7 @@ const FormPop = ({openSession}) => {
 const LoginForm = ({openSession}) => {
     return (
         <Popover placement="topLeft" content={<FormPop openSession={openSession}/>} trigger="click">
-            <p style={{marginRight: '1vw', marginLeft: '1vw', cursor: 'pointer'}}> Ingresá</p>
+            <p className='mobileSignUp' style={{ cursor: 'pointer'}}> Ingresá</p>
         </Popover>
     )
 }

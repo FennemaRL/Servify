@@ -114,6 +114,9 @@ code {
   max-width:50vw;
 }
 @media screen and (max-width: 48em) {
+  .mobileSignUp{
+    padding-top: 4vh ;
+  }
   .zones{
     max-width: 100%;
   }

@@ -10,7 +10,7 @@ import logo from '../src/img/logofinal.png'
 function Nav({islog, closeSession, openSession, userName}) {
 
     return <Menu mode="horizontal" style={{backgroundColor:'#f1f6f5', boxShadow:'0 4px 6px -6px #222', minHeight:'85px', marginLeft:'2vw', marginRight:'2vw',paddingTop:'15px', width:'96vw', display:'flex', justifyContent:'space-around' }}>
-            <Menu.Item  style={{display:'flex', justifyContent:'center',alignItems:'center'}}><NavLink to="/Servify/" exact activeStyle={{borderBottom: '4px solid #1890ff',borderRadius:'2px'}}><div style={{display:'flex'}}> <img src={logo} style={{width:'25px',height:'30px'}} alt="logo de la pagina"/><h3 style={{color:'#045454', fontWeight:'bold'}}> ervify </h3></div></NavLink></Menu.Item>
+            <Menu.Item  style={{display:'flex', justifyContent:'center',alignItems:'center'}}><NavLink to="/Servify/" ><div style={{display:'flex'}}> <img src={logo} style={{width:'25px',height:'30px'}} alt="logo de la pagina"/><h3 style={{color:'#045454', fontWeight:'bold'}}> ervify </h3></div></NavLink></Menu.Item>
             <Searchbar/>         
             <ButtonLogin closeSession={closeSession} openSession ={openSession} islog={islog} userName={userName} />
           </Menu>
