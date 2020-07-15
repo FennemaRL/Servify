@@ -26,8 +26,9 @@ function Register({openSession}){
     };
     const tailLayout = {
         wrapperCol: {
-            offset: 8,
-            span: 16,
+            offset: 4,
+            xs: 3,
+            lg: 16,
         },
     };
 
