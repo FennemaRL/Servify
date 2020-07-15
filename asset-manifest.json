@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Servify/static/css/main.47a0df56.chunk.css",
-    "main.js": "/Servify/static/js/main.2a14fa7a.chunk.js",
-    "main.js.map": "/Servify/static/js/main.2a14fa7a.chunk.js.map",
+    "main.js": "/Servify/static/js/main.a46ba3cd.chunk.js",
+    "main.js.map": "/Servify/static/js/main.a46ba3cd.chunk.js.map",
     "runtime-main.js": "/Servify/static/js/runtime-main.00211ae3.js",
     "runtime-main.js.map": "/Servify/static/js/runtime-main.00211ae3.js.map",
     "static/css/2.3cb76441.chunk.css": "/Servify/static/css/2.3cb76441.chunk.css",
     "static/js/2.51ec2a1c.chunk.js": "/Servify/static/js/2.51ec2a1c.chunk.js",
     "static/js/2.51ec2a1c.chunk.js.map": "/Servify/static/js/2.51ec2a1c.chunk.js.map",
     "index.html": "/Servify/index.html",
-    "precache-manifest.4dba93e50028bf37d4484678ab870fa2.js": "/Servify/precache-manifest.4dba93e50028bf37d4484678ab870fa2.js",
+    "precache-manifest.3a8022b02d96f6db398db33b4250eade.js": "/Servify/precache-manifest.3a8022b02d96f6db398db33b4250eade.js",
     "service-worker.js": "/Servify/service-worker.js",
     "static/css/2.3cb76441.chunk.css.map": "/Servify/static/css/2.3cb76441.chunk.css.map",
     "static/css/main.47a0df56.chunk.css.map": "/Servify/static/css/main.47a0df56.chunk.css.map",
@@ -22,6 +22,6 @@
     "static/css/2.3cb76441.chunk.css",
     "static/js/2.51ec2a1c.chunk.js",
     "static/css/main.47a0df56.chunk.css",
-    "static/js/main.2a14fa7a.chunk.js"
+    "static/js/main.a46ba3cd.chunk.js"
   ]
 }

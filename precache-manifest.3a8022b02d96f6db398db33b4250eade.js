@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "28342665a6e3f3bb7d296773407b9249",
+    "revision": "04fe74b3400e201acdd297b7495bf793",
     "url": "/Servify/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Servify/static/css/2.3cb76441.chunk.css"
   },
   {
-    "revision": "e3354e3c922e8cbe1b43",
+    "revision": "777aa9714ed189faaed0",
     "url": "/Servify/static/css/main.47a0df56.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Servify/static/js/2.51ec2a1c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e3354e3c922e8cbe1b43",
-    "url": "/Servify/static/js/main.2a14fa7a.chunk.js"
+    "revision": "777aa9714ed189faaed0",
+    "url": "/Servify/static/js/main.a46ba3cd.chunk.js"
   },
   {
     "revision": "b426c8f3a7f151f344b3",
